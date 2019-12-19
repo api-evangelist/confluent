@@ -1,0 +1,64 @@
+{
+    "name": "Confluent",
+    "description": "Confluent, founded by the creators of Apache Kafka, delivers a complete execution of Kafka for the Enterprise, to help you run your business in real time.",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/28237-www-confluent-io.jpg",
+    "tags": [
+        "api service provider",
+        "have api"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/confluent\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Confluent",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/28237-www-confluent-io.jpg",
+            "humanURL": "https:\/\/www.confluent.io",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/confluent-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/confluent-postman-collection.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Blog",
+            "url": "https:\/\/www.confluent.io\/blog\/"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/confluent"
+        },
+        {
+            "type": "Email",
+            "url": "pr@confluent.io"
+        },
+        {
+            "type": "Email",
+            "url": "info@confluent.io"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/confluentinc"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/confluentinc"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/www.confluent.io"
+        }
+    ]
+}
