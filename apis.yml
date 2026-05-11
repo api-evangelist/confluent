@@ -30,6 +30,11 @@ apis:
         url: https://docs.confluent.io/
       - type: Website
         url: https://www.confluent.io/
+common:
+  - type: Integrations
+    url: https://www.confluent.io/partner/
+integrations:
+  - name: Become a Partner
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
