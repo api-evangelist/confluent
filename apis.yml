@@ -37,6 +37,8 @@ common:
     url: https://www.linkedin.com/company/confluent
   - type: Integrations
     url: https://www.confluent.io/partner/
+  - type: LLMsTxt
+    url: https://docs.confluent.io/llms.txt
 integrations:
   - name: Become a Partner
 maintainers:
