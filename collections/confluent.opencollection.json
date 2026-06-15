@@ -1,0 +1,406 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluent Cloud Kafka REST API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clusters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Kafka clusters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters"
+          },
+          "docs": "List Kafka clusters"
+        },
+        {
+          "info": {
+            "name": "Get a Kafka cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a Kafka cluster"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Topics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List topics in a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List topics in a cluster"
+        },
+        {
+          "info": {
+            "name": "Create a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a topic"
+        },
+        {
+          "info": {
+            "name": "Get topic metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get topic metadata"
+        },
+        {
+          "info": {
+            "name": "Delete a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a topic"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Partitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List partitions for a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name/partitions",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List partitions for a topic"
+        },
+        {
+          "info": {
+            "name": "Get a single partition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name/partitions/:partition_id",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "partition_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single partition"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Consumer Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List consumer groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/consumer-groups",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List consumer groups"
+        },
+        {
+          "info": {
+            "name": "Get a consumer group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/consumer-groups/:consumer_group_id",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "consumer_group_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a consumer group"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "ACLs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List ACLs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/acls",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List ACLs"
+        },
+        {
+          "info": {
+            "name": "Create an ACL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/acls",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an ACL"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Environments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Confluent Cloud environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/org/v2/environments"
+          },
+          "docs": "List Confluent Cloud environments"
+        },
+        {
+          "info": {
+            "name": "Create an environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/org/v2/environments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an environment"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Service Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List service accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/iam/v2/service-accounts"
+          },
+          "docs": "List service accounts"
+        },
+        {
+          "info": {
+            "name": "Create a service account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/iam/v2/service-accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a service account"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "API Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/iam/v2/api-keys"
+          },
+          "docs": "List API keys"
+        },
+        {
+          "info": {
+            "name": "Create an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/iam/v2/api-keys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an API key"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

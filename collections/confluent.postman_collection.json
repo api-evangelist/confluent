@@ -1,0 +1,1941 @@
+{
+  "item": [
+    {
+      "id": "9020c375-6cda-416b-b165-a6bcd89489ed",
+      "name": "Clusters",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5bb9b865-f300-44cf-a20b-756c43a9ab52",
+          "name": "List Kafka clusters",
+          "request": {
+            "name": "List Kafka clusters",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4a8e4522-1c46-4ba2-911e-f92da315fa49",
+              "name": "Cluster list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"kind\": \"string\",\n      \"cluster_id\": \"string\",\n      \"display_name\": \"string\",\n      \"availability\": \"string\",\n      \"cloud\": \"string\",\n      \"region\": \"string\"\n    },\n    {\n      \"kind\": \"string\",\n      \"cluster_id\": \"string\",\n      \"display_name\": \"string\",\n      \"availability\": \"string\",\n      \"cloud\": \"string\",\n      \"region\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3f229c55-4cd9-441e-8e11-97cd455c8c88",
+          "name": "Get a Kafka cluster",
+          "request": {
+            "name": "Get a Kafka cluster",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5a83f18b-4680-4976-842d-52b4f12c3c91",
+              "name": "Cluster",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"string\",\n  \"cluster_id\": \"string\",\n  \"display_name\": \"string\",\n  \"availability\": \"string\",\n  \"cloud\": \"string\",\n  \"region\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7733f161-fe32-4d55-bf7d-3309cb65b05a",
+      "name": "Topics",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "79eba595-5672-47b7-b883-2b51d98430fd",
+          "name": "List topics in a cluster",
+          "request": {
+            "name": "List topics in a cluster",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8ab9e000-49c7-405a-a456-d7dcd1428ba4",
+              "name": "Topic list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"topic_name\": \"string\",\n      \"partitions_count\": 560,\n      \"replication_factor\": 9946,\n      \"is_internal\": true\n    },\n    {\n      \"topic_name\": \"string\",\n      \"partitions_count\": 7117,\n      \"replication_factor\": 6619,\n      \"is_internal\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ddf83ba-d3ef-4966-a76d-596af7a26b15",
+          "name": "Create a topic",
+          "request": {
+            "name": "Create a topic",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic_name\": \"<string>\",\n  \"partitions_count\": \"<integer>\",\n  \"replication_factor\": \"<integer>\",\n  \"configs\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c6d94092-74d6-4b44-8ed1-85679f3a333a",
+              "name": "Topic created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"topic_name\": \"<string>\",\n  \"partitions_count\": \"<integer>\",\n  \"replication_factor\": \"<integer>\",\n  \"configs\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"topic_name\": \"string\",\n  \"partitions_count\": 7220,\n  \"replication_factor\": 4212,\n  \"is_internal\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c6bbf697-dbcf-4e82-b77f-1966bf6a9013",
+          "name": "Get topic metadata",
+          "request": {
+            "name": "Get topic metadata",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics",
+                ":topic_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topic_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23a6d363-8ec3-4816-aff2-e0fabf5af57b",
+              "name": "Topic",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics",
+                    ":topic_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topic_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"topic_name\": \"string\",\n  \"partitions_count\": 7220,\n  \"replication_factor\": 4212,\n  \"is_internal\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2b166cea-de40-463c-a6bd-cbbd0cb7d319",
+          "name": "Delete a topic",
+          "request": {
+            "name": "Delete a topic",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics",
+                ":topic_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topic_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c0ee05ef-bf63-44ad-892c-508a1265b1d4",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics",
+                    ":topic_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topic_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7ccb0d25-0abc-41c0-978e-da7279c86808",
+      "name": "Partitions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "87546236-0097-4f88-bbd0-debf116180e5",
+          "name": "List partitions for a topic",
+          "request": {
+            "name": "List partitions for a topic",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics",
+                ":topic_name",
+                "partitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topic_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8fc0ec14-6c7c-4a82-bb05-ca781e6fe588",
+              "name": "Partition list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics",
+                    ":topic_name",
+                    "partitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topic_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"partition_id\": 9589,\n      \"leader\": 5201,\n      \"replicas\": [\n        5988,\n        458\n      ]\n    },\n    {\n      \"partition_id\": 7351,\n      \"leader\": 7075,\n      \"replicas\": [\n        300,\n        4160\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f3da8427-5db1-43ef-bd33-c74cc31af7f3",
+          "name": "Get a single partition",
+          "request": {
+            "name": "Get a single partition",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics",
+                ":topic_name",
+                "partitions",
+                ":partition_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topic_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "partition_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "22e3b4fe-ebb1-4d22-b7bf-bab145787530",
+              "name": "Partition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics",
+                    ":topic_name",
+                    "partitions",
+                    ":partition_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topic_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "partition_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"partition_id\": 7104,\n  \"leader\": 5648,\n  \"replicas\": [\n    1369,\n    855\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7a49e008-a2a5-47d1-bd7d-3d7173542f74",
+      "name": "Consumer Groups",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ac2457fa-9306-48b6-87ad-3c854331ccb2",
+          "name": "List consumer groups",
+          "request": {
+            "name": "List consumer groups",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "consumer-groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1de5a41e-82e7-461d-844f-f17dde49af21",
+              "name": "Consumer group list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "consumer-groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"consumer_group_id\": \"string\",\n      \"state\": \"string\",\n      \"coordinator\": 3955,\n      \"is_simple\": false\n    },\n    {\n      \"consumer_group_id\": \"string\",\n      \"state\": \"string\",\n      \"coordinator\": 9802,\n      \"is_simple\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ea6e5d44-8fc5-40d4-a8b9-ec3dbc457df4",
+          "name": "Get a consumer group",
+          "request": {
+            "name": "Get a consumer group",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "consumer-groups",
+                ":consumer_group_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "consumer_group_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dd2ed498-25ce-4c5c-841e-48a967c94830",
+              "name": "Consumer group",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "consumer-groups",
+                    ":consumer_group_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consumer_group_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"consumer_group_id\": \"string\",\n  \"state\": \"string\",\n  \"coordinator\": 2658,\n  \"is_simple\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "14d2c00b-951e-4b4f-81ea-b4c87e0f4b9a",
+      "name": "ACLs",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6ac19fd0-6493-44ec-8e72-a5bda0049dea",
+          "name": "List ACLs",
+          "request": {
+            "name": "List ACLs",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "acls"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4df67b65-8a73-48fa-a629-2102041108c0",
+              "name": "ACL list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "acls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"resource_type\": \"string\",\n      \"resource_name\": \"string\",\n      \"pattern_type\": \"string\",\n      \"principal\": \"string\",\n      \"host\": \"string\",\n      \"operation\": \"string\",\n      \"permission\": \"string\"\n    },\n    {\n      \"resource_type\": \"string\",\n      \"resource_name\": \"string\",\n      \"pattern_type\": \"string\",\n      \"principal\": \"string\",\n      \"host\": \"string\",\n      \"operation\": \"string\",\n      \"permission\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "978973ad-ce07-42e3-a45d-1f1c5e189504",
+          "name": "Create an ACL",
+          "request": {
+            "name": "Create an ACL",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "acls"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource_type\": \"<string>\",\n  \"resource_name\": \"<string>\",\n  \"pattern_type\": \"<string>\",\n  \"principal\": \"<string>\",\n  \"host\": \"<string>\",\n  \"operation\": \"<string>\",\n  \"permission\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0d5e277c-0abd-4733-ab06-9fe49d105cb0",
+              "name": "ACL created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "acls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resource_type\": \"<string>\",\n  \"resource_name\": \"<string>\",\n  \"pattern_type\": \"<string>\",\n  \"principal\": \"<string>\",\n  \"host\": \"<string>\",\n  \"operation\": \"<string>\",\n  \"permission\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "ae119c18-6edb-44db-9ac1-9cd6c1ffa022",
+      "name": "Environments",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a94936d1-99f5-4bfa-93ee-2791dc82f6e2",
+          "name": "List Confluent Cloud environments",
+          "request": {
+            "name": "List Confluent Cloud environments",
+            "description": {},
+            "url": {
+              "path": [
+                "org",
+                "v2",
+                "environments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3b0b4ae7-439b-4234-97de-f84ea0f549f8",
+              "name": "Environment list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "org",
+                    "v2",
+                    "environments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"display_name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"display_name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24f0c09e-03d3-4491-b8f1-f6c02a6fd914",
+          "name": "Create an environment",
+          "request": {
+            "name": "Create an environment",
+            "description": {},
+            "url": {
+              "path": [
+                "org",
+                "v2",
+                "environments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"display_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ce62db6e-a48d-4294-93a3-47991d545794",
+              "name": "Environment created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "org",
+                    "v2",
+                    "environments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"display_name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"display_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "28859a80-5a27-4b30-907e-1d55baf238bd",
+      "name": "Service Accounts",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "092d86c1-0620-458f-9dc3-448f834b1b4f",
+          "name": "List service accounts",
+          "request": {
+            "name": "List service accounts",
+            "description": {},
+            "url": {
+              "path": [
+                "iam",
+                "v2",
+                "service-accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b132cada-cc75-4b06-bb39-bd1a67057d1a",
+              "name": "Service account list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "iam",
+                    "v2",
+                    "service-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"display_name\": \"string\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"display_name\": \"string\",\n      \"description\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fab2557-b26a-48b3-8a24-85e807890304",
+          "name": "Create a service account",
+          "request": {
+            "name": "Create a service account",
+            "description": {},
+            "url": {
+              "path": [
+                "iam",
+                "v2",
+                "service-accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"display_name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e7736f9e-835e-4690-bc49-c822ce74f497",
+              "name": "Service account created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "iam",
+                    "v2",
+                    "service-accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"display_name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e420d740-1dd0-416c-a971-4238d26ec0ef",
+      "name": "API Keys",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "346cbc61-f18c-46ff-8260-eabe60867cbd",
+          "name": "List API keys",
+          "request": {
+            "name": "List API keys",
+            "description": {},
+            "url": {
+              "path": [
+                "iam",
+                "v2",
+                "api-keys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "20a1ebab-6f5b-45f5-b788-a6d1ebfe74ee",
+              "name": "API key list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "iam",
+                    "v2",
+                    "api-keys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"spec\": {\n        \"display_name\": \"string\",\n        \"description\": \"string\",\n        \"owner\": {\n          \"id\": \"string\"\n        },\n        \"resource\": {\n          \"id\": \"string\",\n          \"kind\": \"string\"\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"spec\": {\n        \"display_name\": \"string\",\n        \"description\": \"string\",\n        \"owner\": {\n          \"id\": \"string\"\n        },\n        \"resource\": {\n          \"id\": \"string\",\n          \"kind\": \"string\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b9c2992f-03fa-46e7-b0a4-479eca0a7a89",
+          "name": "Create an API key",
+          "request": {
+            "name": "Create an API key",
+            "description": {},
+            "url": {
+              "path": [
+                "iam",
+                "v2",
+                "api-keys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"spec\": {\n    \"display_name\": \"<string>\",\n    \"description\": \"<string>\",\n    \"owner\": {\n      \"id\": \"<string>\"\n    },\n    \"resource\": {\n      \"id\": \"<string>\",\n      \"kind\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8a44fdad-97cf-4303-aa73-dc5c04035460",
+              "name": "API key created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "iam",
+                    "v2",
+                    "api-keys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"spec\": {\n    \"display_name\": \"<string>\",\n    \"description\": \"<string>\",\n    \"owner\": {\n      \"id\": \"<string>\"\n    },\n    \"resource\": {\n      \"id\": \"<string>\",\n      \"kind\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"spec\": {\n    \"display_name\": \"string\",\n    \"description\": \"string\",\n    \"owner\": {\n      \"id\": \"string\"\n    },\n    \"resource\": {\n      \"id\": \"string\",\n      \"kind\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.confluent.cloud",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "14b7a944-d37c-41a7-889c-0202c893f621",
+    "name": "Confluent Cloud Kafka REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API (v3) and Cloud Management API as published at https://docs.confluent.io/. Authoritative, full reference lives in Confluent's per-resource API documentation; this spec covers commonly used cluster, topic, partition, consumer group, and ACL operations together with the documented HTTP Basic (API key) authentication scheme.\n\nContact Support:\n Name: Confluent Documentation",
+      "type": "text/plain"
+    }
+  }
+}
