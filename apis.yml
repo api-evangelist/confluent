@@ -31,6 +31,15 @@ apis:
       - type: Website
         url: https://www.confluent.io/
 common:
+  - type: VulnerabilityDisclosure
+    url: security/confluent-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/confluent-domain-security.yml
+  - type: Authentication
+    url: authentication/confluent-authentication.yml
+  - name: Agent Skills
+    url: https://github.com/confluentinc/agent-skills
+    type: AgentSkills
   - type: GitHubOrganization
     url: https://github.com/confluentinc
   - type: LinkedIn
@@ -39,6 +48,8 @@ common:
     url: https://www.confluent.io/partner/
   - type: LlmsText
     url: https://docs.confluent.io/llms.txt
+  - url: https://www.confluent.io/feed/
+    type: Blog
 integrations:
   - name: Become a Partner
 maintainers:
