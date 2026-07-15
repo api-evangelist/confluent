@@ -31,6 +31,8 @@ apis:
       - type: Website
         url: https://www.confluent.io/
 common:
+  - type: AgenticAccess
+    url: agentic-access/confluent-agentic-access.yml
   - type: VulnerabilityDisclosure
     url: security/confluent-vulnerability-disclosure.yml
   - type: DomainSecurity
