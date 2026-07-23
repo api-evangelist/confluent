@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Confluent Cloud Kafka REST ACLs API Keys API
+  version: v3
+  description: Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API (v3) and Cloud Management API as published at https://docs.confluent.io/. Authoritative, full reference lives in Confluent's per-resource API documentation; this spec covers commonly used cluster, topic, partition, consumer group, and ACL operations together with the documented HTTP Basic (API key) authentication scheme.
+  contact:
+    name: Confluent Documentation
+    url: https://docs.confluent.io/
+  license:
+    name: Confluent Community License / Apache 2.0
+    url: https://www.confluent.io/confluent-community-license/
+servers:
+- url: https://api.confluent.cloud
+  description: Confluent Cloud control plane
+- url: https://{kafka_cluster_host}
+  description: Confluent Cloud Kafka REST endpoint for a specific cluster
+  variables:
+    kafka_cluster_host:
+      default: pkc-xxxxx.region.provider.confluent.cloud
+      description: Kafka cluster bootstrap host portion of the REST endpoint
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: API Keys
+paths:
+  /iam/v2/api-keys:
+    get:
+      tags:
+      - API Keys
+      summary: List API keys
+      operationId: listApiKeys
+      responses:
+        '200':
+          description: API key list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyList'
+    post:
+      tags:
+      - API Keys
+      summary: Create an API key
+      operationId: createApiKey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+      responses:
+        '201':
+          description: API key created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+components:
+  schemas:
+    ApiKeyList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+        spec:
+          type: object
+          properties:
+            display_name:
+              type: string
+            description:
+              type: string
+            owner:
+              type: object
+              properties:
+                id:
+                  type: string
+            resource:
+              type: object
+              properties:
+                id:
+                  type: string
+                kind:
+                  type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using a Confluent Cloud API key (ID:secret)
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 bearer token (Confluent STS, external OAuth, or partner token)

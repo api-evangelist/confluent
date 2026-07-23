@@ -1,0 +1,108 @@
+openapi: 3.1.0
+info:
+  title: Confluent Cloud Kafka REST ACLs Partitions API
+  version: v3
+  description: Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API (v3) and Cloud Management API as published at https://docs.confluent.io/. Authoritative, full reference lives in Confluent's per-resource API documentation; this spec covers commonly used cluster, topic, partition, consumer group, and ACL operations together with the documented HTTP Basic (API key) authentication scheme.
+  contact:
+    name: Confluent Documentation
+    url: https://docs.confluent.io/
+  license:
+    name: Confluent Community License / Apache 2.0
+    url: https://www.confluent.io/confluent-community-license/
+servers:
+- url: https://api.confluent.cloud
+  description: Confluent Cloud control plane
+- url: https://{kafka_cluster_host}
+  description: Confluent Cloud Kafka REST endpoint for a specific cluster
+  variables:
+    kafka_cluster_host:
+      default: pkc-xxxxx.region.provider.confluent.cloud
+      description: Kafka cluster bootstrap host portion of the REST endpoint
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Partitions
+paths:
+  /kafka/v3/clusters/{cluster_id}/topics/{topic_name}/partitions:
+    parameters:
+    - $ref: '#/components/parameters/ClusterId'
+    - $ref: '#/components/parameters/TopicName'
+    get:
+      tags:
+      - Partitions
+      summary: List partitions for a topic
+      operationId: listPartitions
+      responses:
+        '200':
+          description: Partition list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartitionList'
+  /kafka/v3/clusters/{cluster_id}/topics/{topic_name}/partitions/{partition_id}:
+    parameters:
+    - $ref: '#/components/parameters/ClusterId'
+    - $ref: '#/components/parameters/TopicName'
+    - $ref: '#/components/parameters/PartitionId'
+    get:
+      tags:
+      - Partitions
+      summary: Get a single partition
+      operationId: getPartition
+      responses:
+        '200':
+          description: Partition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Partition'
+components:
+  parameters:
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
+    TopicName:
+      name: topic_name
+      in: path
+      required: true
+      schema:
+        type: string
+    PartitionId:
+      name: partition_id
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Partition:
+      type: object
+      properties:
+        partition_id:
+          type: integer
+        leader:
+          type: integer
+        replicas:
+          type: array
+          items:
+            type: integer
+    PartitionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Partition'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic authentication using a Confluent Cloud API key (ID:secret)
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 bearer token (Confluent STS, external OAuth, or partner token)
