@@ -6,9 +6,22 @@ description: >-
   into instantly accessible and usable data products with the market leading Data
   Streaming Platform.
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 position: Consumer
 access: 3rd-Party
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/confluent.png
 tags: []
 created: '2025-08-19'
 modified: '2026-03-16'
@@ -16,20 +29,91 @@ url: >-
   https://raw.githubusercontent.com/api-evangelist/confluent/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-  - aid: confluent:confluent
-    name: Confluent
-    description: >-
-      Stream, connect, process, and govern your data with an all-in-one, real-time
-      platform from the pioneer in data streaming. Build faster, scale smarter, and
-      turn data chaos into instantly accessible and usable data products with the
-      market leading Data Streaming Platform.
-    humanURL: https://www.confluent.io/
-    tags: []
-    properties:
-      - type: Documentation
-        url: https://docs.confluent.io/
-      - type: Website
-        url: https://www.confluent.io/
+- aid: confluent:confluent
+  name: Confluent
+  description: >-
+    Stream, connect, process, and govern your data with an all-in-one, real-time platform from the pioneer
+    in data streaming. Build faster, scale smarter, and turn data chaos into instantly accessible and
+    usable data products with the market leading Data Streaming Platform.
+  humanURL: https://www.confluent.io/
+  tags: []
+  properties:
+  - type: Documentation
+    url: https://docs.confluent.io/
+  - type: Website
+    url: https://www.confluent.io/
+- aid: confluent:confluent-acls-api
+  name: Confluent ACLs API
+  description: The ACLs API from Confluent — 1 operation(s) for acls.
+  humanURL: https://www.confluent.io/
+  tags:
+  - ACLs
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-acls-api-openapi.yml
+- aid: confluent:confluent-api-keys-api
+  name: Confluent API Keys API
+  description: The API Keys API from Confluent — 1 operation(s) for api keys.
+  humanURL: https://www.confluent.io/
+  tags:
+  - API Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-api-keys-api-openapi.yml
+- aid: confluent:confluent-clusters-api
+  name: Confluent Clusters API
+  description: The Clusters API from Confluent — 2 operation(s) for clusters.
+  humanURL: https://www.confluent.io/
+  tags:
+  - Clusters
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-clusters-api-openapi.yml
+- aid: confluent:confluent-consumer-groups-api
+  name: Confluent Consumer Groups API
+  description: The Consumer Groups API from Confluent — 2 operation(s) for consumer groups.
+  humanURL: https://www.confluent.io/
+  tags:
+  - Consumer Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-consumer-groups-api-openapi.yml
+- aid: confluent:confluent-environments-api
+  name: Confluent Environments API
+  description: The Environments API from Confluent — 1 operation(s) for environments.
+  humanURL: https://www.confluent.io/
+  tags:
+  - Environments
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-environments-api-openapi.yml
+- aid: confluent:confluent-partitions-api
+  name: Confluent Partitions API
+  description: The Partitions API from Confluent — 2 operation(s) for partitions.
+  humanURL: https://www.confluent.io/
+  tags:
+  - Partitions
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-partitions-api-openapi.yml
+- aid: confluent:confluent-service-accounts-api
+  name: Confluent Service Accounts API
+  description: The Service Accounts API from Confluent — 1 operation(s) for service accounts.
+  humanURL: https://www.confluent.io/
+  tags:
+  - Service Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-service-accounts-api-openapi.yml
+- aid: confluent:confluent-topics-api
+  name: Confluent Topics API
+  description: The Topics API from Confluent — 2 operation(s) for topics.
+  humanURL: https://www.confluent.io/
+  tags:
+  - Topics
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-topics-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/confluent-agentic-access.yml
