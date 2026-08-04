@@ -1,0 +1,28 @@
+{
+  "provider": "confluent",
+  "sources": [
+    "confluent-acls-api-openapi.yml",
+    "confluent-api-keys-api-openapi.yml",
+    "confluent-clusters-api-openapi.yml",
+    "confluent-consumer-groups-api-openapi.yml",
+    "confluent-environments-api-openapi.yml",
+    "confluent-partitions-api-openapi.yml",
+    "confluent-service-accounts-api-openapi.yml",
+    "confluent-topics-api-openapi.yml"
+  ],
+  "outputs": [
+    "confluent-acls-api-openapi.yml",
+    "confluent-api-keys-api-openapi.yml",
+    "confluent-clusters-api-openapi.yml",
+    "confluent-consumer-groups-api-openapi.yml",
+    "confluent-environments-api-openapi.yml",
+    "confluent-partitions-api-openapi.yml",
+    "confluent-service-accounts-api-openapi.yml",
+    "confluent-topics-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
