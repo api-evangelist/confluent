@@ -1,0 +1,256 @@
+{
+  "item": [
+    {
+      "id": "f8ccb523-f047-42c7-9b5e-82e2bc5a51c4",
+      "name": "ACLs",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1cee243c-8a24-429c-a930-fa94a9b9f98b",
+          "name": "List ACLs",
+          "request": {
+            "name": "List ACLs",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "acls"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "13d6d5d7-c7bc-48eb-a048-68706c6a43b6",
+              "name": "ACL list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "acls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"resource_type\": \"string\",\n      \"resource_name\": \"string\",\n      \"pattern_type\": \"string\",\n      \"principal\": \"string\",\n      \"host\": \"string\",\n      \"operation\": \"string\",\n      \"permission\": \"string\"\n    },\n    {\n      \"resource_type\": \"string\",\n      \"resource_name\": \"string\",\n      \"pattern_type\": \"string\",\n      \"principal\": \"string\",\n      \"host\": \"string\",\n      \"operation\": \"string\",\n      \"permission\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce9fe32d-928f-4182-a9fc-737bdd9b7cf8",
+          "name": "Create an ACL",
+          "request": {
+            "name": "Create an ACL",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "acls"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource_type\": \"<string>\",\n  \"resource_name\": \"<string>\",\n  \"pattern_type\": \"<string>\",\n  \"principal\": \"<string>\",\n  \"host\": \"<string>\",\n  \"operation\": \"<string>\",\n  \"permission\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "de463a10-76fa-4e60-987c-425014c06d66",
+              "name": "ACL created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "acls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"resource_type\": \"<string>\",\n  \"resource_name\": \"<string>\",\n  \"pattern_type\": \"<string>\",\n  \"principal\": \"<string>\",\n  \"host\": \"<string>\",\n  \"operation\": \"<string>\",\n  \"permission\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.confluent.cloud",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6dff440a-7329-4670-ae2f-0bf0dec4a4e8",
+    "name": "Confluent Cloud Kafka REST ACLs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API (v3) and Cloud Management API as published at https://docs.confluent.io/. Authoritative, full reference lives in Confluent's per-resource API documentation; this spec covers commonly used cluster, topic, partition, consumer group, and ACL operations together with the documented HTTP Basic (API key) authentication scheme.\n\nContact Support:\n Name: Confluent Documentation",
+      "type": "text/plain"
+    }
+  }
+}

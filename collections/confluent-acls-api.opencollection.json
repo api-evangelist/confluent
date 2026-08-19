@@ -1,0 +1,65 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluent Cloud Kafka REST ACLs API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ACLs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List ACLs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/acls",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List ACLs"
+        },
+        {
+          "info": {
+            "name": "Create an ACL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/acls",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an ACL"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

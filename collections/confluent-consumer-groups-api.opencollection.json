@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluent Cloud Kafka REST ACLs Consumer Groups API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Consumer Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List consumer groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/consumer-groups",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List consumer groups"
+        },
+        {
+          "info": {
+            "name": "Get a consumer group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/consumer-groups/:consumer_group_id",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "consumer_group_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a consumer group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

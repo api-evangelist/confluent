@@ -1,0 +1,76 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluent Cloud Kafka REST ACLs Partitions API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Partitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List partitions for a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name/partitions",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List partitions for a topic"
+        },
+        {
+          "info": {
+            "name": "Get a single partition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name/partitions/:partition_id",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "partition_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single partition"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

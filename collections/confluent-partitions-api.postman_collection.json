@@ -1,0 +1,295 @@
+{
+  "item": [
+    {
+      "id": "09caf8d0-5886-41fb-86d7-1192a5035660",
+      "name": "Partitions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0f693b59-583f-4feb-8a04-5d00917f7fdd",
+          "name": "List partitions for a topic",
+          "request": {
+            "name": "List partitions for a topic",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics",
+                ":topic_name",
+                "partitions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topic_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4db24c8b-b06c-419a-8475-245f9b5ac9ea",
+              "name": "Partition list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics",
+                    ":topic_name",
+                    "partitions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topic_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"partition_id\": 6248,\n      \"leader\": 8096,\n      \"replicas\": [\n        7085,\n        7384\n      ]\n    },\n    {\n      \"partition_id\": 3623,\n      \"leader\": 7562,\n      \"replicas\": [\n        2120,\n        5280\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d304b4c-a9aa-41b8-8a17-a6114683a819",
+          "name": "Get a single partition",
+          "request": {
+            "name": "Get a single partition",
+            "description": {},
+            "url": {
+              "path": [
+                "kafka",
+                "v3",
+                "clusters",
+                ":cluster_id",
+                "topics",
+                ":topic_name",
+                "partitions",
+                ":partition_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "cluster_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topic_name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "partition_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9dc14083-1fad-4c5e-9600-2e5064f8bf04",
+              "name": "Partition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "kafka",
+                    "v3",
+                    "clusters",
+                    ":cluster_id",
+                    "topics",
+                    ":topic_name",
+                    "partitions",
+                    ":partition_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "cluster_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topic_name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "partition_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"partition_id\": 6831,\n  \"leader\": 7598,\n  \"replicas\": [\n    8085,\n    4231\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.confluent.cloud",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c5b02677-e742-4276-b8dd-226d8cd09fa1",
+    "name": "Confluent Cloud Kafka REST ACLs Partitions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API (v3) and Cloud Management API as published at https://docs.confluent.io/. Authoritative, full reference lives in Confluent's per-resource API documentation; this spec covers commonly used cluster, topic, partition, consumer group, and ACL operations together with the documented HTTP Basic (API key) authentication scheme.\n\nContact Support:\n Name: Confluent Documentation",
+      "type": "text/plain"
+    }
+  }
+}

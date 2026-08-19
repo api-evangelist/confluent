@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluent Cloud Kafka REST ACLs Topics API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Topics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List topics in a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List topics in a cluster"
+        },
+        {
+          "info": {
+            "name": "Create a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a topic"
+        },
+        {
+          "info": {
+            "name": "Get topic metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get topic metadata"
+        },
+        {
+          "info": {
+            "name": "Delete a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.confluent.cloud/kafka/v3/clusters/:cluster_id/topics/:topic_name",
+            "params": [
+              {
+                "name": "cluster_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "topic_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a topic"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
