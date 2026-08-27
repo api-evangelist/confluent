@@ -1,0 +1,109 @@
+generated: '2026-08-27'
+method: searched
+source: https://github.com/confluentinc/agent-skills
+description: >-
+  Confluent PUBLISHES its own Agent Skills — this is not a set API Evangelist generated. The
+  repository is vendored under skills/agent-skills/ verbatim. Confluent states the skills follow
+  the Agent Skills Specification at https://agentskills.io/specification, and distributes them
+  through a Claude Code plugin marketplace as well as the Skills CLI for Cursor, GitHub Copilot
+  and any other spec-compatible agent.
+  Because the provider authored these, nothing here is generated on Confluent's behalf.
+publisher: Confluent
+repo: https://github.com/confluentinc/agent-skills
+docs: https://docs.confluent.io/cloud/current/ai/ai-tools/agent-skills.html
+specification:
+  name: Agent Skills Specification
+  url: https://agentskills.io/specification
+distribution:
+  - kind: claude-code-plugin
+    marketplace: confluent-agent-skills
+    plugin: streaming-skills-plugin
+    file: skills/agent-skills/.claude-plugin/marketplace.json
+  - kind: cursor-plugin
+    file: skills/agent-skills/.cursor-plugin/plugin.json
+  - kind: skills-cli
+    note: For Cursor, GitHub Copilot and other spec-compatible agents.
+supported_agents: [Claude Code, Cursor, GitHub Copilot]
+local_path: skills/agent-skills/
+license_file: skills/agent-skills/LICENSE
+skill_count: 9
+skills:
+  - name: confluent-cloud-cdc-tableflow
+    path: skills/agent-skills/skills/confluent-cloud-cdc-tableflow/SKILL.md
+    summary: >-
+      End-to-end Change Data Capture pipelines on Confluent Cloud using Debezium source
+      connectors, Flink for transformation, and Tableflow for Iceberg/Delta Lake integration.
+    prerequisites: Confluent Cloud account, open-source MCP server or Confluent CLI
+    has_evals: true
+  - name: confluent-skill-creator
+    path: skills/agent-skills/skills/confluent-skill-creator/SKILL.md
+    summary: >-
+      Build and test new Confluent product skills end to end — scoping, drafting,
+      spec-compliance validation, and end-to-end tests against a real Confluent environment.
+    prerequisites: Python 3.9+, confluent-kafka with Avro/JSON Schema/Protobuf extras, a Confluent environment
+    has_evals: true
+  - name: confluent-skill-reviewer
+    path: skills/agent-skills/skills/confluent-skill-reviewer/SKILL.md
+    summary: >-
+      Audit a Confluent agent skill against the Agent Skills Specification, Confluent
+      conventions and eval coverage requirements; returns blocking issues, warnings and nits.
+    has_evals: true
+  - name: developing-kafka-java-client
+    summary: >-
+      Scaffold or extend Java Kafka producer and consumer projects with Schema Registry
+      serialization (Avro, JSON Schema, Protobuf) for Confluent Cloud, local Docker or
+      WarpStream, using Maven or Gradle.
+    prerequisites: Java 17+, Maven or Gradle, Docker for local development
+    note: >-
+      Listed in Confluent's published skill table on docs.confluent.io. Not present in the
+      vendored snapshot of the repository, which was cloned before this skill landed.
+  - name: developing-kafka-python-client
+    path: skills/agent-skills/skills/developing-kafka-python-client/SKILL.md
+    summary: >-
+      Scaffold Python Kafka producer and consumer projects using confluent-kafka-python with
+      Schema Registry serialization, in asynchronous or synchronous mode.
+    prerequisites: Python, pip, Docker for local development
+    has_evals: true
+  - name: flink-udf
+    path: skills/agent-skills/skills/flink-udf/SKILL.md
+    summary: >-
+      Build and deploy Flink user-defined functions in Java — scalar UDFs, UDTFs and process
+      table functions — invoked from Flink SQL or the Table API on Confluent Cloud or Docker.
+    prerequisites: Java 17+, Maven or Gradle, Confluent CLI or Docker
+    has_evals: true
+  - name: kafka-schema-registry
+    path: skills/agent-skills/skills/kafka-schema-registry/SKILL.md
+    summary: >-
+      Scan projects for Kafka applications, extract schemas from data models, tag PII fields,
+      generate Terraform for Schema Registry registration, and produce a migration report with
+      rollout ordering.
+    prerequisites: Terraform
+    has_evals: true
+  - name: kafka-streams-programming
+    path: skills/agent-skills/skills/kafka-streams-programming/SKILL.md
+    summary: >-
+      Architect, build and debug Kafka Streams applications — topology design, pattern
+      selection (joins, windows, aggregations), code generation and production troubleshooting.
+    prerequisites: Java 17+, Gradle or Maven, Docker
+    has_evals: true
+  - name: msk-migration
+    summary: >-
+      Assess and plan a migration from Amazon MSK to Confluent Cloud, including an environment
+      readiness audit and a technical migration plan covering sizing, networking,
+      authentication and switchover.
+    prerequisites: An AWS MSK environment; KCP (optional) for automated scans
+    note: >-
+      Listed in Confluent's published skill table on docs.confluent.io. Not present in the
+      vendored snapshot of the repository.
+quality_signals:
+  evals_as_contract: >-
+    Every vendored skill ships an evals/evals.json alongside SKILL.md, and the repository
+    enforces it — confluent-skill-reviewer audits eval coverage as one of three named gates.
+    This is a materially stronger publishing posture than a skills directory alone.
+  anti_triggers: >-
+    Most skills carry explicit "Do NOT trigger for..." clauses in their description, which is a
+    deliberate defence against trigger overlap; the repository ships
+    scripts/check_trigger_overlap.py to test it.
+  lazy_loading: >-
+    Skills keep detail in references/ and instruct the agent to load only what it needs, rather
+    than inlining everything into SKILL.md.

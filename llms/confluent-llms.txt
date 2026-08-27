@@ -108,7 +108,7 @@ Always use Schema Registry with Kafka producers and consumers. This ensures:
 - Safe schema evolution without breaking downstream applications
 - Complete data governance and lineage tracking
 
-- [Kafka Client Overview](https://docs.confluent.io/kafka-client/overview.md): Learn about client libraries for different programming languages
+- [Kafka Client Overview](https://docs.confluent.io/kafka-clients/overview.md): Learn about client libraries for different programming languages
 - [Kafka Producers with Schema Registry](https://docs.confluent.io/platform/current/clients/producer.md): Build producer applications using Schema Registry serializers
 - [Kafka Consumers with Schema Registry](https://docs.confluent.io/platform/current/clients/consumer.md): Build consumer applications using Schema Registry deserializers
 - [Client Examples](https://docs.confluent.io/kafka-client/examples-clients.md): Explore code examples for various programming languages

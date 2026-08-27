@@ -1,0 +1,169 @@
+generated: '2026-08-27'
+method: searched
+status: published
+source: >-
+  https://docs.confluent.io/cloud/current/ai/ai-tools/managed-mcp-server.html
+  and https://github.com/confluentinc/mcp-confluent
+description: >-
+  Confluent ships TWO distinct MCP products. The managed servers are remote HTTPS endpoints an
+  agent can POST to today, governed by the caller's existing Confluent Cloud RBAC. The
+  open-source server is a local stdio process a human must install and run first, and Confluent
+  states plainly that it is community-supported with no service level commitments. They are not
+  interchangeable and are recorded separately below.
+deployment:
+  mode: both
+  endpoint: https://api.confluent.cloud/mcp/v1
+  install: npx -y @confluentinc/mcp-confluent
+  package: https://www.npmjs.com/package/@confluentinc/mcp-confluent
+  auth: api-key
+  verified: probed
+servers:
+  - name: confluent-cloud-managed-global
+    kind: managed
+    transport: http
+    url: https://api.confluent.cloud/mcp/v1
+    auth: HTTP Basic with a Confluent Cloud API key (Cloud, global, or resource-scoped)
+    scope: organization-wide operations not tied to a region
+    probe:
+      method: POST tools/list (jsonrpc 2.0)
+      http_status: 401
+      body: '{"errors":[{"status":"401","detail":"Unauthorized"}]}'
+      note: >-
+        The live tool schemas are auth-gated. The tool NAMES and descriptions below are
+        transcribed verbatim from Confluent's published tool tables, not from an authenticated
+        tools/list response, so inputSchema is not captured. Authenticated introspection is
+        required to bind real input contracts.
+  - name: confluent-cloud-managed-regional
+    kind: managed
+    transport: http
+    url_template: https://mcp.<region>.<cloud>.confluent.cloud/mcp/v1/organizations/<org_id>
+    auth: HTTP Basic with a resource-scoped Confluent Cloud API key
+    scope: >-
+      operations requiring direct access to resources in one region — topics and Schema
+      Registry subjects. cloud is one of aws, gcp, azure.
+    note: >-
+      Templated by design; the concrete host depends on the customer's cloud, region and
+      organization ID, so no single endpoint could be probed.
+  - name: mcp-confluent
+    kind: open-source
+    transport: stdio
+    install: npx -y @confluentinc/mcp-confluent
+    package: https://www.npmjs.com/package/@confluentinc/mcp-confluent
+    repo: https://github.com/confluentinc/mcp-confluent
+    version: 1.5.0
+    published: '2026-07-07'
+    auth: api-key
+    scope: >-
+      Confluent Cloud, Confluent Platform and standalone Apache Kafka. Confluent's README
+      states it provides "50+ tools across Kafka, Flink SQL, Schema Registry, Connectors,
+      Tableflow, and more". Tool names are enumerable only by running
+      `npx -y @confluentinc/mcp-confluent --list-tools`, which requires local execution, so
+      they are not transcribed here rather than guessed.
+    support: >-
+      Community-supported. Confluent states it "doesn't provide dedicated support for it, and
+      support is best-effort only, with no service level commitments."
+tools:
+  - name: list_environments
+    server: managed-global
+    category: discovery
+    description: List all Confluent Cloud environments you can access, including environment IDs, names, and stream governance packages.
+  - name: read_environment
+    server: managed-global
+    category: discovery
+    description: Get details for a specific environment.
+  - name: list_clusters
+    server: managed-global
+    category: discovery
+    description: List Kafka clusters in an environment, including cluster type, cloud provider, region, and availability.
+  - name: read_cluster
+    server: managed-global
+    category: discovery
+    description: Get details and endpoints for a specific cluster.
+  - name: list_connectors
+    server: managed-global
+    category: connectors
+    description: List all connectors in a cluster with name, type, and current status.
+  - name: get_connector_config
+    server: managed-global
+    category: connectors
+    description: Get the full configuration for a connector, including configuration parameters and task list.
+  - name: get_connector_status
+    server: managed-global
+    category: connectors
+    description: Get runtime status and per-task status with error traces (PROVISIONING, RUNNING, DEGRADED, FAILED, PAUSED, DELETED).
+  - name: get_connector_logs
+    server: managed-global
+    category: connectors
+    description: Fetch recent connector logs. ERROR-level by default, optional WARN and INFO. Maximum lookback is 72 hours.
+  - name: get_connector_offsets
+    server: managed-global
+    category: connectors
+    description: Get partition and offset information showing the connector's consumption progress.
+  - name: get_connector_metrics
+    server: managed-global
+    category: connectors
+    description: Fetch time-series metrics for a connector.
+  - name: get_connector_error_summary
+    server: managed-global
+    category: connectors
+    description: Get an AI-generated summary of connector errors extracted from task status and error traces.
+  - name: get_connector_fix_recommendations
+    server: managed-global
+    category: connectors
+    description: Get AI-generated fix recommendations for a failing connector.
+  - name: restart_connector
+    server: managed-global
+    category: connectors
+    write: true
+    description: Restart a connector and its tasks.
+  - name: update_connector_config
+    server: managed-global
+    category: connectors
+    write: true
+    description: >-
+      Update a connector's configuration. Pass only the fields you want to change; other fields
+      are preserved. You can't remove a field by omitting it.
+  - name: list_metrics
+    server: managed-global
+    category: metrics
+    description: >-
+      List available metric descriptors, including names, types, and units. Supports resource
+      types kafka, connector, compute_pool, ksql, schema_registry.
+  - name: query_metrics
+    server: managed-global
+    category: metrics
+    description: >-
+      Query time-series metric data for a cluster, such as throughput or consumer lag.
+      Supports custom time intervals, granularity, and grouping by topic or consumer group.
+  - name: list_kafka_topics
+    server: managed-regional
+    category: topics
+    description: List all topics in a cluster.
+  - name: describe_kafka_topic
+    server: managed-regional
+    category: topics
+    description: Get topic configuration, including partition count and replication factor.
+  - name: consume_kafka_messages
+    server: managed-regional
+    category: topics
+    description: Read one to ten sample messages from a topic. You can target a specific partition and offset.
+  - name: list_schema_subjects
+    server: managed-regional
+    category: schema-registry
+    description: List all schema subjects in Schema Registry, including subject name, version, schema ID, and schema type.
+  - name: read_schema_subject
+    server: managed-regional
+    category: schema-registry
+    description: Get the full schema definition for a subject, including content, version, and references.
+safety:
+  read_only_by_default: true
+  note: >-
+    Confluent states most managed MCP tools are read-only and that you cannot create, change or
+    delete clusters or topics through MCP tools. The two exceptions are restart_connector and
+    update_connector_config, which change Confluent Cloud resources.
+  authorization: >-
+    MCP tools return only the resources the caller's API key has permission to access; access is
+    governed by existing Confluent Cloud RBAC.
+  audit: >-
+    MCP tool calls appear in the Confluent Cloud audit log, logged with a method name prefixed
+    `mcp.tools/call.` followed by the tool name.

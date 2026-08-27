@@ -1,0 +1,83 @@
+generated: '2026-08-27'
+method: searched
+source: https://docs.confluent.io/cloud/current/release-notes/index.html
+http_status: 200
+description: >-
+  Confluent Cloud publishes a dated release-notes page, updated multiple times per week. Entries
+  are feature announcements per release date; there is no per-API-group version number attached
+  to an entry, and no separate breaking-change feed — breaking changes are communicated by email
+  under the 180-day deprecation policy rather than in this changelog.
+url: https://docs.confluent.io/cloud/current/release-notes/index.html
+scheme: date-based
+versioned_entries: false
+current_version: null
+current_version_note: >-
+  Confluent Cloud is continuously delivered and carries no aggregate product version. The
+  closest thing to a version is the per-API-group path version (connect/v1, cmk/v2, srcm/v3).
+cadence: multiple entries per week
+window_start: '2026-08-12'
+window_end: '2026-08-26'
+entries:
+  - date: '2026-08-26'
+    breaking: false
+    additions: true
+    highlights:
+      - IBM MQ Source connector now supports STRING and BYTES output data formats.
+      - Output key format is now configurable for IBM MQ Source connectors.
+      - Input key format is now configurable for IBM MQ Sink connectors.
+  - date: '2026-08-25'
+    breaking: false
+    additions: true
+    highlights:
+      - >-
+        Unified Stream Manager now supports alerting for registered Confluent Platform clusters
+        — offline partitions, broker storage exhaustion, stalled telemetry — routed to the
+        Console dashboard, email, Slack, Microsoft Teams or a generic webhook.
+  - date: '2026-08-19'
+    breaking: false
+    additions: true
+    highlights:
+      - >-
+        Secret manager integration extended to HTTP Sink V2, HTTP Source V2 and Oracle XStream
+        CDC Source connectors.
+      - >-
+        Console idle session timeout increased from 30 minutes to two hours; inactivity is now
+        measured by interaction rather than by an open browser tab. Eight-hour maximum session
+        length unchanged.
+  - date: '2026-08-18'
+    breaking: false
+    additions: true
+    highlights:
+      - Baseline CFU for an individual Flink SQL statement, as a Limited Availability feature.
+      - >-
+        Lightning Queries — read the Real-Time Context Engine's materialized table for a topic
+        directly through an API without an agent (Early Access Program).
+      - >-
+        AI_FORECAST and AI_DETECT_ANOMALIES now support three IBM Granite time-series models
+        (TTM, FlowState, PatchTST-FM) alongside Google TimesFM 2.5 (Early Access).
+  - date: '2026-08-17'
+    breaking: false
+    additions: true
+    highlights:
+      - >-
+        FROM_CHANGELOG and TO_CHANGELOG built-in changelog conversion functions for Confluent
+        Cloud for Apache Flink are now generally available.
+  - date: '2026-08-12'
+    breaking: false
+    additions: true
+    highlights:
+      - Advanced Message Search available for Open Preview in the Console message browser.
+      - >-
+        Secret manager integration extended to Amazon DynamoDB CDC Source and Amazon DynamoDB
+        Sink connectors.
+observations:
+  - >-
+    No entry in the observed two-week window is marked breaking. That is consistent with
+    Confluent's stated policy: breaking changes land approximately once a year with 180 days of
+    email notice, not in the rolling release notes.
+  - >-
+    The page is large (348KB as markdown) and is the single source for Confluent Cloud change
+    communication; Confluent Platform and the CLI carry their own separate release notes.
+related:
+  - https://docs.confluent.io/platform/current/release-notes/index.html
+  - https://github.com/confluentinc/cli/releases

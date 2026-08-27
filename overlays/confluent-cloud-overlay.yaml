@@ -1,0 +1,61 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Confluent Cloud APIs
+  version: 1.0.0
+extends: openapi/confluent-cloud-openapi.yaml
+x-provenance:
+  generated: '2026-08-27'
+  method: generated
+  source: >-
+    Derived from the artifacts in this repo. Captures API Evangelist annotations WITHOUT
+    mutating the verbatim spec harvested from https://docs.confluent.io/cloud/current/openapi.yaml.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: confluent
+      x-apievangelist-harvested: '2026-08-27'
+      x-apievangelist-source: https://docs.confluent.io/cloud/current/openapi.yaml
+      x-apievangelist-operations: 504
+      x-apievangelist-api-groups: 15
+      x-apievangelist-note: >-
+        info.version is empty in the published document, carrying the inline comment "TODO:
+        figure out our aggregate API spec versioning strategy, this is here to pass the linter".
+        This is a consequence of Confluent's per-API-group versioning model rather than an
+        oversight, but it leaves the contract unversioned to any tool reading info.version.
+  - target: $.info
+    update:
+      x-apievangelist-conventions:
+        pagination: opaque cursor (page_size / page_token), excluded on Connect v1 and Kafka REST v3
+        errors: proprietary envelope, NOT RFC 9457
+        idempotency: none published
+        rate_limit_headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After]
+        deprecation_notice_days: 180
+        artifacts:
+          conventions: conventions/confluent-conventions.yml
+          errors: errors/confluent-problem-types.yml
+          lifecycle: lifecycle/confluent-lifecycle.yml
+          rate_limits: rate-limits/confluent-rate-limits.yml
+          authentication: authentication/confluent-authentication.yml
+          scopes: scopes/confluent-scopes.yml
+          data_model: data-model/confluent-data-model.yml
+  - target: $.info
+    update:
+      x-apievangelist-agent-surface:
+        mcp_managed_endpoint: https://api.confluent.cloud/mcp/v1
+        mcp_local_package: '@confluentinc/mcp-confluent'
+        agent_skills: https://github.com/confluentinc/agent-skills
+        agent_card: none published
+        crosswalk: mcp/confluent-tool-crosswalk.yml
+  - target: $.paths['/srcm/v2/clusters']
+    update:
+      x-apievangelist-lifecycle: deprecated
+      x-apievangelist-successor: /srcm/v3/clusters
+  - target: $.paths['/srcm/v2/regions']
+    update:
+      x-apievangelist-lifecycle: deprecated
+  - target: $.paths['/kafka/v3/clusters/{cluster_id}/topics/{topic_name}/records']
+    update:
+      x-apievangelist-reversibility: none
+      x-apievangelist-note: >-
+        A produced record cannot be unsent, and no idempotency key exists. Treat as terminal;
+        do not blindly retry on an ambiguous failure.

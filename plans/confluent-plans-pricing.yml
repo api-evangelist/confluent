@@ -3,137 +3,144 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Confluent
 providerId: confluent
+generated: '2026-08-27'
+method: searched
+source: https://www.confluent.io/pricing/
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags: []
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+modified: '2026-08-27'
+supersedes: >-
+  A 2026-05-04 bulk-sweep scaffold that invented three generic API tiers (1,000 requests/month
+  free, 10 req/min) bearing no relation to anything Confluent sells. Confluent does not meter
+  its platform in API requests at all — it meters eCKU-hours, GB transferred and GB stored.
+  The scaffold values are removed.
+tags: [Pricing, Plans, Confluent Cloud]
+description: >-
+  Confluent Cloud pricing is consumption-based on serverless cluster types, not on API call
+  volume. The unit is the eCKU (Elastic Confluent Unit for Kafka) charged per eCKU-hour,
+  plus data in/out per GB and data stored per GB-month. The APIs themselves — the Cloud API,
+  Metrics API, Kafka REST v3, Schema Registry — carry no separate price; they are the control
+  plane for the cluster you are already paying for.
+currency: USD
+billing_model: consumption
+metered_units: [eCKU-hour, GB ingress/egress, GB-month stored]
+plan_count: 5
 plans:
-  - id: confluent-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Confluent API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
+  - id: basic
+    name: Basic
+    tier_family: General Purpose
+    price_entry: '$0/Month'
+    starting_cost_monthly: 0
+    description: Start small with no risk. Easily get started with your test cases.
     entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Confluent
-  - id: confluent-pro
-    name: Professional
-    type: paid
-    description: Production tier for Confluent. Provides higher quotas, priority support, and access to
-      the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
+      - {name: ecku_hour, label: eCKU, metric: ecku-hour, price: '0.14', unit: eCKU-hour, note: 'First eCKU free, then $0.14'}
+      - {name: data_transfer, label: Data In/Out (Ingress/Egress), metric: gb, price: '0.05', unit: GB}
+      - {name: data_stored, label: Data Stored, metric: gb-month, price: '0.08', unit: GB-month}
+    limits:
+      uptime_sla: 99.5%
+      throughput_ingress_mbps: 250
+      throughput_egress_mbps: 750
+      partition_limit: 1500
+      storage_limit: 5 TB
+      api_keys_per_cluster: 50
+    features:
+      - Serverless, fully managed clusters with zero ops
+      - Autoscaling Kafka resources
+      - 80+ fully managed connectors
+      - Security and governance essentials
+      - Multicloud across AWS, Azure, and GCP
+      - Secure public endpoints
+  - id: standard
+    name: Standard
+    tier_family: General Purpose
+    price_entry: '~$385/Month'
+    starting_cost_monthly: 385
+    description: Great for most production-ready use cases with an extended feature set.
     entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1000
-        price: TBD
-        userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Confluent
-  - id: confluent-enterprise
+      - {name: ecku_hour, label: eCKU, metric: ecku-hour, price: '0.75', unit: eCKU-hour}
+      - {name: data_transfer, label: Data In/Out (Ingress/Egress), metric: gb, price_min: '0.035', price_max: '0.050', unit: GB}
+      - {name: data_stored, label: Data Stored, metric: gb-month, price: '0.03', unit: GB-month}
+    limits:
+      uptime_sla: '99.9% (1 eCKU) / 99.99% (2+ eCKUs)'
+      partition_limit: 2500
+      storage_limit: Infinite
+      api_keys_per_cluster: 250
+    features:
+      - Everything in Basic
+      - High availability with 99.99% uptime SLA
+      - Infinite storage
+      - Audit logs to detect security threats
+      - 30%+ throughput savings that scale with usage
+  - id: enterprise
     name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Confluent. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
+    tier_family: General Purpose
+    price_entry: '~$895/Month'
+    starting_cost_monthly: 895
+    description: Ideal for mission-critical use cases and sensitive data at GBps+ scale.
     entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Confluent
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+      - {name: ecku_hour, label: eCKU, metric: ecku-hour, price_min: '1.75', price_max: '2.25', unit: eCKU-hour}
+      - {name: data_transfer, label: Data In/Out (Ingress/Egress), metric: gb, price_min: '0.020', price_max: '0.050', unit: GB}
+    limits:
+      uptime_sla: 99.99%
+      throughput_ingress_mbps: 1920
+      throughput_egress_mbps: 5760
+      partition_limit: 96000
+      storage_limit: Infinite
+      api_keys_per_cluster: 2500
+    features:
+      - Everything in Basic and Standard
+      - Private networking (Private Link / Private Service Connect)
+      - GBps+ autoscaling
+      - Enhanced partition limits
+      - 60%+ throughput savings
+  - id: freight
+    name: Freight
+    tier_family: Specialty
+    price_entry: '$2,300/Month'
+    starting_cost_monthly: 2300
+    description: >-
+      Cost-efficient for high scale logging and observability use cases with relaxed latency
+      requirements.
+    latency: Relaxed
+    entries:
+      - {name: ecku_hour, label: eCKU, metric: ecku-hour, price: '2.25', unit: eCKU-hour, note: 'minimum 2 eCKUs'}
+      - {name: data_transfer, label: Data In/Out (Ingress/Egress), metric: gb, price_min: '0.014', price_max: '0.030', unit: GB, note: 'Freight delivers direct-to-object storage; price shown is an effective pre-replication price'}
+    limits:
+      uptime_sla: 99.99%
+      throughput_ingress_mbps: 9120
+      throughput_egress_mbps: 27360
+      partition_limit: 50000
+      api_keys_per_cluster: 2500
+    features:
+      - Private networking only
+  - id: dedicated
+    name: Dedicated
+    tier_family: Pre-provisioned
+    price_entry: contact-sales
+    starting_cost_monthly: null
+    description: >-
+      Pre-provisioned capacity for use cases with distinct networking and throughput
+      requirements. Priced per CKU rather than per eCKU. Confluent directs buyers to contact
+      sales, so no public per-unit price is available.
+    limits:
+      api_keys_per_cluster: 20000
+      ckus_per_cluster_default: 24
+    features:
+      - Self-balancing clusters
+      - VPC/VNet peering
+      - AWS Transit Gateway
+      - Customer managed keys (BYOK)
+notes:
+  - Prices shown are pre-replication.
+  - >-
+    Confluent states discounts scale with usage — the more you use, the more you save — so the
+    published per-unit rates are list prices, not the rates a committed customer pays.
+  - >-
+    A free trial exists (https://www.confluent.io/confluent-cloud/tryfree/) and Confluent
+    advertises the first eCKU free on Basic, which is the closest thing to a free tier.
+free_tier:
+  available: true
+  url: https://www.confluent.io/confluent-cloud/tryfree/
+  http_status: 200
+  description: First eCKU free on Basic clusters, plus a signup trial credit.
+pricing_url: https://www.confluent.io/pricing/
+cost_estimator: https://www.confluent.io/pricing/

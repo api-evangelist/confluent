@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Confluent Cloud Metrics API
+  version: 1.0.0
+extends: openapi/confluent-metrics-api-openapi.yaml
+x-provenance:
+  generated: '2026-08-27'
+  method: generated
+  source: >-
+    Derived from the artifacts in this repo. Does not mutate the spec harvested verbatim from
+    https://api.telemetry.confluent.cloud/docs/api.yaml.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: confluent
+      x-apievangelist-harvested: '2026-08-27'
+      x-apievangelist-source: https://api.telemetry.confluent.cloud/docs/api.yaml
+      x-apievangelist-operations: 6
+      x-apievangelist-domain-standard: OpenMetrics
+      x-apievangelist-gap: >-
+        No operation in this document declares an operationId, so every generated client and
+        every tool binding must key on path+method. The sibling Confluent Cloud API declares an
+        operationId on all 504 of its operations; this one declares zero.
+  - target: $.paths['/v2/metrics/{dataset}/export']
+    update:
+      x-apievangelist-standard: >-
+        Serves OpenMetrics and Prometheus text exposition formats, making Confluent telemetry
+        consumable by an existing Prometheus/Grafana stack with no bespoke connector.

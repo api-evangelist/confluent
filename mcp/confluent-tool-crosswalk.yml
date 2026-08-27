@@ -1,0 +1,200 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  mcp/confluent-mcp.yml (tool names transcribed from
+  https://docs.confluent.io/cloud/current/ai/ai-tools/managed-mcp-server.html)
+  bound to operationIds in openapi/confluent-cloud-openapi.yaml and
+  openapi/confluent-metrics-api-openapi.yaml
+description: >-
+  Binds each Confluent managed MCP tool to the REST operation(s) that back it, so a tool
+  inherits a real inputSchema from the spec instead of a guessed one. The live tools/list is
+  auth-gated (HTTP 401), so bindings are by name and documented semantics against the published
+  tool tables — confidence is set accordingly and nothing is asserted that the spec does not
+  contain. Confluent's own docs describe the managed servers as views onto the Cloud APIs, and
+  every binding below resolves to an operation that exists in the harvested spec.
+surfaces:
+  openapi:
+    - file: openapi/confluent-cloud-openapi.yaml
+      title: Confluent Cloud APIs
+      operations: 504
+      gated: false
+      source: https://docs.confluent.io/cloud/current/openapi.yaml
+    - file: openapi/confluent-metrics-api-openapi.yaml
+      title: Confluent Cloud Metrics API
+      operations: 6
+      gated: false
+      source: https://api.telemetry.confluent.cloud/docs/api.yaml
+  graphql: null
+  mcp:
+    global: https://api.confluent.cloud/mcp/v1
+    regional: https://mcp.<region>.<cloud>.confluent.cloud/mcp/v1/organizations/<org_id>
+    gated: true
+    gate_evidence: 'POST tools/list -> HTTP 401 Unauthorized'
+crosswalk:
+  - tool: list_environments
+    category: discovery
+    rest: [listOrgV2Environments]
+    binding: rest
+    confidence: high
+  - tool: read_environment
+    category: discovery
+    rest: [getOrgV2Environment]
+    binding: rest
+    confidence: high
+  - tool: list_clusters
+    category: discovery
+    rest: [listCmkV2Clusters]
+    binding: rest
+    confidence: high
+  - tool: read_cluster
+    category: discovery
+    rest: [getCmkV2Cluster, getKafkaCluster]
+    binding: rest
+    confidence: medium
+    note: >-
+      The tool returns "details and endpoints"; cmk/v2 carries the cluster spec and endpoints,
+      Kafka REST v3 getKafkaCluster carries the cluster-level Kafka view. Fans out to both.
+  - tool: list_connectors
+    category: connectors
+    rest: [listConnectv1Connectors, listConnectv1ConnectorsWithExpansions]
+    binding: rest
+    confidence: high
+    note: Returning name, type and status together matches the ?expand=info,status,id form.
+  - tool: get_connector_config
+    category: connectors
+    rest: [getConnectv1ConnectorConfig, readConnectv1Connector]
+    binding: rest
+    confidence: high
+    note: readConnectv1Connector carries the task list the tool description mentions.
+  - tool: get_connector_status
+    category: connectors
+    rest: [readConnectv1ConnectorStatus, listConnectv1ConnectorTasks]
+    binding: rest
+    confidence: high
+  - tool: get_connector_offsets
+    category: connectors
+    rest: [getConnectv1ConnectorOffsets]
+    binding: rest
+    confidence: high
+  - tool: get_connector_metrics
+    category: connectors
+    rest: []
+    rest_paths: ['POST /v2/metrics/{dataset}/query']
+    binding: rest
+    confidence: medium
+    note: >-
+      Backed by the separate Metrics API (openapi/confluent-metrics-api-openapi.yaml) with
+      resource type connector, not by the Cloud API. That spec declares NO operationId on any
+      of its six operations, so this row binds by path+method rather than by operationId.
+  - tool: list_metrics
+    category: metrics
+    rest: []
+    rest_paths:
+      - 'GET /v2/metrics/{dataset}/descriptors/metrics'
+      - 'GET /v2/metrics/{dataset}/descriptors/resources'
+    binding: rest
+    confidence: medium
+    note: >-
+      The tool exposes both descriptor families through one name. Bound by path+method because
+      the Metrics API spec declares no operationIds.
+  - tool: query_metrics
+    category: metrics
+    rest: []
+    rest_paths: ['POST /v2/metrics/{dataset}/query']
+    binding: rest
+    confidence: high
+    note: >-
+      Bound by path+method because the Metrics API spec declares no operationIds.
+  - tool: restart_connector
+    category: connectors
+    write: true
+    rest: [restartConnectv1Connector]
+    binding: rest
+    confidence: high
+  - tool: update_connector_config
+    category: connectors
+    write: true
+    rest: [createOrUpdateConnectv1ConnectorConfig]
+    binding: rest
+    confidence: medium
+    note: >-
+      The REST operation is a full PUT of the config document. The tool documents merge
+      semantics ("pass only the fields you want to change; other fields are preserved"), so
+      the server performs a read-modify-write the REST surface does not offer directly. This
+      divergence is real and is the reason confidence is not high.
+  - tool: list_kafka_topics
+    category: topics
+    rest: [listKafkaTopics]
+    binding: rest
+    confidence: high
+  - tool: describe_kafka_topic
+    category: topics
+    rest: [getKafkaTopic, listKafkaTopicConfigs]
+    binding: rest
+    confidence: high
+  - tool: list_schema_subjects
+    category: schema-registry
+    rest: [list, listVersions]
+    binding: rest
+    confidence: medium
+    note: >-
+      Schema Registry GET /subjects returns subject names only; the tool also returns version,
+      schema ID and schema type, which requires a fan-out over listVersions/getSchemaByVersion.
+  - tool: read_schema_subject
+    category: schema-registry
+    rest: [getSchemaByVersion, getReferencedBy]
+    binding: rest
+    confidence: high
+mcp_only:
+  - tool: get_connector_logs
+    reason: >-
+      No connector-log operation exists anywhere in the harvested Cloud API spec. Confluent
+      surfaces recent connector logs (ERROR by default, 72-hour lookback) through MCP only.
+  - tool: get_connector_error_summary
+    reason: >-
+      AI-generated summary of connector errors. A server-side synthesis over task status and
+      error traces, with no REST equivalent.
+  - tool: get_connector_fix_recommendations
+    reason: >-
+      AI-generated fix recommendations for a failing connector. Server-side inference, no REST
+      equivalent. This and the two rows above are the clearest case in the catalog of an MCP
+      surface that is not a projection of the REST API but a distinct product capability.
+  - tool: consume_kafka_messages
+    reason: >-
+      Reading one to ten sample messages from a topic. The Kafka REST v3 surface in this spec
+      exposes produceRecord (POST records) but no consume operation — consumption over REST
+      requires the self-managed Confluent REST Proxy, which is not part of the Cloud API spec.
+rest_only:
+  - capability: Cluster lifecycle (write)
+    operations: [createCmkV2Cluster, updateCmkV2Cluster, deleteCmkV2Cluster]
+    note: >-
+      Deliberate. Confluent documents that you cannot create, change or delete clusters through
+      MCP tools.
+  - capability: Topic lifecycle (write)
+    operations: [createKafkaTopic, deleteKafkaTopic, updatePartitionCountKafkaTopic]
+    note: Deliberate — same read-only posture as clusters.
+  - capability: Environment lifecycle (write)
+    operations: [createOrgV2Environment, updateOrgV2Environment, deleteOrgV2Environment]
+  - capability: Connector lifecycle beyond restart
+    operations: [createConnectv1Connector, deleteConnectv1Connector, pauseConnectv1Connector, resumeConnectv1Connector, alterConnectv1ConnectorOffsetsRequest]
+  - capability: Schema Registry writes
+    operations: [register, deleteSubject, deleteSchemaVersion, lookUpSchemaUnderSubject]
+  - capability: Topic and broker configuration
+    operations: [updateKafkaTopicConfig, updateKafkaTopicConfigBatch, updateKafkaClusterConfig, updateKafkaClusterConfigs, deleteKafkaTopicConfig]
+  - capability: Produce records
+    operations: [produceRecord]
+  - capability: IAM, RBAC, IP filtering, API keys, service accounts, notifications, networking, Flink, Tableflow, ksqlDB, Stream Sharing, service quotas, partner entitlements
+    note: >-
+      The bulk of the 504-operation Cloud API has no MCP tool at all. The managed servers cover
+      discovery, connector operations, metrics, topics and schemas; everything else is REST-only.
+coverage:
+  tools_named: 21
+  tools_bound: 17
+  mcp_only: 4
+  rest_operations_total: 510
+  rest_operations_with_a_tool: 27
+  note: >-
+    rest_operations_total is 504 Cloud API operations plus 6 Metrics API operations.
+    rest_operations_with_a_tool counts distinct operationIds in crosswalk[].rest (24) plus the
+    3 distinct Metrics API path+method pairs in crosswalk[].rest_paths. The Metrics API spec
+    declares no operationId on any operation, which is itself a contract-quality gap.

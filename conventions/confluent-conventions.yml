@@ -1,0 +1,197 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  info.description of https://docs.confluent.io/cloud/current/openapi.yaml (Confluent's own
+  API guidelines, published inside the contract) plus
+  https://docs.confluent.io/cloud/current/api.html
+description: >-
+  Cross-cutting runtime semantics for the Confluent Cloud APIs. Unusually, Confluent publishes
+  its API guidelines INSIDE the OpenAPI document's info.description rather than only on a docs
+  page, so every rule below is machine-readable from the contract itself.
+docs: https://docs.confluent.io/cloud/current/api.html
+authentication:
+  style: HTTP Basic (API key ID as username, secret as password) or OAuth 2.0 bearer token
+  key_types:
+    - name: Cloud API key
+      scope: resource-management operations across the organization
+    - name: Resource API key
+      scope: a single resource — Kafka cluster, Schema Registry, Flink, ksqlDB
+    - name: Global API key
+      scope: multiple Confluent Cloud resources with one credential
+  oauth:
+    token_url: https://api.confluent.cloud/sts/v1/oauth2/token
+    flows: [clientCredentials]
+    variants: [Confluent STS access token, external OAuth/OIDC identity provider, partner OAuth]
+  see: authentication/confluent-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    Confluent publishes no idempotency key mechanism for the Cloud APIs. There is no
+    Idempotency-Key header, no request-replay window and no documented safe-retry contract for
+    POST operations; the retry guidance Confluent does publish is for 429 rate limiting
+    (capped exponential backoff with jitter), which protects the service rather than the
+    caller's exactly-once semantics.
+  caveat: >-
+    Do not confuse this with Kafka's idempotent producer (enable.idempotence=true), which is a
+    property of the Kafka wire protocol and the client libraries, not of the REST APIs
+    described here. The distinction matters for an agent: producing a record through
+    POST /kafka/v3/clusters/{cluster_id}/topics/{topic_name}/records over REST does not carry
+    the producer-level idempotence guarantee.
+pagination:
+  style: opaque cursor
+  request_params:
+    - name: page_size
+      description: Client-provided max items per page. Only valid on the first request.
+    - name: page_token
+      description: Server-generated opaque token for traversing the result set.
+  response_fields:
+    location: metadata
+    links: [next, prev, first, last]
+    note: >-
+      next is the only guaranteed link; prev/first/last are optional per collection. A response
+      with no next link has no further data. Clients must treat page_token and every link as an
+      opaque string.
+  exceptions:
+    - The Connect v1 API group does not support pagination on list operations.
+    - The Kafka REST v3 API group does not support pagination on list operations.
+field_expansion:
+  supported: partial
+  note: >-
+    Not a general facility. One documented case: the Connect v1 list-connectors operation
+    accepts ?expand=info,status,id (operationId listConnectv1ConnectorsWithExpansions).
+sparse_fieldsets:
+  supported: false
+metadata:
+  envelope: >-
+    Most resources use a declarative spec/status object model — a resource carries metadata
+    (id, self, resource_name, created_at, updated_at), spec (desired state) and status
+    (observed state, including phase). List responses carry api_version, kind, metadata, data[].
+  exception: The Connect v1 API group uses a different object model.
+identifiers:
+  id: >-
+    Natural identifier, unique within its parent resource and unique across time — never
+    reclaimed or reused after deletion. Prefixed by resource kind, e.g. lkc- for a Kafka cluster.
+  resource_name: >-
+    Confluent Resource Name (CRN) — a globally unique URI across all resources, e.g.
+    crn://confluent.cloud/kafka=lkc-abc123.
+  self: A URL at which the object can be addressed, encoding service location and API version.
+request_id_tracing:
+  field: requestId
+  location: top level of the error response body
+  description: Unique identifier for the API request, for tracing, debugging and support inquiries.
+  note: >-
+    Confluent documents requestId on the error envelope. No request-id REQUEST header is
+    documented for the caller to supply, though the API's CORS policy advertises
+    X-Client-Request-Id and X-Correlation-Id as accepted headers.
+versioning:
+  style: per-API-group generational version in the path
+  note: >-
+    There is no single "Confluent Cloud API version". Each API group versions independently —
+    connect/v1, cmk/v2, iam/v2, org/v2, srcm/v3 — and a breaking change bumps only the affected
+    group. Confluent states explicitly that the v1/v2 in the URL is a generational version in
+    the GitHub/Stripe sense, not a semver major.
+  see: lifecycle/confluent-lifecycle.yml
+error_envelope:
+  format: proprietary JSON (NOT RFC 9457 application/problem+json)
+  shape:
+    status: HTTP status code as a string, e.g. "403"
+    error:
+      code: Unique application-specific error code, UPPER_SNAKE_CASE (e.g. RESOURCE_NOT_FOUND)
+      message: Actionable user-facing description, no trailing period
+      details: Optional additional context
+      timestamp: ISO 8601 UTC
+      path: The exact API endpoint or resource path related to the error
+      suggestion: Optional recommended remediation
+    requestId: Optional unique request identifier
+    doc_url: Optional link to the error's documentation page
+  exception: The Connect v1 API group uses a different error structure.
+  see: errors/confluent-problem-types.yml
+rate_limit_signaling:
+  status_on_exhaustion: 429
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After]
+  see: rate-limits/confluent-rate-limits.yml
+http_guidelines:
+  user_agent:
+    required: recommended-strongly
+    note: >-
+      Confluent documents that requests SHOULD carry a valid User-Agent of the form
+      name/version [(comments)], that requests with no User-Agent may be rejected, and that an
+      invalid User-Agent may return 403 Forbidden. This section is present but HTML-commented
+      out in the published spec description, so treat it as guidance rather than an enforced
+      contract.
+  method_override:
+    header: X-HTTP-Method-Override
+    note: >-
+      Documented for tunnelling PUT/PATCH/DELETE through POST behind restrictive firewalls.
+      Also inside the commented-out block of the spec description.
+dry_run_mode:
+  supported: false
+  note: >-
+    No validate-only / dry-run parameter is documented on any Cloud API write operation.
+reversibility:
+  grade: documented
+  applicability: write-surface present
+  note: >-
+    Confluent publishes reversal paths for connector state and for schema versions, but states
+    no time window for any of them, which is what holds this at `documented` rather than
+    `verified`. An agent can learn THAT an action is reversible; it cannot learn from the
+    published contract HOW LONG it has to reverse it.
+  operations:
+    - surface: Connector lifecycle
+      forward: createConnectv1Connector
+      reversal: deleteConnectv1Connector
+      window: null
+      window_source: null
+      note: >-
+        Deletion is destructive, not a restore. No undelete operation exists for a connector.
+    - surface: Connector pause
+      forward: pauseConnectv1Connector
+      reversal: resumeConnectv1Connector
+      window: unbounded
+      window_source: null
+      note: >-
+        A paused connector can be resumed at any time; Confluent documents no expiry. Recorded
+        as unbounded rather than as a stated window, because the docs assert no limit either way.
+    - surface: Connector offsets
+      forward: alterConnectv1ConnectorOffsetsRequest
+      reversal: null
+      window: null
+      note: >-
+        Offset alteration has no documented reversal. getConnectv1ConnectorOffsets can be read
+        BEFORE the alteration to capture a restore point, but the API offers no undo — this is
+        the single highest-consequence irreversible write on the Connect surface.
+    - surface: Schema Registry subject version
+      forward: register
+      reversal: deleteSchemaVersion
+      window: null
+      note: >-
+        Schema Registry distinguishes a soft delete from a permanent delete (?permanent=true).
+        A soft-deleted version can be recovered; a permanently deleted one cannot. Confluent
+        publishes no time window on the soft-delete state.
+    - surface: Kafka topic
+      forward: createKafkaTopic
+      reversal: null
+      window: null
+      note: >-
+        deleteKafkaTopic is irreversible and destroys retained data. Cluster Deletion
+        Protection exists at the CLUSTER level as a guard, not as an undo.
+    - surface: Kafka cluster
+      forward: createCmkV2Cluster
+      reversal: null
+      window: null
+      note: >-
+        deleteCmkV2Cluster is irreversible. Confluent ships Cluster Deletion Protection as a
+        preventive flag rather than a restore path.
+    - surface: Produce record
+      forward: produceRecord
+      reversal: null
+      window: null
+      note: >-
+        A produced record cannot be unsent. Compaction and retention are configuration, not
+        reversal. An agent must treat produceRecord as terminal.
+  agent_guidance: >-
+    Of Confluent's write surface, only connector pause/resume is genuinely round-trippable.
+    Topic deletion, cluster deletion, record production and offset alteration are one-way. An
+    agent with write scope should require human confirmation for those four regardless of what
+    the API permits, because no reversal operation exists to fall back on.

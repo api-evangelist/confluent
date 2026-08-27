@@ -1,20 +1,51 @@
-generated: '2026-07-11'
+generated: '2026-08-27'
 method: derived
-source: openapi/confluent-openapi.yml
+source: openapi/confluent-acls-api-openapi.yml, openapi/confluent-api-keys-api-openapi.yml,
+  openapi/confluent-cloud-openapi.yaml, openapi/confluent-clusters-api-openapi.yml, openapi/confluent-consumer-groups-api-openapi.yml,
+  openapi/confluent-environments-api-openapi.yml, openapi/confluent-partitions-api-openapi.yml,
+  openapi/confluent-service-accounts-api-openapi.yml, openapi/confluent-topics-api-openapi.yml
 summary:
   types:
   - http
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
 schemes:
 - name: basicAuth
   type: http
   scheme: basic
   description: HTTP Basic authentication using a Confluent Cloud API key (ID:secret)
   sources:
-  - openapi/confluent-openapi.yml
+  - openapi/confluent-acls-api-openapi.yml
+  - openapi/confluent-api-keys-api-openapi.yml
+  - openapi/confluent-cloud-openapi.yaml
+  - openapi/confluent-clusters-api-openapi.yml
+  - openapi/confluent-consumer-groups-api-openapi.yml
+  - openapi/confluent-environments-api-openapi.yml
+  - openapi/confluent-partitions-api-openapi.yml
+  - openapi/confluent-service-accounts-api-openapi.yml
+  - openapi/confluent-topics-api-openapi.yml
 - name: bearerAuth
   type: http
   scheme: bearer
   bearerFormat: JWT
   description: OAuth 2.0 bearer token (Confluent STS, external OAuth, or partner token)
   sources:
-  - openapi/confluent-openapi.yml
+  - openapi/confluent-acls-api-openapi.yml
+  - openapi/confluent-api-keys-api-openapi.yml
+  - openapi/confluent-clusters-api-openapi.yml
+  - openapi/confluent-consumer-groups-api-openapi.yml
+  - openapi/confluent-environments-api-openapi.yml
+  - openapi/confluent-partitions-api-openapi.yml
+  - openapi/confluent-service-accounts-api-openapi.yml
+  - openapi/confluent-topics-api-openapi.yml
+- name: confluent-sts-access-token
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+    scopes: 0
+  description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following
+    OAuth 2.0.
+  sources:
+  - openapi/confluent-cloud-openapi.yaml

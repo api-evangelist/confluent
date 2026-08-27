@@ -1,0 +1,178 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  openapi/confluent-cloud-openapi.yaml, openapi/confluent-metrics-api-openapi.yaml,
+  https://www.confluent.io/trust-and-security/, https://www.confluent.io/pricing/
+description: >-
+  Cross-cutting and domain standards Confluent's contracts actually declare, plus the
+  third-party compliance attestations Confluent publishes. Conformance is asserted only where
+  the spec or a published Confluent page states it.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      openapi/confluent-cloud-openapi.yaml declares securitySchemes of type oauth2 —
+      confluent-sts-access-token, external-access-token and oauth — all clientCredentials, token
+      URL https://api.confluent.cloud/sts/v1/oauth2/token.
+  - id: oauth2-client-credentials
+    conforms: true
+    evidence: All three oauth2 schemes declare only the clientCredentials flow.
+  - id: oidc
+    conforms: partial
+    evidence: >-
+      Confluent supports external OIDC identity providers for workload identity federation into
+      Confluent STS, but publishes no /.well-known/openid-configuration on any probed host
+      (404 on www.confluent.io and api.confluent.cloud), so no OIDC discovery document exists
+      to conform against.
+  - id: http-basic-auth
+    conforms: true
+    evidence: >-
+      securitySchemes cloud-api-key, global-api-key and resource-api-key are type http, scheme
+      basic — API key ID as username, secret as password.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Zero occurrences of application/problem+json in the harvested spec. Confluent publishes
+      its own error envelope (status / error{code,message,details,timestamp,path,suggestion} /
+      requestId / doc_url) and Schema Registry uses a third shape again.
+  - id: rfc6585-429
+    conforms: true
+    evidence: 429 Too Many Requests declared on 487 of 504 operations, with Retry-After documented.
+  - id: rfc9116-security-txt
+    conforms: true
+    evidence: >-
+      https://www.confluent.io/.well-known/security.txt returns 200 with Contact, Canonical,
+      Policy, Expires and Hiring fields.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: >-
+      No Sunset or Deprecation response header is documented or present in the spec. Confluent
+      communicates deprecation out-of-band with 180 days notice; its own spec carries a
+      commented-out `TODO` under the "Discoverability" heading of the Deprecation Policy.
+  - id: cursor-pagination
+    conforms: true
+    evidence: >-
+      page_size / page_token with opaque tokens and IANA link relations next/prev/first/last in
+      metadata. Excludes the Connect v1 and Kafka REST v3 groups, which do not paginate.
+  - id: idempotency-key
+    conforms: false
+    evidence: >-
+      No Idempotency-Key header or equivalent replay mechanism anywhere in the spec or docs.
+  - id: json-api
+    conforms: false
+    evidence: >-
+      Confluent uses a declarative metadata/spec/status object model, not the JSON:API
+      data/attributes/relationships shape.
+  - id: odata
+    conforms: false
+  - id: scim
+    conforms: false
+    evidence: >-
+      Confluent's identity surface is iam/v2 (Users, Service Accounts, Invitations, Role
+      Bindings, IP Groups, IP Filters) with proprietary shapes. No urn:ietf:params:scim:schemas
+      URN appears in the spec and no /scim/v2 path exists. Notable given the enterprise SSO
+      posture — SSO is supported, SCIM provisioning is not offered as a standard interface.
+  - id: openmetrics
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      The Confluent Cloud Metrics API (openapi/confluent-metrics-api-openapi.yaml,
+      GET /v2/metrics/{dataset}/export) serves metrics in OpenMetrics format and the spec links
+      the OpenMetrics specification at
+      https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md.
+      This is the domain standard for Confluent's market: an operator already running a
+      Prometheus-compatible scraper can consume Confluent telemetry with no bespoke connector.
+  - id: apache-kafka-protocol
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      Confluent's entire product is an implementation of, and superset of, the Apache Kafka wire
+      protocol; the Kafka REST v3 API group (Cluster, Topic, Partition, ACL, Consumer Group,
+      Records, Cluster Linking, Share Group, Streams Group) is the HTTP projection of it. The
+      Kafka protocol is the de facto interoperability standard for the data-streaming market
+      and is why WarpStream, MSK and Redpanda are substitutable at the client layer.
+  - id: asyncapi
+    conforms: partial
+    domain_standard: true
+    evidence: >-
+      Confluent does not publish an AsyncAPI document for its own event surface, but it ships
+      first-party AsyncAPI TOOLING: `confluent asyncapi export` and `confluent asyncapi import`
+      in the CLI generate and consume an AsyncAPI specification for a Confluent Cloud cluster.
+      The standard is supported as a customer-facing output format rather than as a Confluent
+      self-description. See asyncapi/confluent-webhooks.yml.
+    source: https://docs.confluent.io/confluent-cli/current/command-reference/asyncapi/index.html
+  - id: apache-avro
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      Schema Registry (Subjects, Schemas, Compatibility, Config, Modes, Exporters tags) treats
+      Avro as a first-class schema type alongside JSON Schema and Protobuf, with published
+      serializers io.confluent:kafka-avro-serializer and Confluent.SchemaRegistry.Serdes.Avro.
+  - id: json-schema-2020-12
+    conforms: partial
+    evidence: >-
+      Schema Registry supports JSON Schema as a registered schema type. The OpenAPI itself is
+      3.0.0, which predates full JSON Schema 2020-12 alignment.
+  - id: protobuf
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      Protobuf is a supported Schema Registry schema type with a published serializer
+      (io.confluent:kafka-protobuf-serializer). No first-party .proto service contract is
+      published for Confluent's own APIs — see grpc/ (absent).
+  - id: openapi-3-0
+    conforms: true
+    evidence: >-
+      Both harvested contracts declare openapi 3.0.0.
+  - id: agent-skills-spec
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      Confluent publishes agent skills at https://github.com/confluentinc/agent-skills and
+      states they follow the Agent Skills Specification at https://agentskills.io/specification.
+  - id: mcp
+    conforms: true
+    domain_standard: true
+    evidence: >-
+      Managed remote MCP servers at https://api.confluent.cloud/mcp/v1 (probed, 401 auth-gated)
+      plus the open-source stdio server @confluentinc/mcp-confluent.
+  - id: a2a
+    conforms: false
+    evidence: >-
+      No agent card at /.well-known/agent-card.json or /.well-known/agent.json on any of the
+      six hosts probed. See well-known/confluent-well-known.yml.
+contract_quality_findings:
+  - finding: The Metrics API spec declares no operationId on any of its six operations.
+    file: openapi/confluent-metrics-api-openapi.yaml
+    impact: >-
+      Every generated client and every tool crosswalk must bind by path+method instead of by a
+      stable identifier. The Cloud API spec, by contrast, declares an operationId on every one
+      of its 504 operations.
+  - finding: info.version is empty in both harvested contracts.
+    detail: >-
+      The Cloud API spec carries `version: ''` with the inline comment "TODO: figure out our
+      aggregate API spec versioning strategy, this is here to pass the linter". This is a
+      consequence of the per-API-group versioning model — there is genuinely no aggregate
+      version — but it leaves the document unversioned to any tool that reads info.version.
+  - finding: Three different error envelopes coexist in one published contract.
+    detail: >-
+      The documented Confluent envelope, a different Connect v1 structure, and Schema Registry's
+      application/vnd.schemaregistry.v1+json {error_code, message}. Confluent flags the Connect
+      v1 divergence itself in both the Errors and Pagination sections.
+compliance:
+  published: true
+  url: https://www.confluent.io/trust-and-security/
+  http_status: 200
+  certifications:
+    - {name: SOC 1 Type 2, scope: 'Confluent Cloud, Confluent Platform', availability: on request}
+    - {name: SOC 2 Type 2, scope: 'Confluent Cloud, Confluent Platform', availability: on request}
+    - {name: SOC 3, scope: 'Confluent Cloud, Confluent Platform', availability: public download}
+    - {name: ISO 27001, availability: 'certificate and Statement of Applicability available for download'}
+    - {name: ISO 27701, description: privacy information management}
+    - {name: PCI DSS, availability: 'Attestation of Compliance (AOC) on request'}
+    - {name: CSA STAR Level 2}
+    - {name: TISAX}
+  readiness:
+    - {name: GDPR, status: readiness}
+    - {name: HIPAA, status: readiness}
+  regulatory: Financial Services Regulation Compliance program published

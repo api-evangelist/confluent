@@ -1,0 +1,142 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, api.nuget.org, proxy.golang.org,
+  packages.confluent.io/maven, plus the Confluent client-library docs at
+  https://docs.confluent.io/kafka-clients/overview.html
+description: >-
+  First-party Confluent client libraries and agent tooling. Confluent's Kafka clients are all
+  built on librdkafka and version in lockstep (2.15.0 across Python, .NET and Go as of
+  2026-06-30). The JVM serializers and Schema Registry client are published to Confluent's own
+  Maven repository at packages.confluent.io/maven, NOT to Maven Central — repo1.maven.org has
+  no io.confluent artifacts, which is why a Maven Central probe reads as absent.
+packages:
+  - language: python
+    registry: pypi
+    name: confluent-kafka
+    url: https://pypi.org/project/confluent-kafka/
+    install: pip install confluent-kafka
+    version: 2.15.0
+    published: '2026-06-30'
+    official: true
+    repo: https://github.com/confluentinc/confluent-kafka-python
+    note: Confluent's Python client for Apache Kafka, with Avro/JSON Schema/Protobuf Schema Registry serdes.
+  - language: javascript
+    registry: npm
+    name: "@confluentinc/kafka-javascript"
+    url: https://www.npmjs.com/package/@confluentinc/kafka-javascript
+    install: npm install @confluentinc/kafka-javascript
+    version: 1.10.0
+    published: '2026-07-01'
+    official: true
+    repo: https://github.com/confluentinc/confluent-kafka-javascript
+  - language: javascript
+    registry: npm
+    name: "@confluentinc/schemaregistry"
+    url: https://www.npmjs.com/package/@confluentinc/schemaregistry
+    install: npm install @confluentinc/schemaregistry
+    version: 1.10.0
+    published: '2026-07-01'
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@confluentinc/mcp-confluent"
+    url: https://www.npmjs.com/package/@confluentinc/mcp-confluent
+    install: npx -y @confluentinc/mcp-confluent
+    version: 1.5.0
+    published: '2026-07-07'
+    official: true
+    repo: https://github.com/confluentinc/mcp-confluent
+    note: >-
+      Open-source local-stdio MCP server. Confluent labels it community-supported with no SLA;
+      the supported path for Confluent Cloud customers is the managed remote MCP server.
+  - language: dotnet
+    registry: nuget
+    name: Confluent.Kafka
+    url: https://www.nuget.org/packages/Confluent.Kafka/
+    install: dotnet add package Confluent.Kafka
+    version: 2.15.0
+    published: '2026-06-30'
+    official: true
+    repo: https://github.com/confluentinc/confluent-kafka-dotnet
+  - language: dotnet
+    registry: nuget
+    name: Confluent.SchemaRegistry
+    url: https://www.nuget.org/packages/Confluent.SchemaRegistry/
+    install: dotnet add package Confluent.SchemaRegistry
+    version: 2.15.0
+    published: '2026-06-30'
+    official: true
+  - language: dotnet
+    registry: nuget
+    name: Confluent.SchemaRegistry.Serdes.Avro
+    url: https://www.nuget.org/packages/Confluent.SchemaRegistry.Serdes.Avro/
+    install: dotnet add package Confluent.SchemaRegistry.Serdes.Avro
+    version: 2.15.0
+    published: '2026-06-30'
+    official: true
+  - language: go
+    registry: go
+    name: github.com/confluentinc/confluent-kafka-go/v2
+    url: https://pkg.go.dev/github.com/confluentinc/confluent-kafka-go/v2
+    install: go get github.com/confluentinc/confluent-kafka-go/v2
+    version: v2.15.0
+    published: '2026-06-30'
+    official: true
+    repo: https://github.com/confluentinc/confluent-kafka-go
+    note: >-
+      The unversioned module path github.com/confluentinc/confluent-kafka-go is frozen at
+      v1.9.2 (2022-08-02); v2 is the maintained line.
+  - language: java
+    registry: confluent-maven
+    name: io.confluent:kafka-avro-serializer
+    url: https://packages.confluent.io/maven/io/confluent/kafka-avro-serializer/
+    install: "<dependency><groupId>io.confluent</groupId><artifactId>kafka-avro-serializer</artifactId><version>8.3.1</version></dependency>"
+    version: 8.3.1
+    published: '2026-08-27'
+    official: true
+    note: >-
+      version + published read from packages.confluent.io/maven/io/confluent/kafka-avro-serializer/maven-metadata.xml
+      (<release>8.3.1</release>, <lastUpdated>20260827034149</lastUpdated>). Requires the
+      Confluent Maven repository; not on Maven Central.
+  - language: java
+    registry: confluent-maven
+    name: io.confluent:kafka-schema-registry-client
+    url: https://packages.confluent.io/maven/io/confluent/kafka-schema-registry-client/
+    install: "<dependency><groupId>io.confluent</groupId><artifactId>kafka-schema-registry-client</artifactId><version>8.3.1</version></dependency>"
+    version: 8.3.1
+    published: '2026-08-27'
+    official: true
+  - language: c
+    registry: github
+    name: librdkafka
+    url: https://github.com/confluentinc/librdkafka
+    install: brew install librdkafka
+    version: null
+    published: null
+    official: true
+    note: >-
+      The C/C++ client underpinning every other Confluent client. Distributed through OS
+      package managers and GitHub releases rather than a language registry, so no registry
+      metadata endpoint was queried; version left null rather than guessed.
+  - language: go
+    registry: homebrew
+    name: confluentinc/tap/cli
+    url: https://github.com/confluentinc/cli
+    install: brew install confluentinc/tap/cli
+    version: v4.73.0
+    published: '2026-08-17'
+    official: true
+    note: >-
+      The Confluent CLI binary. version + published read from the confluentinc/cli GitHub
+      latest release (tag v4.73.0, published 2026-08-17). Also distributed via APT/YUM from
+      packages.confluent.io/confluent-cli and via Docker. See cli/confluent-cli.yml.
+absent:
+  - registry: maven-central
+    probed: https://repo1.maven.org/maven2/io/confluent/kafka-avro-serializer/maven-metadata.xml
+    result: no metadata returned — io.confluent is not published to Maven Central
+  - registry: rubygems
+    probed: https://rubygems.org/api/v1/gems/confluent-schema-registry.json
+    result: 404 — Confluent publishes no first-party Ruby client
+  - registry: crates.io
+    result: not probed as first-party; Rust users are directed to community librdkafka bindings

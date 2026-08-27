@@ -1,0 +1,87 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://docs.confluent.io/confluent-cli/current/overview.html,
+  https://docs.confluent.io/confluent-cli/current/install.html,
+  https://docs.confluent.io/confluent-cli/current/command-reference/,
+  https://github.com/confluentinc/cli
+description: >-
+  The Confluent CLI manages both Confluent Cloud and Confluent Platform from one binary. It is
+  source-available under the Confluent Community License, written in Go, and shipped through
+  Homebrew, APT, YUM, Docker and direct binary download.
+name: confluent
+binary: confluent
+repo: https://github.com/confluentinc/cli
+license: Confluent Community License
+version: v4.73.0
+released: '2026-08-17'
+version_source: https://api.github.com/repos/confluentinc/cli/releases/latest
+docs: https://docs.confluent.io/confluent-cli/current/overview.html
+command_reference: https://docs.confluent.io/confluent-cli/current/command-reference/
+install:
+  - method: homebrew
+    command: brew install confluentinc/tap/cli
+    platforms: [macos, linux]
+  - method: apt
+    command: sudo apt install confluent-cli
+    repository: https://packages.confluent.io/confluent-cli/deb
+    key: https://packages.confluent.io/confluent-cli/deb/archive.key
+    note: 'Pin a version with e.g. sudo apt install confluent-cli=3.48.0'
+    platforms: [debian, ubuntu]
+  - method: yum
+    command: yum-config-manager --add-repo https://packages.confluent.io/confluent-cli/rpm/confluent-cli.repo
+    platforms: [rhel, centos, fedora]
+  - method: docker
+    platforms: [any]
+  - method: binary
+    source: direct download
+    platforms: [darwin-amd64, darwin-arm64, windows-amd64, linux-amd64, linux-arm64, alpine-amd64, alpine-arm64]
+supported_platforms:
+  - macOS Intel (Darwin AMD64)
+  - macOS Apple silicon (Darwin ARM64)
+  - Windows 64-bit Intel/AMD
+  - Linux AMD64
+  - Linux ARM64
+  - Alpine AMD64
+  - Alpine ARM64
+prerequisites:
+  confluent_platform: >-
+    For Confluent Platform use the CLI requires the Confluent REST Proxy server for Apache Kafka
+    to be running; it mediates between the CLI and the clusters. Not required for the Apache
+    Kafka scripts shipped with Confluent Platform.
+command_groups:
+  method: probed
+  note: >-
+    Each group below was confirmed by fetching its command-reference index page and observing
+    HTTP 200. Groups that 302'd are not listed rather than assumed.
+  groups:
+    - {name: kafka, description: Kafka clusters, topics, ACLs, consumer groups, cluster links, quotas}
+    - {name: flink, description: Confluent Cloud for Apache Flink — compute pools, statements, connections, artifacts}
+    - {name: connect, description: Managed and custom connectors, plugins, offsets}
+    - {name: schema-registry, description: Schemas, subjects, compatibility, exporters, encryption keys}
+    - {name: environment, description: Confluent Cloud environments}
+    - {name: organization, description: Organization-level administration}
+    - {name: iam, description: Users, service accounts, role bindings, IP filters, identity providers, pools}
+    - {name: api-key, description: Create, list, delete and store Confluent Cloud API keys}
+    - {name: tableflow, description: Tableflow topics, catalog integrations, storage}
+    - {name: ksql, description: ksqlDB clusters}
+    - {name: network, description: Networking — private links, gateways, DNS, peerings}
+    - {name: byok, description: Self-managed (BYOK) encryption keys}
+    - {name: local, description: Run a local Confluent Platform for development}
+    - {name: plugin, description: CLI plugin management}
+    - {name: context, description: CLI contexts — switch between environments and credentials}
+    - {name: asyncapi, description: 'AsyncAPI document tooling: export and import an AsyncAPI specification'}
+key_flows:
+  - name: Export an AsyncAPI document for a cluster
+    commands: [confluent asyncapi export]
+    note: >-
+      The one place Confluent turns a running cluster into a standard machine-readable event
+      contract. See conformance/confluent-conformance.yml (asyncapi) and
+      asyncapi/confluent-webhooks.yml.
+  - name: Import an AsyncAPI document
+    commands: [confluent asyncapi import]
+  - name: List service quotas
+    commands: [confluent organization]
+    docs: https://docs.confluent.io/cloud/current/quotas/use-cli.html
+related_packages:
+  - packages/confluent-packages.yml

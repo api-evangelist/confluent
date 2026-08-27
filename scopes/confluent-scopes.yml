@@ -1,0 +1,52 @@
+generated: '2026-08-27'
+method: derived
+source: openapi/confluent-cloud-openapi.yaml
+schemes:
+- name: confluent-sts-access-token
+  source: openapi/confluent-cloud-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+  description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following
+    OAuth 2.0.
+- name: external-access-token
+  source: openapi/confluent-cloud-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+  description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following
+    OAuth 2.0.
+- name: oauth
+  source: openapi/confluent-cloud-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: /oauth2/token
+  description: Authenticate with OAuth 2.0. Currently this is only supported for partner APIs.
+scopes:
+- scope: marketplace::describe
+  sources:
+  - openapi/confluent-cloud-openapi.yaml
+- scope: partner:alter
+  description: enables partners to alter entitlements
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/confluent-cloud-openapi.yaml
+- scope: partner:create
+  description: enables partners to create entitlements and signup on behalf of customers
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/confluent-cloud-openapi.yaml
+- scope: partner:delete
+  description: enables partners to delete entitlements and organizations
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/confluent-cloud-openapi.yaml
+- scope: partner:describe
+  description: enables partners to read and list entitlements and organizations
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/confluent-cloud-openapi.yaml

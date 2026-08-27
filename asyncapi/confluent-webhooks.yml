@@ -1,0 +1,89 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://docs.confluent.io/cloud/current/monitoring/configure-notifications.html and the
+  notifications/v1 API group in openapi/confluent-cloud-openapi.yaml
+description: >-
+  Confluent publishes no AsyncAPI document describing its own event surface, so there is no
+  AsyncAPI artifact to save — fabricating one would be inventing a contract Confluent does not
+  ship. What Confluent DOES publish is a webhook surface: the Confluent Cloud notifications
+  system delivers events to a generic webhook URL, Slack or Microsoft Teams, and the whole
+  subscription model is manageable through the notifications/v1 API group.
+asyncapi_document:
+  published: false
+  note: >-
+    Confluent ships first-party AsyncAPI TOOLING rather than a self-description. The CLI command
+    `confluent asyncapi export` generates an AsyncAPI specification FOR A CUSTOMER'S OWN
+    Confluent Cloud cluster (its topics and their Schema Registry schemas), and
+    `confluent asyncapi import` consumes one. That is a per-tenant artifact produced against a
+    live cluster with credentials, not a document Confluent publishes about itself, so nothing
+    is captured here.
+  tooling:
+    - {command: confluent asyncapi export, docs: 'https://docs.confluent.io/confluent-cli/current/command-reference/asyncapi/confluent_asyncapi_export.html'}
+    - {command: confluent asyncapi import, docs: 'https://docs.confluent.io/confluent-cli/current/command-reference/asyncapi/confluent_asyncapi_import.html'}
+webhooks:
+  published: true
+  docs: https://docs.confluent.io/cloud/current/monitoring/configure-notifications.html
+  api_group: notifications/v1
+  delivery_targets:
+    - {kind: Webhook, description: Generic HTTP webhook URL}
+    - {kind: Slack, description: Slack incoming webhook}
+    - {kind: MicrosoftTeams, description: 'Microsoft Teams incoming webhook (Workflows-based; the retired Office 365 connector form is no longer supported)'}
+    - {kind: Email, description: Email delivery}
+  payload:
+    description: The message body Confluent POSTs to a generic webhook URL.
+    schema:
+      id: {type: string, required: true}
+      title: {type: string}
+      message: {type: string}
+      created_at: {type: string}
+  verification:
+    required: true
+    description: >-
+      Confluent sends a test message to each URL and it must be verified before the integration
+      can be saved. An unverifiable URL blocks the save.
+  management_api:
+    create_integration:
+      method: POST
+      path: /notifications/v1/integrations
+      example_request: |
+        {
+          "display_name": "Slack integration",
+          "description": "A Slack channel integration",
+          "target": {
+            "kind": "Slack",
+            "webhook_url": "https://hooks.slack.com/services/REDACTED"
+          }
+        }
+      example_response_status: 201
+    list_notification_types:
+      path: /notifications/v1/notification-types
+    create_subscription:
+      path: /notifications/v1/subscriptions
+    note: >-
+      Flow is: create an integration, list notification types, then create a subscription
+      binding a notification type to an integration.
+  openapi_tags:
+    - Subscriptions (notifications/v1)
+    - Integrations (notifications/v1)
+    - Notification Types (notifications/v1)
+    - Resource Preferences (notifications/v1)
+    - Resource Subscriptions (notifications/v1)
+    - User Notifications (notifications/v1)
+event_categories:
+  note: >-
+    Notification types are enumerable only through the live API
+    (GET /notifications/v1/notification-types), which requires credentials. Categories below
+    are the ones Confluent names in prose; the authoritative list is the API response.
+  documented_examples:
+    - Service quota threshold crossed (50% Information, 90% Warning, 100% Critical)
+    - Connector state transitions (documented for connector failure/recovery alerts)
+    - >-
+      Unified Stream Manager alerts for registered Confluent Platform clusters — offline
+      partitions, broker storage exhaustion, stalled telemetry (added 2026-08-25)
+streaming_surface:
+  note: >-
+    Confluent's primary "event surface" is Apache Kafka itself, which is not describable in
+    AsyncAPI at the vendor level — the channels are the customer's own topics. This is the
+    reason the AsyncAPI slot is empty for a company whose entire product is event streaming,
+    and it is a category distinction rather than a gap in Confluent's publishing.

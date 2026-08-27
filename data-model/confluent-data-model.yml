@@ -1,0 +1,154 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/confluent-cloud-openapi.yaml — components.schemas (624 schemas), walked for the
+  declarative metadata/spec/status resource shape and for spec-level *ObjectReference $refs
+description: >-
+  The Confluent Cloud entity graph, derived mechanically from the contract rather than
+  transcribed from prose. Confluent uses a Kubernetes-style declarative object model: a
+  resource is metadata + spec (desired state) + status (observed state), and a relationship is
+  expressed as an ObjectReference inside spec, which is what makes the graph machine-derivable
+  at all. Environment is the root of almost everything.
+object_model:
+  envelope:
+    api_version: 'The API group and version, e.g. cmk/v2. readOnly.'
+    kind: 'The object this REST resource represents, e.g. Cluster. readOnly.'
+    id: Natural identifier, unique within scope and across time, never reclaimed after deletion.
+    metadata: {self: addressable URL, resource_name: CRN, created_at: ISO 8601, updated_at: ISO 8601, deleted_at: ISO 8601}
+    spec: The desired state of the object.
+    status: The observed state, including phase.
+  list_envelope: {api_version: '', kind: '<Kind>List', metadata: 'pagination links', data: 'array of resources'}
+  reference_types:
+    - {name: ObjectReference, description: A reference to another object by id, with related and resource_name URLs}
+    - {name: GlobalObjectReference, description: Reference to an object unique across the whole organization}
+    - {name: EnvScopedObjectReference, description: Reference to an object unique within one environment}
+    - {name: TypedGlobalObjectReference, description: Global reference that also carries the referent's kind}
+    - {name: TypedEnvScopedObjectReference, description: Environment-scoped reference carrying the referent's kind}
+  extensions_observed:
+    - {name: x-immutable, description: 'Marks a spec field that cannot be changed after creation, e.g. cmk.v2.ClusterSpec.cloud and .region'}
+    - {name: x-extensible-enum, description: 'An enum the caller must tolerate new members of — the machine-readable form of the forward-compatibility policy'}
+identifier_prefixes:
+  note: >-
+    Confluent ids are kind-prefixed. Prefixes below are taken from `example` values in the spec,
+    not from a docs table.
+  prefixes:
+    - {prefix: 'lkc-', kind: Kafka Cluster, example: lkc-abc123}
+    - {prefix: 'env-', kind: Environment}
+    - {prefix: 'i-', kind: Notification Integration, example: i-a1KrA}
+    - {prefix: 'tci-', kind: Tableflow Catalog Integration, example: tci-12345}
+crn:
+  format: 'crn://confluent.cloud/<kind>=<id>[/<kind>=<id>...]'
+  example: crn://confluent.cloud/kafka=lkc-abc123
+  description: >-
+    Confluent Resource Name — a globally unique URI across all resources, encompassing every
+    parent kind and id needed to identify one instance. Never reclaimed after deletion.
+root_entity: Environment
+entities:
+  - name: Environment
+    schema: org.v2.Environment
+    api_group: org/v2
+    description: >-
+      The organizational container. Nearly every other Confluent Cloud resource declares an
+      environment reference in its spec, making Environment the root of the graph.
+    operations: [listOrgV2Environments, getOrgV2Environment, createOrgV2Environment, updateOrgV2Environment, deleteOrgV2Environment]
+  - name: Kafka Cluster
+    schema: cmk.v2.Cluster
+    api_group: cmk/v2
+    operations: [listCmkV2Clusters, getCmkV2Cluster, createCmkV2Cluster, updateCmkV2Cluster, deleteCmkV2Cluster]
+    notable_fields:
+      - {field: deletion_protection, type: boolean, note: 'Preventive guard on an irreversible delete — see conventions/ reversibility'}
+      - {field: config, note: 'Discriminated oneOf over Basic | Standard | Dedicated | Enterprise | Freight — the pricing tiers are in the contract'}
+      - {field: cloud, x_immutable: true}
+      - {field: region, x_immutable: true}
+    deprecated_fields: [kafka_bootstrap_endpoint, http_endpoint, api_endpoint]
+    deprecated_note: All three are superseded by the `endpoints` map keyed by access_point_id.
+  - name: API Key
+    schema: iam.v2.ApiKey
+    api_group: iam/v2
+  - name: Compute Pool
+    schema: fcpm.v2.ComputePool
+    api_group: fcpm/v2
+  - name: ksqlDB Cluster
+    schema: ksqldbcm.v2.Cluster
+    api_group: ksqldbcm/v2
+  - name: Schema Registry Cluster
+    schema: srcm.v3.Cluster
+    api_group: srcm/v3
+    note: srcm.v2.Cluster is the deprecated predecessor and is still present in the contract.
+  - name: Network
+    schema: networking.v1.Network
+    api_group: networking/v1
+  - name: Gateway
+    schema: networking.v1.Gateway
+    api_group: networking/v1
+  - name: Tableflow Topic
+    schema: tableflow.v1.TableflowTopic
+    api_group: tableflow/v1
+  - name: Client Quota
+    schema: kafka-quotas.v1.ClientQuota
+    api_group: kafka-quotas/v1
+  - name: Custom Connect Plugin
+    schema: ccpm.v1.CustomConnectPlugin
+    api_group: ccpm/v1
+  - name: RTCE Topic
+    schema: rtce.v1.RtceTopic
+    api_group: rtce/v1
+    note: Real-Time Context Engine topic.
+relationships:
+  method: derived
+  note: >-
+    Each row is a spec-level ObjectReference declared in the contract. `via` is the exact
+    property name in the resource's spec object.
+  edges:
+    - {from: cmk.v2.Cluster, to: Environment, type: belongs_to, via: spec.environment, ref: EnvScopedObjectReference}
+    - {from: cmk.v2.Cluster, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: EnvScopedObjectReference, immutable: true}
+    - {from: cmk.v2.Cluster, to: BYOK Key, type: has_one, via: spec.byok, ref: GlobalObjectReference}
+    - {from: iam.v2.ApiKey, to: 'Owner (User or Service Account)', type: belongs_to, via: spec.owner, ref: TypedGlobalObjectReference}
+    - {from: iam.v2.ApiKey, to: 'Resource (Cluster, Schema Registry, Flink, ksqlDB)', type: belongs_to, via: spec.resource, ref: TypedEnvScopedObjectReference}
+    - {from: fcpm.v2.ComputePool, to: Environment, type: belongs_to, via: spec.environment, ref: GlobalObjectReference}
+    - {from: fcpm.v2.ComputePool, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: EnvScopedObjectReference}
+    - {from: ksqldbcm.v2.Cluster, to: cmk.v2.Cluster, type: belongs_to, via: spec.kafka_cluster, ref: EnvScopedObjectReference}
+    - {from: ksqldbcm.v2.Cluster, to: 'Credential Identity', type: has_one, via: spec.credential_identity, ref: TypedGlobalObjectReference}
+    - {from: ksqldbcm.v2.Cluster, to: Environment, type: belongs_to, via: spec.environment, ref: GlobalObjectReference}
+    - {from: kafka-quotas.v1.ClientQuota, to: cmk.v2.Cluster, type: belongs_to, via: spec.cluster, ref: EnvScopedObjectReference}
+    - {from: kafka-quotas.v1.ClientQuota, to: Environment, type: belongs_to, via: spec.environment, ref: GlobalObjectReference}
+    - {from: srcm.v3.Cluster, to: Environment, type: belongs_to, via: spec.environment, ref: GlobalObjectReference}
+    - {from: srcm.v2.Cluster, to: Environment, type: belongs_to, via: spec.environment, ref: GlobalObjectReference}
+    - {from: srcm.v2.Cluster, to: srcm.v2.Region, type: belongs_to, via: spec.region, ref: GlobalObjectReference}
+    - {from: networking.v1.Network, to: Environment, type: belongs_to, via: spec.environment, ref: ObjectReference}
+    - {from: networking.v1.Network, to: networking.v1.Gateway, type: has_one, via: spec.gateway, ref: TypedEnvScopedObjectReference}
+    - {from: networking.v1.Gateway, to: Environment, type: belongs_to, via: spec.environment, ref: ObjectReference}
+    - {from: networking.v1.AccessPoint, to: networking.v1.Gateway, type: belongs_to, via: spec.gateway, ref: ObjectReference}
+    - {from: networking.v1.DnsForwarder, to: networking.v1.Gateway, type: belongs_to, via: spec.gateway, ref: ObjectReference}
+    - {from: networking.v1.DnsRecord, to: networking.v1.Gateway, type: belongs_to, via: spec.gateway, ref: TypedEnvScopedObjectReference}
+    - {from: networking.v1.Peering, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: ObjectReference}
+    - {from: networking.v1.PrivateLinkAccess, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: ObjectReference}
+    - {from: networking.v1.PrivateLinkAttachmentConnection, to: networking.v1.PrivateLinkAttachment, type: belongs_to, via: spec.private_link_attachment, ref: ObjectReference}
+    - {from: networking.v1.TransitGatewayAttachment, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: ObjectReference}
+    - {from: networking.v1.NetworkLinkEndpoint, to: networking.v1.NetworkLinkService, type: belongs_to, via: spec.network_link_service, ref: EnvScopedObjectReference}
+    - {from: networking.v1.NetworkLinkEndpoint, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: EnvScopedObjectReference}
+    - {from: networking.v1.NetworkLinkService, to: networking.v1.Network, type: belongs_to, via: spec.network, ref: EnvScopedObjectReference}
+    - {from: networking.v1.NetworkLinkServiceAssociation, to: networking.v1.NetworkLinkService, type: belongs_to, via: spec.network_link_service, ref: EnvScopedObjectReference}
+    - {from: tableflow.v1.TableflowTopic, to: cmk.v2.Cluster, type: belongs_to, via: spec.kafka_cluster, ref: EnvScopedObjectReference}
+    - {from: tableflow.v1.CatalogIntegration, to: cmk.v2.Cluster, type: belongs_to, via: spec.kafka_cluster, ref: EnvScopedObjectReference}
+    - {from: rtce.v1.RtceTopic, to: cmk.v2.Cluster, type: belongs_to, via: spec.kafka_cluster, ref: EnvScopedObjectReference}
+    - {from: rtce.v1.RtceTopic, to: Environment, type: belongs_to, via: spec.environment, ref: EnvScopedObjectReference}
+    - {from: ccpm.v1.CustomConnectPlugin, to: Environment, type: belongs_to, via: spec.environment, ref: EnvScopedObjectReference}
+    - {from: ccpm.v1.CustomConnectPluginVersion, to: Environment, type: belongs_to, via: spec.environment, ref: EnvScopedObjectReference}
+sub_resource_hierarchy:
+  note: >-
+    The Kafka REST v3 and Schema Registry v1 groups do NOT use the declarative object model.
+    Their relationships are expressed by URL path nesting instead, so they are recorded here
+    separately rather than as spec references.
+  paths:
+    - 'Kafka Cluster (/kafka/v3/clusters/{cluster_id}) -> Topic -> Partition -> Replica'
+    - 'Kafka Cluster -> Consumer Group -> Consumer -> Lag'
+    - 'Kafka Cluster -> ACL'
+    - 'Kafka Cluster -> Broker -> Broker Config'
+    - 'Kafka Cluster -> Cluster Link -> Mirror Topic'
+    - 'Schema Registry -> Subject -> Version -> Schema (referenced-by graph via getReferencedBy)'
+    - 'Connect: Environment -> Kafka Cluster -> Connector -> Task / Offsets / Status'
+counts:
+  schemas_total: 624
+  declarative_resources: 34
+  relationship_edges: 35

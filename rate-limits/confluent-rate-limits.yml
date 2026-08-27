@@ -3,85 +3,141 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Confluent
 providerId: confluent
+generated: '2026-08-27'
+method: searched
+source: >-
+  Rate Limiting section of info.description in
+  https://docs.confluent.io/cloud/current/openapi.yaml, plus
+  https://docs.confluent.io/cloud/current/quotas/service-quotas.html
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Confluent API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+modified: '2026-08-27'
+supersedes: >-
+  A 2026-05-04 bulk-sweep scaffold that asserted invented tier limits (10 req/min free,
+  1000 req/month) which Confluent has never published. Those values were fabricated and are
+  removed. Everything below is transcribed from Confluent's own published documents.
+tags: [Rate Limiting, Quotas, Throttling, Service Quotas]
+description: >-
+  Confluent enforces two distinct kinds of limit and it matters which one an agent hits.
+  Request-rate and concurrency throttling returns 429 with headers; service quotas are resource
+  COUNT ceilings (how many API keys, clusters, topics you may have) which surface as 402/400.
+  Confluent publishes the throttling header contract precisely and the per-endpoint numeric
+  rates not at all.
 headers:
   limit: X-RateLimit-Limit
   remaining: X-RateLimit-Remaining
   reset: X-RateLimit-Reset
   retryAfter: Retry-After
-  policy: RateLimit-Policy
+header_semantics:
+  X-RateLimit-Limit: The maximum number of requests you're permitted to make per time period.
+  X-RateLimit-Reset: The relative time in SECONDS until the current rate limit window resets.
+  X-RateLimit-Remaining: >-
+    The number of requests remaining in the current rate-limit window. Confluent flags
+    explicitly that this differs from the GitHub and Twitter headers of the same name, which
+    use UTC epoch seconds — Confluent uses RELATIVE time to avoid client/server clock skew.
+    An agent reusing a GitHub-shaped rate-limit client will misread this header.
+  Retry-After: >-
+    Seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+header_exception: >-
+  Rate-limit headers are NOT returned on a 429 from the Kafka REST API (v3). Callers of
+  /kafka/v3/* get the status code with no runtime signal and must fall back to blind backoff.
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
+  quotaExceeded: 402
+  quotaExceededKnownIssue: >-
+    Confluent documents a known issue: some "Quota Exceeded" errors are returned as HTTP 400
+    instead of HTTP 402.
   serviceUnavailable: 503
+operations_declaring_429: 487
+operations_total: 504
+limit_count: 6
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Confluent
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Confluent
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Confluent
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Confluent
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Confluent
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  - name: Request rate (per user)
+    scope: per-user
+    metric: requests
+    limit: null
+    window: null
+    published: false
+    note: >-
+      Confluent enforces request-rate limits per user but does not publish the numeric rate for
+      any endpoint. The limit is discoverable only at runtime from X-RateLimit-Limit.
+  - name: Request rate (per organization)
+    scope: per-organization
+    metric: requests
+    limit: null
+    window: null
+    published: false
+  - name: Concurrency (per user and per organization)
+    scope: per-user, per-organization
+    metric: concurrent-operations
+    limit: null
+    published: false
+  - name: Unauthenticated request rate
+    scope: per-source-ip
+    metric: requests
+    limit: null
+    published: false
+    note: >-
+      Unauthenticated requests are associated with the originating IP address, not with a user.
+  - name: Kafka REST Produce v3 connections (Dedicated)
+    scope: per-cluster
+    metric: connections-per-second
+    limit: 300
+    unit: per additional CKU
+    window: second
+    published: true
+    note: >-
+      The one published numeric rate. Each additional CKU on a Dedicated cluster increases the
+      Kafka REST Produce v3 connection limit by 300 requests per second — the documented path
+      to a higher rate, since Confluent states rate limits are otherwise fixed and cannot be
+      increased.
+  - name: Cloud API keys per organization
+    scope: per-organization
+    metric: api-keys
+    limit: 3000
+    quota_code: iam.max_cloud_api_keys.per_org
+    published: true
+    kind: service-quota
+increase_path:
+  rate_limits: >-
+    Generally fixed and cannot be increased. Higher throughput comes from a Dedicated cluster,
+    where certain limits scale with the number of CKUs. Contact support@confluent.io.
+  service_quotas: >-
+    Many default quotas CAN be increased on request via Confluent Support. Quotas carrying a
+    quota code are readable programmatically through the Service Quotas API
+    (service-quota/v1 — Applied Quotas and Scopes tags in the OpenAPI).
+service_quota_examples:
+  source: https://docs.confluent.io/cloud/current/quotas/service-quotas.html
+  note: >-
+    Illustrative rows only; the full table is long and Confluent maintains it. These are
+    verbatim.
+  quotas:
+    - {resource: API keys per organization, default: 3000, quota_code: iam.max_cloud_api_keys.per_org}
+    - {resource: Audit log API keys per organization, default: 2, quota_code: iam.max_audit_log_api_keys.per_org}
+    - {resource: API keys per Dedicated cluster, default: 20000, quota_code: kafka.max_api_keys.per_cluster}
+    - {resource: API keys per Freight cluster, default: 2500, quota_code: kafka.max_api_keys.per_cluster}
+    - {resource: API keys per Enterprise cluster, default: 2500, quota_code: kafka.max_api_keys.per_cluster}
+    - {resource: API keys per Standard cluster, default: 250, quota_code: kafka.max_api_keys.per_cluster}
+    - {resource: API keys per Basic cluster, default: 50, quota_code: kafka.max_api_keys.per_cluster}
+    - {resource: API keys per service account, default: 100, quota_code: iam.max_cloud_api_keys.per_service_account}
+    - {resource: CKUs per cluster (integrated cloud billing or invoice), default: 24, quota_code: kafka.max_ckus.per_cluster}
+  notifications: >-
+    Confluent sends one notification per quota when usage first crosses 50% (Information), 90%
+    (Warning) and 100% (Critical) of the limit, configurable in Console or via the
+    notifications/v1 API group.
+partition_limits:
+  source: https://www.confluent.io/pricing/
+  note: A hard per-cluster ceiling that behaves as a quota rather than a rate.
+  values:
+    - {cluster_type: Basic, partitions: 1500}
+    - {cluster_type: Standard, partitions: 2500}
+    - {cluster_type: Enterprise, partitions: 96000}
+    - {cluster_type: Freight, partitions: 50000}
+retry_guidance:
+  statement: >-
+    Integrations should gracefully handle these limits by watching for 429 error responses and
+    building in a retry mechanism following a capped exponential backoff policy, with jitter,
+    to prevent retry amplification and the thundering herd effect.
+  source: info.description of the published OpenAPI
+  caveat: >-
+    Confluent publishes no idempotency key, so a retried POST is not automatically safe. See
+    conventions/confluent-conventions.yml.

@@ -1,3 +1,13 @@
+# PROVENANCE NOTICE (added 2026-08-27 by the API Evangelist enrichment pipeline)
+# This file is NOT a Confluent-published contract. Its own info.description calls it a
+# "Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API",
+# i.e. it was hand-written by an earlier pipeline round, not harvested from Confluent.
+# It is SUPERSEDED by openapi/_original/confluent-cloud-openapi.yaml, harvested verbatim on
+# 2026-08-27 from https://docs.confluent.io/cloud/current/openapi.yaml (504 operations,
+# servers: https://api.confluent.cloud). The eight per-tag files in openapi/ that were refined
+# from THIS document (confluent-acls-api, -api-keys-api, -clusters-api, -consumer-groups-api,
+# -environments-api, -partitions-api, -service-accounts-api, -topics-api) inherit this
+# provenance and should be re-refined from the real spec, not from here.
 openapi: 3.1.0
 info:
   title: Confluent Cloud Kafka REST API

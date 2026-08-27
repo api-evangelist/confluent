@@ -1,0 +1,74 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://docs.confluent.io/cloud/current/client-apps/testing.html,
+  https://docs.confluent.io/platform/current/get-started/platform-quickstart.html,
+  https://www.confluent.io/confluent-cloud/tryfree/,
+  https://docs.confluent.io/kafka-connectors/datagen/current/overview.html
+description: >-
+  Confluent has no test-mode/live-mode key split and no hosted sandbox tenant — the pattern
+  familiar from payments APIs does not apply here. What Confluent ships instead is a full local
+  substitute for the platform (Docker, embedded clusters, in-process mocks) plus a free tier on
+  the real service. An agent evaluating Confluent should expect to run a real cluster, not a
+  simulator behind a test key.
+test_mode:
+  separate_keys: false
+  key_prefixes: null
+  note: >-
+    Confluent API keys are Cloud, Global or Resource-scoped — a scope axis, not a test/live
+    axis. There is no test-mode credential; every key acts on real resources. The blast-radius
+    control is RBAC scope and a throwaway environment, not a sandbox flag.
+free_tier:
+  url: https://www.confluent.io/confluent-cloud/tryfree/
+  http_status: 200
+  description: >-
+    Free signup with trial credit, plus the first eCKU free on Basic clusters on an ongoing
+    basis. See plans/confluent-plans-pricing.yml.
+local_environments:
+  - name: Confluent Platform quick start (Docker)
+    docs: https://docs.confluent.io/platform/current/get-started/platform-quickstart.html
+    description: >-
+      Full local Confluent Platform with Docker Compose — Kafka, Connect, Schema Registry and
+      Control Center. Requires Docker 1.11+ and at least 6 GB allocated to Docker on macOS.
+    repo: https://github.com/confluentinc/cp-all-in-one
+  - name: Confluent Platform quick start (ZIP/TAR)
+    docs: https://docs.confluent.io/platform/current/installation/installing_cp/zip-tar.html
+  - name: confluent local
+    docs: https://docs.confluent.io/confluent-cli/current/command-reference/local/
+    description: CLI command group for running a local Confluent Platform for development.
+unit_test_tooling:
+  - {name: TopologyTestDriver, scope: Kafka Streams, description: 'Test Kafka Streams topology logic without a running cluster; single-message stepping.', docs: 'https://docs.confluent.io/platform/current/streams/developer-guide/test-streams.html'}
+  - {name: MockProcessorContext, scope: Kafka Streams, description: Mocked context that captures data forwarded by a custom Processor.}
+  - {name: MockProducer, scope: JVM client, description: 'Implements the KafkaProducer interface, mocking all I/O.'}
+  - {name: MockConsumer, scope: JVM client, description: 'Implements the KafkaConsumer interface, mocking all I/O.'}
+  - {name: MockSchemaRegistryClient, scope: Schema Registry, description: 'Simulate a Schema Registry instance in unit tests; serialize and deserialize without a live registry.', repo: 'https://github.com/confluentinc/schema-registry'}
+  - {name: ksql-test-runner, scope: ksqlDB, description: 'Command-line test runner that checks ksqlDB statements against given inputs with no running Kafka or ksqlDB cluster.', caveat: 'Confluent states it can change and has no backward compatibility guarantees.'}
+  - {name: rdkafka_mock, scope: non-JVM (librdkafka), description: 'Minimal implementation of the Kafka protocol broker APIs with no other dependencies.'}
+integration_test_tooling:
+  - {name: Testcontainers for Kafka, description: 'Confluent''s recommended integration-test path — brokers in Docker with isolated JVM, memory and CPU.', url: 'https://www.testcontainers.org/modules/kafka/'}
+  - {name: EmbeddedKafkaCluster, description: 'Asynchronous multi-threaded cluster in the same JVM as the tests, from kafka-streams-test-utils.', caveat: 'Confluent states it is not a public interface and has no backward compatibility guarantees.'}
+  - {name: EmbeddedSingleNodeKafkaCluster, description: 'As EmbeddedKafkaCluster but including Schema Registry.', repo: 'https://github.com/confluentinc/kafka-streams-examples'}
+  - {name: Trivup, description: 'Light-weight community-supported framework for bringing up a simple Kafka cluster (non-JVM clients).'}
+fixture_and_trigger_tooling:
+  - name: Datagen Source Connector
+    docs: https://docs.confluent.io/kafka-connectors/datagen/current/overview.html
+    description: >-
+      Confluent's first-party mock-data generator. Produces synthetic records to topics using
+      predefined or custom Avro schemas — the closest thing Confluent has to seedable fixtures.
+  - name: Advanced Message Search
+    description: >-
+      Console message browser filter for inspecting retained history by field value (Open
+      Preview since 2026-08-12). Useful for verifying test writes without a consumer app.
+schema_compatibility_testing:
+  - {name: Schema Registry Maven plugin, docs: 'https://docs.confluent.io/cloud/current/sr/develop/maven-plugin.html', description: 'Checks a new schema for compatibility against previously registered schemas as a build step.'}
+  - {name: testCompatibilityBySubjectName, kind: api-operation, description: 'Schema Registry operation that tests a candidate schema against a subject''s compatibility rules before registering it — a genuine dry-run for the one write surface that has one.'}
+test_values:
+  published: false
+  note: >-
+    Confluent publishes no magic test identifiers, test cards or reserved sentinel values.
+    Nothing is transcribed here rather than invented.
+agent_guidance: >-
+  There is no safe rehearsal mode on the live Confluent Cloud APIs. The only true dry-run in the
+  whole surface is Schema Registry's compatibility test. For anything else, an agent should
+  operate against a dedicated throwaway environment created with createOrgV2Environment and
+  torn down afterwards, with a resource-scoped API key — that environment IS the sandbox.

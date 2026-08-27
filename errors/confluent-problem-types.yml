@@ -1,0 +1,123 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/confluent-cloud-openapi.yaml (4xx/5xx responses across 504 operations) enriched from
+  the Errors section of the same document's info.description
+format: proprietary-json
+rfc9457: false
+rfc9457_note: >-
+  Confluent does NOT use RFC 9457 application/problem+json anywhere. A grep of the harvested
+  spec returns zero occurrences of problem+json. Confluent publishes its own error envelope,
+  documented below, and Schema Registry uses a third shape again
+  (application/vnd.schemaregistry.v1+json with a flat {error_code, message}).
+envelope:
+  description: The documented Confluent Cloud error envelope.
+  example: |
+    {
+      "status": 400,
+      "error": {
+        "code": "INVALID_SCHEMA_FIELD",
+        "message": "The 'name' field in the schema is required and cannot be empty.",
+        "details": "Schemas must include a top-level 'name' field with a non-empty string value.",
+        "timestamp": "2025-08-01T20:36:45Z",
+        "path": "/api/v1/schemas",
+        "suggestion": "Ensure the 'name' field is included in the payload and is not an empty string."
+      },
+      "requestId": "a1b2c3d4-e5f6-7890-g1h2-i3j4k516m7n8",
+      "doc_url": "https://docs.confluent.io/cloud/current/api/errors/INVALID_SCHEMA_FIELD.html"
+    }
+  fields:
+    status: {type: string, required: true, description: HTTP status code as a string}
+    error.code: {type: string, required: true, description: Unique application-specific code in UPPER_SNAKE_CASE}
+    error.message: {type: string, required: true, description: Actionable user-facing description, no trailing period}
+    error.details: {type: string, required: false}
+    error.timestamp: {type: string, required: true, description: ISO 8601 UTC}
+    error.path: {type: string, required: true, description: The exact endpoint or resource path}
+    error.suggestion: {type: string, required: false, description: Recommended remediation}
+    requestId: {type: string, required: false, description: For tracing, debugging and support}
+    doc_url: {type: string, required: false}
+  divergence:
+    - group: Connect v1
+      note: Confluent states the Connect v1 API group uses a different error structure.
+    - group: Schema Registry v1
+      media_type: application/vnd.schemaregistry.v1+json
+      schema: '#/components/schemas/ErrorMessage'
+      note: >-
+        Flat {error_code, message} with a five-digit numeric code, not the UPPER_SNAKE_CASE
+        envelope above. This is the only part of the Confluent surface with a published,
+        enumerable error-code registry, transcribed below.
+finding_doc_url_is_dead:
+  claim: >-
+    The doc_url Confluent puts in its own error envelope points at a page that is not served.
+  probed: https://docs.confluent.io/cloud/current/api/errors/INVALID_SCHEMA_FIELD.html
+  http_status: 200
+  effective_url: https://docs.confluent.io/index.html
+  verdict: >-
+    Soft-404. The per-error documentation host redirects every /cloud/current/api/errors/* path
+    to the docs home page rather than serving an error page or returning 404. An agent that
+    follows doc_url to self-remediate lands on the documentation index with no error context.
+    /cloud/current/api/errors/index.html behaves identically.
+status_codes:
+  - {status: 200, title: OK, description: Everything worked as expected.}
+  - {status: 201, title: Created, description: 'The resource was created. Follow the Location header.'}
+  - {status: 204, title: No Content, description: Everything worked and there is no content to return.}
+  - {status: 400, title: Bad Request, description: 'The request was unacceptable, often due to malformed syntax, or a missing or malformed parameter.', operations_declaring: 475}
+  - {status: 401, title: Unauthorized, description: 'No valid credentials provided, or the credentials are unsuitable, invalid, or unauthorized.', operations_declaring: 464}
+  - {status: 402, title: Over Quota, description: "The request was valid, but you've exceeded your plan quota or limits.", operations_declaring: 44}
+  - {status: 403, title: Forbidden, description: Authenticated but not permitted., operations_declaring: 425}
+  - {status: 404, title: Not Found, description: "The requested resource doesn't exist or you're unauthorized to know it exists.", operations_declaring: 284}
+  - {status: 409, title: Conflict, description: 'The request conflicts with another request (already exists, or based on a stale version of data).', operations_declaring: 121}
+  - {status: 413, title: Payload Too Large, operations_declaring: 1}
+  - {status: 415, title: Unsupported Media Type, operations_declaring: 1}
+  - {status: 422, title: Validation Failed, description: 'The request was parsed correctly but failed some sort of validation. Returns a list of fields that failed.', operations_declaring: 129}
+  - {status: 429, title: Too Many Requests, description: 'Too many requests hit the API too quickly. Confluent recommends capped exponential backoff with jitter.', operations_declaring: 487}
+  - {status: 500, title: Internal Server Error, operations_declaring: 417}
+  - {status: '5XX', title: Server Errors, description: "Something went wrong on Confluent's end. (These are rare.)", operations_declaring: 75}
+known_issues:
+  - issue: Quota Exceeded
+    description: Some "Quota Exceeded" errors are returned as HTTP 400 instead of HTTP 402.
+    proposed_resolution: Return 402 consistently for "Quota Exceeded" errors.
+    source: info.description "Known Issues" table of the published spec
+schema_registry_error_codes:
+  media_type: application/vnd.schemaregistry.v1+json
+  shape: '{"error_code": 40401, "message": "Subject not found"}'
+  note: >-
+    Five-digit codes; the first three digits mirror the HTTP status. Extracted verbatim from
+    the response descriptions of the harvested spec.
+  codes:
+    - {code: 40401, status: 404, meaning: Subject not found}
+    - {code: 40402, status: 404, meaning: Version not found}
+    - {code: 40403, status: 404, meaning: Schema not found}
+    - {code: 40450, status: 404, meaning: Exporter not found}
+    - {code: 40470, status: 404, meaning: Key not found}
+    - {code: 40471, status: 404, meaning: Key not soft-deleted}
+    - {code: 40472, status: 404, meaning: Key must be undeleted}
+    - {code: 40950, status: 409, meaning: Missing or invalid exporter name}
+    - {code: 40951, status: 409, meaning: Missing or invalid exporter config}
+    - {code: 40952, status: 409, meaning: Invalid exporter subjects}
+    - {code: 40960, status: 409, meaning: Exporter already exists}
+    - {code: 40961, status: 409, meaning: Exporter already running}
+    - {code: 40963, status: 409, meaning: Exporter not paused}
+    - {code: 40964, status: 409, meaning: Too many exporters}
+    - {code: 40971, status: 409, meaning: Key already exists}
+    - {code: 40972, status: 409, meaning: Too many keys}
+    - {code: 42201, status: 422, meaning: Invalid schema or schema type}
+    - {code: 42202, status: 422, meaning: Invalid version}
+    - {code: 42203, status: 422, meaning: Invalid compatibility level}
+    - {code: 42204, status: 422, meaning: Invalid mode}
+    - {code: 42205, status: 422, meaning: Operation not permitted}
+    - {code: 42271, status: 422, meaning: Invalid key}
+    - {code: 42272, status: 422, meaning: References to key exist}
+    - {code: 50001, status: 500, meaning: Failure in the backend data store}
+    - {code: 50002, status: 500, meaning: Operation timed out}
+    - {code: 50003, status: 500, meaning: Failure forwarding the request to the primary}
+    - {code: 50004, status: 500, meaning: Unknown leader}
+    - {code: 50070, status: 500, meaning: DEK generation error}
+agent_guidance:
+  retry: >-
+    Retry only 429 and 5XX, with capped exponential backoff plus jitter, per Confluent's own
+    published guidance. Do NOT retry 400/401/403/404/409/422 — they are deterministic.
+  danger: >-
+    Because no idempotency key exists (see conventions/confluent-conventions.yml), retrying a
+    failed POST is not safe in general. produceRecord in particular must not be blindly retried
+    on an ambiguous failure: a timed-out produce may already have been written.

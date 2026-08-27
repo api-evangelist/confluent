@@ -1,0 +1,132 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  Versioning / API Lifecycle Policy / Compatibility Policy / Deprecation Policy sections of
+  info.description in https://docs.confluent.io/cloud/current/openapi.yaml, plus
+  https://status.confluent.cloud/ and
+  https://docs.confluent.io/cloud/current/clusters/upgrade-policy.html
+description: >-
+  Confluent publishes an unusually complete API lifecycle contract, and publishes it inside the
+  OpenAPI document rather than only on a marketing page — six named lifecycle stages, a 180-day
+  breaking-change notice, and a per-API-group versioning model.
+versioning:
+  scheme: per-API-group generational version in the URL path
+  current_version: null
+  note: >-
+    There is deliberately no single "Confluent Cloud API" version. Each API group carries its
+    own — connect/v1, cmk/v2, iam/v2, org/v2, notifications/v1, srcm/v2 and srcm/v3 coexisting,
+    service-quota/v1, partner/v2, cdx/v1, Kafka REST v3, Schema Registry v1. A breaking change
+    bumps only the affected group.
+  semver: false
+  semver_note: >-
+    Confluent states explicitly that the v1/v2 in the URL is a generational or meta version in
+    the sense used by the GitHub and Stripe APIs, not a semver major.
+  groups_observed:
+    [connect/v1, cmk/v2, iam/v2, org/v2, notifications/v1, srcm/v2, srcm/v3, service-quota/v1,
+     partner/v2, cdx/v1, cam/v1, ksqldbcm/v2, kafka/v3, schema-registry/v1, telemetry/v2]
+stages:
+  - name: Early Access
+    description: >-
+      May change at any time. Not recommended for production. Not officially supported.
+      Intended for user feedback only. Users must be granted explicit access by Confluent.
+  - name: Preview
+    description: >-
+      Unlikely to change between Preview and GA. Not recommended for production. Officially
+      supported for non-production usage. Accessible to all users.
+  - name: Limited Availability
+    description: >-
+      Available to select customers in a subset of regions/providers/networks and recommended
+      for production usage.
+  - name: Generally Available
+    description: >-
+      Will not change at short notice. Recommended for production. Officially supported for
+      non-production and production usage.
+  - name: Deprecated
+    description: >-
+      Still supported, no longer under active development. Existing usage continues to
+      function; migration is strongly recommended. Removed in the future at the announced date.
+  - name: Sunset
+    description: Removed, and no longer supported or available.
+default_stage: >-
+  An API is Generally Available unless explicitly marked otherwise. Each API in the reference
+  documents its own lifecycle phase.
+deprecation_policy:
+  published: true
+  url: https://docs.confluent.io/cloud/current/api.html
+  notice_period_days: 180
+  statement: >-
+    Confluent will announce deprecations at least 180 days in advance of a breaking change and
+    will continue to maintain the deprecated APIs in their original form during this time.
+  exceptions: >-
+    Critical security vulnerabilities or functional defects. Confluent states it will take any
+    necessary action to mitigate a critical security issue as soon as possible, which may
+    include disabling the vulnerable functionality.
+  cadence: >-
+    Governed by the Confluent Cloud Upgrade Policy — backward incompatible changes and
+    deprecations are made approximately once per year, with 180 days notice provided by email
+    to all registered Confluent Cloud users.
+  upgrade_policy_url: https://docs.confluent.io/cloud/current/clusters/upgrade-policy.html
+  communication_channels:
+    - {kind: email, description: Email to all registered Confluent Cloud users}
+    - {kind: blog, url: 'https://www.confluent.io/blog/'}
+    - {kind: slack, url: 'https://confluentcommunity.slack.com'}
+    - {kind: google-group, url: 'https://groups.google.com/forum/#!forum/confluent-platform'}
+    - {kind: social, url: 'https://twitter.com/ConfluentInc'}
+    - {kind: account-team, description: Enterprise customers may receive information by email to their Confluent contact}
+  rfc8594_headers:
+    deprecation_header: false
+    sunset_header: false
+    note: >-
+      No RFC 8594 Sunset or Deprecation response header is documented, and none appears in the
+      harvested spec. Deprecation is communicated out-of-band (email, blog, Slack) and marked in
+      the reference documentation, not signalled at runtime. Confluent's own spec carries a
+      "Discoverability" heading under Deprecation Policy whose body is an HTML-commented
+      `TODO:` — the gap is one Confluent has itself flagged and not yet closed.
+  deprecated_operations_in_spec:
+    count: 7
+    method: derived
+    source: openapi/confluent-cloud-openapi.yaml
+    note: >-
+      Every deprecated operation in the harvested 504-operation spec belongs to one API group,
+      srcm/v2 (Stream Governance / Schema Registry cluster management), superseded by srcm/v3.
+      Both generations are present in the same contract, which is exactly the behaviour the
+      per-group versioning model promises: v2 stays callable and marked while v3 is the path
+      forward.
+    operations:
+      - {operationId: listSrcmV2Regions, method: GET, path: /srcm/v2/regions, group: srcm/v2}
+      - {operationId: getSrcmV2Region, method: GET, path: '/srcm/v2/regions/{id}', group: srcm/v2}
+      - {operationId: listSrcmV2Clusters, method: GET, path: /srcm/v2/clusters, group: srcm/v2}
+      - {operationId: createSrcmV2Cluster, method: POST, path: /srcm/v2/clusters, group: srcm/v2}
+      - {operationId: getSrcmV2Cluster, method: GET, path: '/srcm/v2/clusters/{id}', group: srcm/v2}
+      - {operationId: updateSrcmV2Cluster, method: PATCH, path: '/srcm/v2/clusters/{id}', group: srcm/v2}
+      - {operationId: deleteSrcmV2Cluster, method: DELETE, path: '/srcm/v2/clusters/{id}', group: srcm/v2}
+    successor_group: srcm/v3 (Clusters (srcm/v3) is present and not deprecated)
+compatibility_policy:
+  published: true
+  backward_compatibility: >-
+    Confluent commits to non-breaking additive change without advance notice, and requires
+    clients to tolerate it. See the Compatibility Policy section of the spec description for
+    the full client-responsibility list.
+  forward_compatibility: >-
+    Documented, with implementation hints for clients.
+  client_responsibility: >-
+    Clients MUST follow the Compatibility Policy — tolerate new fields, new enum values and
+    reordered collections — or their integration is not covered by the stability guarantee.
+  undocumented_endpoints: >-
+    Confluent states that any endpoint not documented in the API Reference is private, subject
+    to change without notice, and not covered by any agreement.
+status_page:
+  url: https://status.confluent.cloud/
+  http_status: 200
+  verified: '2026-08-27'
+  scope: Confluent Cloud
+sla:
+  published: true
+  source: https://www.confluent.io/pricing/
+  tiers:
+    - {cluster_type: Basic, uptime_sla: 99.5%}
+    - {cluster_type: Standard, uptime_sla: '99.9% (1 eCKU) / 99.99% (2+ eCKUs)'}
+    - {cluster_type: Enterprise, uptime_sla: 99.99%}
+    - {cluster_type: Freight, uptime_sla: 99.99%}
+changelog:
+  see: changelog/confluent-changelog.yml

@@ -1,0 +1,88 @@
+generated: '2026-08-27'
+method: searched
+source: live probes of every apis.yml host and OpenAPI servers[] host
+description: >-
+  /.well-known discovery sweep across every Confluent host named in apis.yml and in the
+  servers[] blocks of the harvested OpenAPI documents. One real document was served:
+  RFC 9116 security.txt on www.confluent.io. Everything else 404s.
+hit_count: 1
+hosts:
+  - host: https://www.confluent.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        content_type: text/plain
+        file: confluent-security.txt
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://api.confluent.cloud
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://developer.confluent.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://api.telemetry.confluent.cloud
+    documents:
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/agent-card.json
+        status: 401
+notes:
+  - >-
+    https://confluent.cloud (the Console SPA) answers HTTP 200 with the same 22,731-byte
+    HTML application shell for EVERY /.well-known/* path probed, including agent-card.json
+    and api-catalog. This is a single-page-app catch-all, NOT a served discovery surface,
+    so no document rows are recorded for that host and no pointer is emitted from it.
+  - >-
+    https://docs.confluent.io answers 302 with an empty body on every /.well-known/* path.
+  - >-
+    api.telemetry.confluent.cloud (Metrics API) requires authentication on every path
+    including /.well-known/*, returning 401 "Missing credentials" rather than 404.
+soft_404_control:
+  host: https://confluent.cloud
+  path: /.well-known/this-path-does-not-exist-probe-20260827
+  observed_status: 200
+  observed_bytes: 22731
+  verdict: catch-all SPA shell — all 200s on this host discarded
