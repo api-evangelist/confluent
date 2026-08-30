@@ -83,6 +83,9 @@ apis:
   tags:
   - MCP
   - AI Agents
+  tags_raw:
+  - MCP
+  - AI Agents
   - Model Context Protocol
   properties:
   - type: MCPServer
@@ -1264,6 +1267,8 @@ apis:
   humanURL: https://www.confluent.io/
   baseURL: https://api.confluent.cloud
   tags:
+  - Entity (V1)
+  tags_raw:
   - Entity (v1)
   properties:
   - type: OpenAPI
