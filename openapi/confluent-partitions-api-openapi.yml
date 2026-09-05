@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Confluent Cloud Kafka REST ACLs Partitions API
   version: v3
@@ -59,25 +59,32 @@ paths:
                 $ref: '#/components/schemas/Partition'
 components:
   parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
-    TopicName:
-      name: topic_name
-      in: path
-      required: true
-      schema:
-        type: string
     PartitionId:
       name: partition_id
       in: path
       required: true
       schema:
         type: integer
+    TopicName:
+      name: topic_name
+      in: path
+      required: true
+      schema:
+        type: string
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
+    PartitionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Partition'
     Partition:
       type: object
       properties:
@@ -89,13 +96,6 @@ components:
           type: array
           items:
             type: integer
-    PartitionList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Partition'
   securitySchemes:
     basicAuth:
       type: http

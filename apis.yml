@@ -3717,6 +3717,8 @@ apis:
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
 common:
+  - type: Website
+    url: https://www.confluent.io/
   - type: CapabilityMap
     url: capabilities/confluent-capability-edges.yml
     name: Confluent Business Capability Map
