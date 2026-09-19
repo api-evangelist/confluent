@@ -130,6 +130,8 @@ apis:
   description: The Environments API from Confluent — 1 operation(s) for environments.
   humanURL: https://www.confluent.io/
   tags:
+  - Environment
+  tags_raw:
   - Environments
   properties:
   - type: OpenAPI
@@ -157,6 +159,8 @@ apis:
   description: The Topics API from Confluent — 2 operation(s) for topics.
   humanURL: https://www.confluent.io/
   tags:
+  - Topic
+  tags_raw:
   - Topics
   properties:
   - type: OpenAPI
@@ -3062,6 +3066,8 @@ apis:
   humanURL: https://www.confluent.io/
   baseURL: https://api.confluent.cloud
   tags:
+  - search V1
+  tags_raw:
   - Search (v1)
   properties:
   - type: OpenAPI
@@ -3711,6 +3717,8 @@ apis:
   humanURL: https://www.confluent.io/
   baseURL: https://api.confluent.cloud
   tags:
+  - ACL
+  tags_raw:
   - ACLs
   properties:
   - type: OpenAPI
