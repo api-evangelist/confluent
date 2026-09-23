@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Kafka REST ACLs Topics API
+  title: Confluent Cloud Kafka REST Topics API
   version: v3
   description: Best-effort OpenAPI 3.1 description of a subset of the Confluent Cloud Kafka REST API (v3) and Cloud Management API as published at https://docs.confluent.io/. Authoritative, full reference lives in Confluent's per-resource API documentation; this spec covers commonly used cluster, topic, partition, consumer group, and ACL operations together with the documented HTTP Basic (API key) authentication scheme.
   contact:
@@ -83,17 +83,6 @@ paths:
           description: Deleted
 components:
   schemas:
-    Topic:
-      type: object
-      properties:
-        topic_name:
-          type: string
-        partitions_count:
-          type: integer
-        replication_factor:
-          type: integer
-        is_internal:
-          type: boolean
     TopicCreateRequest:
       type: object
       required:
@@ -114,6 +103,17 @@ components:
                 type: string
               value:
                 type: string
+    Topic:
+      type: object
+      properties:
+        topic_name:
+          type: string
+        partitions_count:
+          type: integer
+        replication_factor:
+          type: integer
+        is_internal:
+          type: boolean
     TopicList:
       type: object
       properties:
