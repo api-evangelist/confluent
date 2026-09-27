@@ -83,6 +83,24 @@ paths:
           description: Deleted
 components:
   schemas:
+    TopicList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+    Topic:
+      type: object
+      properties:
+        topic_name:
+          type: string
+        partitions_count:
+          type: integer
+        replication_factor:
+          type: integer
+        is_internal:
+          type: boolean
     TopicCreateRequest:
       type: object
       required:
@@ -103,24 +121,6 @@ components:
                 type: string
               value:
                 type: string
-    Topic:
-      type: object
-      properties:
-        topic_name:
-          type: string
-        partitions_count:
-          type: integer
-        replication_factor:
-          type: integer
-        is_internal:
-          type: boolean
-    TopicList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Topic'
   parameters:
     ClusterId:
       name: cluster_id

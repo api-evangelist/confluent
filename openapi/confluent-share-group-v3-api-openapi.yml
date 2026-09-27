@@ -214,119 +214,6 @@ paths:
           $ref: '#/components/responses/ServerErrorResponse'
 components:
   schemas:
-    ShareGroupDataList:
-      allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ShareGroupData'
-    Resource:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceMetadata'
-    ResourceCollection:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceCollectionMetadata'
-    ShareGroupTopicPartitionData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - topic_name
-        - partition_id
-        - partition
-        properties:
-          topic_name:
-            type: string
-            description: The name of the topic
-          partition_id:
-            type: integer
-            format: int32
-            description: The partition ID
-          partition:
-            $ref: '#/components/schemas/Relationship'
-            description: Link to the topic partition
-    ResourceMetadata:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-        resource_name:
-          type:
-          - string
-          - 'null'
-    ShareGroupConsumerAssignmentData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - group_id
-        - consumer_id
-        - topic_name
-        - partition_id
-        - partition
-        properties:
-          cluster_id:
-            type: string
-          group_id:
-            type: string
-          consumer_id:
-            type: string
-          topic_name:
-            type: string
-          partition_id:
-            type: integer
-          partition:
-            $ref: '#/components/schemas/Relationship'
-    ShareGroupConsumerData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - group_id
-        - consumer_id
-        - client_id
-        - assignments
-        properties:
-          cluster_id:
-            type: string
-          group_id:
-            type: string
-          consumer_id:
-            type: string
-          client_id:
-            type: string
-          assignments:
-            $ref: '#/components/schemas/Relationship'
-    Relationship:
-      type: object
-      required:
-      - related
-      properties:
-        related:
-          type: string
     ResourceCollectionMetadata:
       type: object
       required:
@@ -338,62 +225,6 @@ components:
           type:
           - string
           - 'null'
-    ShareGroupState:
-      type: string
-      x-extensible-enum:
-      - UNKNOWN
-      - PREPARING_REBALANCE
-      - COMPLETING_REBALANCE
-      - STABLE
-      - DEAD
-      - EMPTY
-    ShareGroupConsumerAssignmentDataList:
-      allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ShareGroupConsumerAssignmentData'
-    ShareGroupData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - share_group_id
-        - state
-        - coordinator
-        - consumers
-        - consumer_count
-        - partition_count
-        properties:
-          cluster_id:
-            type: string
-          share_group_id:
-            type: string
-          state:
-            $ref: '#/components/schemas/ShareGroupState'
-          coordinator:
-            $ref: '#/components/schemas/Relationship'
-          consumers:
-            $ref: '#/components/schemas/Relationship'
-          consumer_count:
-            type: integer
-            format: int32
-            description: Number of consumers in this share group
-          partition_count:
-            type: integer
-            format: int32
-            description: Total number of partitions assigned to this share group across all consumers
-          assigned_topic_partitions:
-            type: array
-            items:
-              $ref: '#/components/schemas/ShareGroupTopicPartitionData'
-            description: List of topic-partitions assigned to this share group, including those from empty groups
     ShareGroupConsumerDataList:
       allOf:
       - $ref: '#/components/schemas/ResourceCollection'
@@ -405,6 +236,36 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ShareGroupConsumerData'
+    ShareGroupConsumerAssignmentDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ShareGroupConsumerAssignmentData'
+    ShareGroupState:
+      type: string
+      x-extensible-enum:
+      - UNKNOWN
+      - PREPARING_REBALANCE
+      - COMPLETING_REBALANCE
+      - STABLE
+      - DEAD
+      - EMPTY
+    ResourceCollection:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceCollectionMetadata'
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -443,83 +304,160 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    Relationship:
+      type: object
+      required:
+      - related
+      properties:
+        related:
+          type: string
+    ResourceMetadata:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+        resource_name:
+          type:
+          - string
+          - 'null'
+    Resource:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceMetadata'
+    ShareGroupDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ShareGroupData'
+    ShareGroupTopicPartitionData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - topic_name
+        - partition_id
+        - partition
+        properties:
+          topic_name:
+            type: string
+            description: The name of the topic
+          partition_id:
+            type: integer
+            format: int32
+            description: The partition ID
+          partition:
+            $ref: '#/components/schemas/Relationship'
+            description: Link to the topic partition
+    ShareGroupConsumerAssignmentData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - group_id
+        - consumer_id
+        - topic_name
+        - partition_id
+        - partition
+        properties:
+          cluster_id:
+            type: string
+          group_id:
+            type: string
+          consumer_id:
+            type: string
+          topic_name:
+            type: string
+          partition_id:
+            type: integer
+          partition:
+            $ref: '#/components/schemas/Relationship'
+    ShareGroupData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - share_group_id
+        - state
+        - coordinator
+        - consumers
+        - consumer_count
+        - partition_count
+        properties:
+          cluster_id:
+            type: string
+          share_group_id:
+            type: string
+          state:
+            $ref: '#/components/schemas/ShareGroupState'
+          coordinator:
+            $ref: '#/components/schemas/Relationship'
+          consumers:
+            $ref: '#/components/schemas/Relationship'
+          consumer_count:
+            type: integer
+            format: int32
+            description: Number of consumers in this share group
+          partition_count:
+            type: integer
+            format: int32
+            description: Total number of partitions assigned to this share group across all consumers
+          assigned_topic_partitions:
+            type: array
+            items:
+              $ref: '#/components/schemas/ShareGroupTopicPartitionData'
+            description: List of topic-partitions assigned to this share group, including those from empty groups
+    ShareGroupConsumerData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - group_id
+        - consumer_id
+        - client_id
+        - assignments
+        properties:
+          cluster_id:
+            type: string
+          group_id:
+            type: string
+          consumer_id:
+            type: string
+          client_id:
+            type: string
+          assignments:
+            $ref: '#/components/schemas/Relationship'
   responses:
-    ListShareGroupConsumersResponse:
-      description: The list of consumers.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ShareGroupConsumerDataList'
-          example:
-            kind: KafkaShareConsumerList
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers
-              next: null
-            data:
-            - kind: KafkaShareGroupConsumer
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-1
-                resource_name: crn:///kafka=cluster-1/share-group=share-group-1/consumer=consumer-1
-              cluster_id: cluster-1
-              group_id: share-group-1
-              consumer_id: consumer-1
-              client_id: client-1
-              assignments:
-                related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-1/assignments
-            - kind: KafkaShareGroupConsumer
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-2
-                resource_name: crn:///kafka=cluster-1/share-group=share-group-1/consumer=consumer-2
-              cluster_id: cluster-1
-              group_id: share-group-1
-              consumer_id: consumer-2
-              client_id: client-2
-              assignments:
-                related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-2/assignments
-            - kind: KafkaShareGroupConsumer
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-3
-                resource_name: crn:///kafka=cluster-1/share-group=share-group-1/consumer=consumer-3
-              cluster_id: cluster-1
-              group_id: share-group-1
-              consumer_id: consumer-3
-              client_id: client-3
-              assignments:
-                related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-3/assignments
-    UnauthorizedErrorResponse:
-      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
+    NoContentResponse:
+      description: Operation succeeded, no content in the response
+    ServerErrorResponse:
+      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            kafka_authentication_failed:
-              description: Thrown when using Basic authentication with wrong Kafka credentials.
+            generic_internal_server_error:
+              description: Thrown for generic HTTP 500 errors.
               value:
-                error_code: 40101
-                message: Authentication failed
-    NotFoundErrorResponse:
-      description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            endpoint_not_found:
-              description: Thrown for generic HTTP 404 errors.
-              value:
-                error_code: 404
-                message: HTTP 404 Not Found
-            cluster_not_found:
-              description: Thrown when using a non-existing cluster ID.
-              value:
-                error_code: 404
-                message: Cluster my-cluster cannot be found.
-            unknown_topic_or_partition:
-              description: Thrown when using a non-existing topic name or partition ID.
-              value:
-                error_code: 40403
-                message: This server does not host this topic-partition.
+                error_code: 500
+                message: Internal Server Error
     ListShareGroupConsumerAssignmentsResponse:
       description: The list of share group assignments.
       content:
@@ -565,58 +503,6 @@ components:
               partition_id: 3
               partition:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-3/partitions/3
-    NoContentResponse:
-      description: Operation succeeded, no content in the response
-    BadRequestErrorResponse:
-      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            bad_request_cannot_deserialize:
-              description: Thrown when trying to deserialize an integer from non-integer data.
-              value:
-                error_code: 400
-                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
-            unsupported_version_exception:
-              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
-              value:
-                error_code: 40035
-                message: The version of this API is not supported in the underlying Kafka cluster.
-    ServerErrorResponse:
-      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            generic_internal_server_error:
-              description: Thrown for generic HTTP 500 errors.
-              value:
-                error_code: 500
-                message: Internal Server Error
-    ForbiddenErrorResponse:
-      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authorization_failed:
-              description: Thrown when the caller is not authorized to perform the underlying operation.
-              value:
-                error_code: 40301
-                message: Request is not authorized
-    TooManyRequestsErrorResponse:
-      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
-      content:
-        text/html:
-          schema:
-            type: string
-          example:
-            description: A sample response from Jetty's DoSFilter.
-            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
     ListShareGroupsResponse:
       description: The list of share groups.
       content:
@@ -710,6 +596,79 @@ components:
               partition_id: 1
               partition:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/partitions/1
+    ListShareGroupConsumersResponse:
+      description: The list of consumers.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShareGroupConsumerDataList'
+          example:
+            kind: KafkaShareConsumerList
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers
+              next: null
+            data:
+            - kind: KafkaShareGroupConsumer
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-1
+                resource_name: crn:///kafka=cluster-1/share-group=share-group-1/consumer=consumer-1
+              cluster_id: cluster-1
+              group_id: share-group-1
+              consumer_id: consumer-1
+              client_id: client-1
+              assignments:
+                related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-1/assignments
+            - kind: KafkaShareGroupConsumer
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-2
+                resource_name: crn:///kafka=cluster-1/share-group=share-group-1/consumer=consumer-2
+              cluster_id: cluster-1
+              group_id: share-group-1
+              consumer_id: consumer-2
+              client_id: client-2
+              assignments:
+                related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-2/assignments
+            - kind: KafkaShareGroupConsumer
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-3
+                resource_name: crn:///kafka=cluster-1/share-group=share-group-1/consumer=consumer-3
+              cluster_id: cluster-1
+              group_id: share-group-1
+              consumer_id: consumer-3
+              client_id: client-3
+              assignments:
+                related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-3/assignments
+    NotFoundErrorResponse:
+      description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            endpoint_not_found:
+              description: Thrown for generic HTTP 404 errors.
+              value:
+                error_code: 404
+                message: HTTP 404 Not Found
+            cluster_not_found:
+              description: Thrown when using a non-existing cluster ID.
+              value:
+                error_code: 404
+                message: Cluster my-cluster cannot be found.
+            unknown_topic_or_partition:
+              description: Thrown when using a non-existing topic name or partition ID.
+              value:
+                error_code: 40403
+                message: This server does not host this topic-partition.
+    TooManyRequestsErrorResponse:
+      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
+      content:
+        text/html:
+          schema:
+            type: string
+          example:
+            description: A sample response from Jetty's DoSFilter.
+            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
     GetShareGroupConsumerResponse:
       description: The consumer.
       content:
@@ -727,15 +686,48 @@ components:
             client_id: client-1
             assignments:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/share-groups/share-group-1/consumers/consumer-1/assignments
+    UnauthorizedErrorResponse:
+      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authentication_failed:
+              description: Thrown when using Basic authentication with wrong Kafka credentials.
+              value:
+                error_code: 40101
+                message: Authentication failed
+    ForbiddenErrorResponse:
+      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authorization_failed:
+              description: Thrown when the caller is not authorized to perform the underlying operation.
+              value:
+                error_code: 40301
+                message: Request is not authorized
+    BadRequestErrorResponse:
+      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            bad_request_cannot_deserialize:
+              description: Thrown when trying to deserialize an integer from non-integer data.
+              value:
+                error_code: 400
+                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
+            unsupported_version_exception:
+              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
+              value:
+                error_code: 40035
+                message: The version of this API is not supported in the underlying Kafka cluster.
   parameters:
-    ClusterId:
-      name: cluster_id
-      description: The Kafka cluster ID.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: cluster-1
     GroupId:
       name: group_id
       description: The group ID.
@@ -744,6 +736,14 @@ components:
       schema:
         type: string
       example: group-1
+    ClusterId:
+      name: cluster_id
+      description: The Kafka cluster ID.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: cluster-1
     ConsumerId:
       name: consumer_id
       description: The consumer ID.

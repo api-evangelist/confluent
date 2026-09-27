@@ -351,6 +351,93 @@ paths:
           description: Internal Server Error
 components:
   schemas:
+    AttributeDef:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name
+        typeName:
+          type: string
+          description: The type name
+        isOptional:
+          type: boolean
+          description: Whether is optional
+        cardinality:
+          type: string
+          description: The cardinality
+          enum:
+          - SINGLE
+          - LIST
+          - SET
+        valuesMinCount:
+          type: integer
+          description: The values min count
+          format: int32
+        valuesMaxCount:
+          type: integer
+          description: The values max count
+          format: int32
+        isUnique:
+          type: boolean
+          description: Whether is unique
+        isIndexable:
+          type: boolean
+          description: Whether is indexable
+        includeInNotification:
+          type: boolean
+          description: Whether to include in notifications
+        defaultValue:
+          type: string
+          description: The default value
+        description:
+          type: string
+          description: The description
+        searchWeight:
+          type: integer
+          description: The search weight
+          format: int32
+        indexType:
+          type: string
+          description: The index type
+          enum:
+          - DEFAULT
+          - STRING
+        constraints:
+          type: array
+          description: The constraints
+          items:
+            $ref: '#/components/schemas/ConstraintDef'
+        options:
+          type: object
+          description: The options
+          additionalProperties:
+            type: string
+        displayName:
+          type: string
+          description: The display name
+    ConstraintDef:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type
+        params:
+          type: object
+          description: The params
+          additionalProperties:
+            type: object
+    ErrorMessage:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: The error code
+          format: int32
+        message:
+          type: string
+          description: The error message
+      description: Error message of this operation
     BusinessMetadataDef:
       properties:
         category:
@@ -489,82 +576,6 @@ components:
           description: The subtypes
           items:
             type: string
-    AttributeDef:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name
-        typeName:
-          type: string
-          description: The type name
-        isOptional:
-          type: boolean
-          description: Whether is optional
-        cardinality:
-          type: string
-          description: The cardinality
-          enum:
-          - SINGLE
-          - LIST
-          - SET
-        valuesMinCount:
-          type: integer
-          description: The values min count
-          format: int32
-        valuesMaxCount:
-          type: integer
-          description: The values max count
-          format: int32
-        isUnique:
-          type: boolean
-          description: Whether is unique
-        isIndexable:
-          type: boolean
-          description: Whether is indexable
-        includeInNotification:
-          type: boolean
-          description: Whether to include in notifications
-        defaultValue:
-          type: string
-          description: The default value
-        description:
-          type: string
-          description: The description
-        searchWeight:
-          type: integer
-          description: The search weight
-          format: int32
-        indexType:
-          type: string
-          description: The index type
-          enum:
-          - DEFAULT
-          - STRING
-        constraints:
-          type: array
-          description: The constraints
-          items:
-            $ref: '#/components/schemas/ConstraintDef'
-        options:
-          type: object
-          description: The options
-          additionalProperties:
-            type: string
-        displayName:
-          type: string
-          description: The display name
-    ErrorMessage:
-      type: object
-      properties:
-        error_code:
-          type: integer
-          description: The error code
-          format: int32
-        message:
-          type: string
-          description: The error message
-      description: Error message of this operation
     BusinessMetadataDefResponse:
       properties:
         category:
@@ -707,17 +718,6 @@ components:
             type: string
         error:
           $ref: '#/components/schemas/ErrorMessage'
-    ConstraintDef:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type
-        params:
-          type: object
-          description: The params
-          additionalProperties:
-            type: object
   securitySchemes:
     cloud-api-key:
       type: http

@@ -132,9 +132,7 @@
     "confluent-service-accounts-api-openapi.yml",
     "confluent-topics-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [
     "confluent-cloud-openapi.yaml: info.version missing",
@@ -145,13 +143,12 @@
     "confluent-cloud-openapi.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "confluent-metrics-api-openapi.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "confluent-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "superseded outputs removed: confluent-ac-ls-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 127 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
-    "confluent-ac-ls-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "confluent-access-points-networking-v1-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "confluent-acl-v3-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "confluent-acls-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "confluent-agents-sql-v1-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "confluent-api-keys-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "confluent-api-keys-iam-v2-api-openapi.yml: previously refined output, superseded by openapi/_original/",

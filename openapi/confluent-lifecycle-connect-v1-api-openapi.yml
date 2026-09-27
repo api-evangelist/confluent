@@ -175,6 +175,36 @@ components:
               type: string
               description: Human readable error message
   responses:
+    connect.v1.DefaultSystemError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 500
+              message: Oops, something went wrong
+    connect.v1.UnauthenticatedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 401
+              message: Unauthorized
+    connect.v1.ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 403
+              message: Forbidden
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -198,36 +228,6 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    connect.v1.ForbiddenError:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 403
-              message: Forbidden
-    connect.v1.UnauthenticatedError:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 401
-              message: Unauthorized
-    connect.v1.DefaultSystemError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 500
-              message: Oops, something went wrong
     connect.v1.ResourceNotFoundError:
       description: Not Found
       content:

@@ -842,182 +842,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ResponseFormat:
-      description: "Desired response format for query results.\n* `FLAT` (default): Each item in the response `data` array represents a data point in the\n  timeseries. Each data point contains the `timestamp`, metric aggregation `value` and\n  attributes for the `group_by` labels.\n* `GROUPED`: Each item in the response `data` array represents a group. Each group contains\n  attributes for the `group_by` labels and an array of `points` for the metric aggregation\n  timeseries. **Only allowed when `group_by` is non-empty.**\n\nPlease see the response schema and accompanying examples for more details.\n"
-      type: string
-      enum:
-      - FLAT
-      - GROUPED
-      default: FLAT
-    AttributesRequest:
-      type: object
-      x-java-class: io.confluent.observability.metricsquery.attributes.AttributesRequest
-      properties:
-        metric:
-          type: string
-          description: The metric that the label values are enumerated for.
-        group_by:
-          description: The label(s) that the values are enumerated for.
-          type: array
-          items:
-            type: string
-          minItems: 1
-        filter:
-          $ref: '#/components/schemas/Filter'
-        intervals:
-          description: Defines the time range(s) for which available metrics will be listed. A time range is an ISO-8601 interval. When unspecified, the value defaults to the last hour before the request was made
-          type: array
-          items:
-            $ref: '#/components/schemas/Interval'
-          minItems: 1
-        limit:
-          type: integer
-          minimum: 1
-          maximum: 1000
-          default: 100
-      required:
-      - group_by
-    LabelDescriptor:
-      description: The description of a label.
-      type: object
-      properties:
-        description:
-          description: The description of the metric.
-          type: string
-        key:
-          description: The key of the label.
-          type: string
-        exportable:
-          description: Is this label included in the `/export` endpoint response?
-          type: boolean
-      required:
-      - description
-      - key
-      example:
-        key: topic
-        description: The name of the Kafka topic.
-        exportable: true
-    ErrorResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                description: A unique identifier for this particular occurrence of the problem.
-                type: string
-              status:
-                description: The HTTP status code applicable to this problem, expressed as a string value.
-                type: string
-              code:
-                description: An application-specific error code, expressed as a string value.
-                type: string
-              detail:
-                description: A human-readable explanation specific to this occurrence of the problem.
-                type: string
-              meta:
-                $ref: '#/components/schemas/Meta'
-              links:
-                $ref: '#/components/schemas/Links'
-      required:
-      - errors
-      example:
-        errors:
-        - detail: fieldA must not be null
-        - detail: fieldB must not be null
-    FlatQueryResponse:
-      title: Flat Response
-      type: object
-      properties:
-        data:
-          description: An array of results for this query. Each item includes `timestamp`, `value`, and an attribute for each label specified in the request's `group_by`.
-          type: array
-          items:
-            $ref: '#/components/schemas/Point'
-        meta:
-          $ref: '#/components/schemas/Meta'
-      required:
-      - data
-      example:
-        data:
-        - timestamp: '2019-10-17T20:17:00.000Z'
-          metric.topic: foo
-          value: 9741
-        - timestamp: '2019-10-17T20:18:00.000Z'
-          metric.topic: foo
-          value: 9246
-        - timestamp: '2019-10-17T20:17:00.000Z'
-          metric.topic: bar
-          value: 844.1
-        - timestamp: '2019-10-17T20:18:00.000Z'
-          metric.topic: bar
-          value: 821.1
-        meta:
-          pagination:
-            page_size: 3
-            total_size: 3
-    Meta:
-      type: object
-      description: Meta object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-      required:
-      - pagination
-    UnaryFilter:
-      title: Unary Filter
-      type: object
-      x-java-class: io.confluent.observability.metricsquery.api.Filter
-      properties:
-        op:
-          type: string
-          enum:
-          - NOT
-        filter:
-          $ref: '#/components/schemas/Filter'
-      required:
-      - op
-      - filter
-      example:
-        op: NOT
-        filter:
-          field: metric.topic
-          op: EQ
-          value: topicA
-    ListResourceDescriptorsResponse:
-      description: The list of resource descriptors for a dataset
-      type: object
-      properties:
-        data:
-          description: The resource descriptors for the specified dataset.
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourceDescriptor'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-      required:
-      - data
-      - meta
-    ListMetricDescriptorsResponse:
-      description: The ListMetricDescriptors response.
-      type: object
-      properties:
-        data:
-          description: The metric descriptors for the specified dataset.
-          items:
-            $ref: '#/components/schemas/MetricDescriptor'
-          type: array
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-      required:
-      - data
-      - meta
     Granularity:
       description: 'Defines the time buckets that the aggregation is performed for.
 
@@ -1089,77 +913,72 @@ components:
       - P1D
       - ALL
       example: PT1H
-    AttributesResponse:
+    CompoundFilter:
+      title: Compound Filter
       type: object
+      x-java-class: io.confluent.observability.metricsquery.api.Filter
       properties:
-        data:
-          description: The enumerated labels, as an array of key/value pairs.
+        op:
+          type: string
+          enum:
+          - AND
+          - OR
+        filters:
           type: array
           items:
-            description: A key/value pair for the label.
-            type: object
-            additionalProperties:
-              type: string
-            example:
-              topic: foo
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
+            $ref: '#/components/schemas/Filter'
       required:
-      - data
-      - meta
+      - op
+      - filters
       example:
-        data:
-        - metric.label.topic: foo
-        - metric.label.topic: bar
-        - metric.label.topic: baz
-        meta:
-          pagination:
-            page_size: 3
-            total_size: 3
-    PageToken:
-      description: An opaque token that you use to get the next page of results.
-      type: string
-    GroupedQueryResponse:
-      title: Grouped Response
+        op: OR
+        filters:
+        - field: resource.kafka.id
+          op: EQ
+          value: lkc-1234
+        - field: resource.kafka.id
+          op: EQ
+          value: lkc-5678
+    FieldFilter:
+      title: Field Filter
       type: object
+      x-java-class: io.confluent.observability.metricsquery.api.Filter
       properties:
-        data:
-          description: An array of results for this query. Each item represents a group bucket having a distinct set of label values for the request's `group_by`.  The groups are ordered lexicographically by the label values for that group.
-          type: array
-          items:
-            type: object
-            properties:
-              points:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Point'
-            additionalProperties: true
-            required:
-            - points
-        meta:
-          $ref: '#/components/schemas/Meta'
+        op:
+          type: string
+          description: 'The comparison operator for the filter.
+
+            Note that labels are compared _lexicographically_.
+
+
+            The `GT` or `GTE` operators can be used to page through grouped result sets that exceed
+
+            the query limit.
+
+            '
+          enum:
+          - EQ
+          - GT
+          - GTE
+        field:
+          description: 'The field to filter on; see [here](#section/Object-Model/Labels) on using labels as
+
+            filter fields.
+
+            '
+          type: string
+          example: metric.topic
+        value:
+          oneOf:
+          - type: string
+          - type: integer
       required:
-      - data
+      - op
+      - value
       example:
-        data:
-        - metric.topic: foo
-          points:
-          - timestamp: '2019-10-17T20:17:00.000Z'
-            value: 9741
-          - timestamp: '2019-10-17T20:18:00.000Z'
-            value: 9246
-        - metric.topic: bar
-          points:
-          - timestamp: '2019-10-17T20:17:00.000Z'
-            value: 844.1
-          - timestamp: '2019-10-17T20:18:00.000Z'
-            value: 821.1
-        meta:
-          pagination:
-            page_size: 3
-            total_size: 3
+        op: EQ
+        field: resource.kafka.id
+        value: lkc-1234
     Aggregation:
       type: object
       x-java-class: io.confluent.observability.metricsquery.api.Aggregation
@@ -1176,6 +995,87 @@ components:
       example:
         metric: io.confluent.kafka.server/bytes_in
         agg: SUM
+    AttributesRequest:
+      type: object
+      x-java-class: io.confluent.observability.metricsquery.attributes.AttributesRequest
+      properties:
+        metric:
+          type: string
+          description: The metric that the label values are enumerated for.
+        group_by:
+          description: The label(s) that the values are enumerated for.
+          type: array
+          items:
+            type: string
+          minItems: 1
+        filter:
+          $ref: '#/components/schemas/Filter'
+        intervals:
+          description: Defines the time range(s) for which available metrics will be listed. A time range is an ISO-8601 interval. When unspecified, the value defaults to the last hour before the request was made
+          type: array
+          items:
+            $ref: '#/components/schemas/Interval'
+          minItems: 1
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      required:
+      - group_by
+    Point:
+      type: object
+      properties:
+        timestamp:
+          description: The timestamp for this time bucket, aligned to UTC boundaries.
+          type: string
+          format: date-time
+        value:
+          description: The value for the requested aggregation for this time bucket.
+          type: number
+      additionalProperties: true
+      required:
+      - timestamp
+      - value
+      example:
+        timestamp: '2019-10-17T20:17:00.000Z'
+        resource.kafka.id: lkc-12345entry
+        metric.topic: foo
+        value: 9741
+    Pagination:
+      description: The pagination information.
+      properties:
+        page_size:
+          description: The page size requested by the user.
+          format: int32
+          type: integer
+        total_size:
+          description: The total number of items, if the total size can be determined in advance; otherwise, `total_size` is not included.
+          format: int32
+          type: integer
+        next_page_token:
+          $ref: '#/components/schemas/PageToken'
+      required:
+      - page_size
+      example:
+        page_size: 10
+        total_size: 25
+    ListResourceDescriptorsResponse:
+      description: The list of resource descriptors for a dataset
+      type: object
+      properties:
+        data:
+          description: The resource descriptors for the specified dataset.
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceDescriptor'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+      required:
+      - data
+      - meta
     QueryRequest:
       type: object
       x-java-class: io.confluent.observability.metricsquery.api.MetricsQueryRequest
@@ -1278,136 +1178,182 @@ components:
       - intervals
       - aggregations
       - granularity
+    OrderBy:
+      type: object
+      properties:
+        metric:
+          type: string
+        agg:
+          $ref: '#/components/schemas/AggregationFunction'
+        order:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+          default: DESCENDING
+      required:
+      - metric
+      example:
+        metric: io.confluent.kafka.server/bytes_in
+        agg: SUM
+        order: DESCENDING
+    Interval:
+      type: string
+      format: ISO-8601 interval (<start>/<end> | <start>/<duration> | <duration>/<end>)
+    Dataset:
+      type: string
+      description: A logical collection of metrics that can be described and queried. Valid values are `cloud` and `health-plus`.
+    PageToken:
+      description: An opaque token that you use to get the next page of results.
+      type: string
     QueryResponse:
       oneOf:
       - $ref: '#/components/schemas/FlatQueryResponse'
       - $ref: '#/components/schemas/GroupedQueryResponse'
-    Dataset:
-      type: string
-      description: A logical collection of metrics that can be described and queried. Valid values are `cloud` and `health-plus`.
-    CompoundFilter:
-      title: Compound Filter
+    ErrorResponse:
       type: object
-      x-java-class: io.confluent.observability.metricsquery.api.Filter
       properties:
-        op:
-          type: string
-          enum:
-          - AND
-          - OR
-        filters:
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/Filter'
+            type: object
+            properties:
+              id:
+                description: A unique identifier for this particular occurrence of the problem.
+                type: string
+              status:
+                description: The HTTP status code applicable to this problem, expressed as a string value.
+                type: string
+              code:
+                description: An application-specific error code, expressed as a string value.
+                type: string
+              detail:
+                description: A human-readable explanation specific to this occurrence of the problem.
+                type: string
+              meta:
+                $ref: '#/components/schemas/Meta'
+              links:
+                $ref: '#/components/schemas/Links'
       required:
-      - op
-      - filters
+      - errors
       example:
-        op: OR
-        filters:
-        - field: resource.kafka.id
-          op: EQ
-          value: lkc-1234
-        - field: resource.kafka.id
-          op: EQ
-          value: lkc-5678
-    ResourceDescriptor:
-      description: 'A Resource represents the entity producing metrics.
-
-        For example: a Kafka cluster a Kafka Connector, etc.
-
-        '
+        errors:
+        - detail: fieldA must not be null
+        - detail: fieldB must not be null
+    AttributesResponse:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ResourceType'
-        description:
-          description: The description of the resource.
-          type: string
-        labels:
-          description: 'Labels for the resource.
-
-            Resource labels can be used for filtering and aggregating metrics
-
-            associated with a resource.
-
-            '
+        data:
+          description: The enumerated labels, as an array of key/value pairs.
           type: array
           items:
-            $ref: '#/components/schemas/LabelDescriptor'
+            description: A key/value pair for the label.
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              topic: foo
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
       required:
-      - type
-      - description
-      - labels
+      - data
+      - meta
       example:
-        type: kafka
-        description: A Kafka cluster.
-        labels:
-        - key: kafka.id
-          description: ID of the kafka cluster
-          exportable: true
-    Point:
-      type: object
-      properties:
-        timestamp:
-          description: The timestamp for this time bucket, aligned to UTC boundaries.
-          type: string
-          format: date-time
-        value:
-          description: The value for the requested aggregation for this time bucket.
-          type: number
-      additionalProperties: true
-      required:
-      - timestamp
-      - value
-      example:
-        timestamp: '2019-10-17T20:17:00.000Z'
-        resource.kafka.id: lkc-12345entry
-        metric.topic: foo
-        value: 9741
-    Interval:
+        data:
+        - metric.label.topic: foo
+        - metric.label.topic: bar
+        - metric.label.topic: baz
+        meta:
+          pagination:
+            page_size: 3
+            total_size: 3
+    ResponseFormat:
+      description: "Desired response format for query results.\n* `FLAT` (default): Each item in the response `data` array represents a data point in the\n  timeseries. Each data point contains the `timestamp`, metric aggregation `value` and\n  attributes for the `group_by` labels.\n* `GROUPED`: Each item in the response `data` array represents a group. Each group contains\n  attributes for the `group_by` labels and an array of `points` for the metric aggregation\n  timeseries. **Only allowed when `group_by` is non-empty.**\n\nPlease see the response schema and accompanying examples for more details.\n"
       type: string
-      format: ISO-8601 interval (<start>/<end> | <start>/<duration> | <duration>/<end>)
-    FieldFilter:
-      title: Field Filter
+      enum:
+      - FLAT
+      - GROUPED
+      default: FLAT
+    FlatQueryResponse:
+      title: Flat Response
       type: object
-      x-java-class: io.confluent.observability.metricsquery.api.Filter
       properties:
-        op:
-          type: string
-          description: 'The comparison operator for the filter.
-
-            Note that labels are compared _lexicographically_.
-
-
-            The `GT` or `GTE` operators can be used to page through grouped result sets that exceed
-
-            the query limit.
-
-            '
-          enum:
-          - EQ
-          - GT
-          - GTE
-        field:
-          description: 'The field to filter on; see [here](#section/Object-Model/Labels) on using labels as
-
-            filter fields.
-
-            '
-          type: string
-          example: metric.topic
-        value:
-          oneOf:
-          - type: string
-          - type: integer
+        data:
+          description: An array of results for this query. Each item includes `timestamp`, `value`, and an attribute for each label specified in the request's `group_by`.
+          type: array
+          items:
+            $ref: '#/components/schemas/Point'
+        meta:
+          $ref: '#/components/schemas/Meta'
       required:
-      - op
-      - value
+      - data
       example:
-        op: EQ
-        field: resource.kafka.id
-        value: lkc-1234
+        data:
+        - timestamp: '2019-10-17T20:17:00.000Z'
+          metric.topic: foo
+          value: 9741
+        - timestamp: '2019-10-17T20:18:00.000Z'
+          metric.topic: foo
+          value: 9246
+        - timestamp: '2019-10-17T20:17:00.000Z'
+          metric.topic: bar
+          value: 844.1
+        - timestamp: '2019-10-17T20:18:00.000Z'
+          metric.topic: bar
+          value: 821.1
+        meta:
+          pagination:
+            page_size: 3
+            total_size: 3
+    Meta:
+      type: object
+      description: Meta object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - pagination
+    GroupedQueryResponse:
+      title: Grouped Response
+      type: object
+      properties:
+        data:
+          description: An array of results for this query. Each item represents a group bucket having a distinct set of label values for the request's `group_by`.  The groups are ordered lexicographically by the label values for that group.
+          type: array
+          items:
+            type: object
+            properties:
+              points:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Point'
+            additionalProperties: true
+            required:
+            - points
+        meta:
+          $ref: '#/components/schemas/Meta'
+      required:
+      - data
+      example:
+        data:
+        - metric.topic: foo
+          points:
+          - timestamp: '2019-10-17T20:17:00.000Z'
+            value: 9741
+          - timestamp: '2019-10-17T20:18:00.000Z'
+            value: 9246
+        - metric.topic: bar
+          points:
+          - timestamp: '2019-10-17T20:17:00.000Z'
+            value: 844.1
+          - timestamp: '2019-10-17T20:18:00.000Z'
+            value: 821.1
+        meta:
+          pagination:
+            page_size: 3
+            total_size: 3
     MetricDescriptor:
       description: Defines a metric type and its schema.
       type: object
@@ -1495,64 +1441,118 @@ components:
         - key: topic
           description: The name of the Kafka topic.
           exportable: true
-    ResourceType:
-      description: A named type for a resource (e.g. `kafka`, `connector`).
-      type: string
-    Filter:
-      description: Metric filter.
-      oneOf:
-      - $ref: '#/components/schemas/FieldFilter'
-      - $ref: '#/components/schemas/CompoundFilter'
-      - $ref: '#/components/schemas/UnaryFilter'
-    OrderBy:
-      type: object
-      properties:
-        metric:
-          type: string
-        agg:
-          $ref: '#/components/schemas/AggregationFunction'
-        order:
-          type: string
-          enum:
-          - ASCENDING
-          - DESCENDING
-          default: DESCENDING
-      required:
-      - metric
-      example:
-        metric: io.confluent.kafka.server/bytes_in
-        agg: SUM
-        order: DESCENDING
-    Pagination:
-      description: The pagination information.
-      properties:
-        page_size:
-          description: The page size requested by the user.
-          format: int32
-          type: integer
-        total_size:
-          description: The total number of items, if the total size can be determined in advance; otherwise, `total_size` is not included.
-          format: int32
-          type: integer
-        next_page_token:
-          $ref: '#/components/schemas/PageToken'
-      required:
-      - page_size
-      example:
-        page_size: 10
-        total_size: 25
     Links:
       description: link information
       properties:
         next:
           description: The next page of resources in a collection. The link is present only if the current document is part of a collection.
           type: string
+    LabelDescriptor:
+      description: The description of a label.
+      type: object
+      properties:
+        description:
+          description: The description of the metric.
+          type: string
+        key:
+          description: The key of the label.
+          type: string
+        exportable:
+          description: Is this label included in the `/export` endpoint response?
+          type: boolean
+      required:
+      - description
+      - key
+      example:
+        key: topic
+        description: The name of the Kafka topic.
+        exportable: true
+    ResourceType:
+      description: A named type for a resource (e.g. `kafka`, `connector`).
+      type: string
+    ResourceDescriptor:
+      description: 'A Resource represents the entity producing metrics.
+
+        For example: a Kafka cluster a Kafka Connector, etc.
+
+        '
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceType'
+        description:
+          description: The description of the resource.
+          type: string
+        labels:
+          description: 'Labels for the resource.
+
+            Resource labels can be used for filtering and aggregating metrics
+
+            associated with a resource.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDescriptor'
+      required:
+      - type
+      - description
+      - labels
+      example:
+        type: kafka
+        description: A Kafka cluster.
+        labels:
+        - key: kafka.id
+          description: ID of the kafka cluster
+          exportable: true
+    UnaryFilter:
+      title: Unary Filter
+      type: object
+      x-java-class: io.confluent.observability.metricsquery.api.Filter
+      properties:
+        op:
+          type: string
+          enum:
+          - NOT
+        filter:
+          $ref: '#/components/schemas/Filter'
+      required:
+      - op
+      - filter
+      example:
+        op: NOT
+        filter:
+          field: metric.topic
+          op: EQ
+          value: topicA
     AggregationFunction:
       type: string
       enum:
       - SUM
       - MIN
       - MAX
+    ListMetricDescriptorsResponse:
+      description: The ListMetricDescriptors response.
+      type: object
+      properties:
+        data:
+          description: The metric descriptors for the specified dataset.
+          items:
+            $ref: '#/components/schemas/MetricDescriptor'
+          type: array
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+      required:
+      - data
+      - meta
+    Filter:
+      description: Metric filter.
+      oneOf:
+      - $ref: '#/components/schemas/FieldFilter'
+      - $ref: '#/components/schemas/CompoundFilter'
+      - $ref: '#/components/schemas/UnaryFilter'
   responses:
     RateLimitError:
       description: Rate Limit Exceeded

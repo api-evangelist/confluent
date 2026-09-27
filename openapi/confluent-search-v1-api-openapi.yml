@@ -211,58 +211,6 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    EntityHeader:
-      type: object
-      properties:
-        typeName:
-          type: string
-          description: The type name
-        attributes:
-          type: object
-          description: The attributes
-          additionalProperties: true
-        guid:
-          type: string
-          description: The internal guid
-        status:
-          type: string
-          description: The status
-          enum:
-          - ACTIVE
-          - DELETED
-          - PURGED
-        displayText:
-          type: string
-          description: The display text
-        classificationNames:
-          type: array
-          description: The classification (tag) names
-          items:
-            type: string
-        classifications:
-          type: array
-          description: The classifications (tags)
-          items:
-            $ref: '#/components/schemas/Classification'
-        meaningNames:
-          type: array
-          description: The meaning names
-          items:
-            type: string
-        meanings:
-          type: array
-          description: The meanings
-          items:
-            $ref: '#/components/schemas/TermAssignmentHeader'
-        isIncomplete:
-          type: boolean
-          description: Whether is incomplete
-        labels:
-          uniqueItems: true
-          type: array
-          description: The labels
-          items:
-            type: string
     SearchParams:
       type: object
       description: Search paramas to filter results
@@ -278,48 +226,6 @@ components:
           type: integer
           description: The offset
           format: int32
-    TermAssignmentHeader:
-      type: object
-      properties:
-        termGuid:
-          type: string
-          description: The term guid
-        relationGuid:
-          type: string
-          description: The relation guid
-        description:
-          type: string
-          description: The description
-        displayText:
-          type: string
-          description: The display text
-        expression:
-          type: string
-          description: The expression
-        createdBy:
-          type: string
-          description: The creator
-        steward:
-          type: string
-          description: The steward
-        source:
-          type: string
-          description: The source
-        confidence:
-          type: integer
-          description: The confidence
-          format: int32
-        status:
-          type: string
-          description: The status
-          enum:
-          - DISCOVERED
-          - PROPOSED
-          - IMPORTED
-          - VALIDATED
-          - DEPRECATED
-          - OBSOLETE
-          - OTHER
     Classification:
       type: object
       properties:
@@ -384,6 +290,100 @@ components:
           description: The referred entities
           additionalProperties:
             $ref: '#/components/schemas/EntityHeader'
+    TermAssignmentHeader:
+      type: object
+      properties:
+        termGuid:
+          type: string
+          description: The term guid
+        relationGuid:
+          type: string
+          description: The relation guid
+        description:
+          type: string
+          description: The description
+        displayText:
+          type: string
+          description: The display text
+        expression:
+          type: string
+          description: The expression
+        createdBy:
+          type: string
+          description: The creator
+        steward:
+          type: string
+          description: The steward
+        source:
+          type: string
+          description: The source
+        confidence:
+          type: integer
+          description: The confidence
+          format: int32
+        status:
+          type: string
+          description: The status
+          enum:
+          - DISCOVERED
+          - PROPOSED
+          - IMPORTED
+          - VALIDATED
+          - DEPRECATED
+          - OBSOLETE
+          - OTHER
+    EntityHeader:
+      type: object
+      properties:
+        typeName:
+          type: string
+          description: The type name
+        attributes:
+          type: object
+          description: The attributes
+          additionalProperties: true
+        guid:
+          type: string
+          description: The internal guid
+        status:
+          type: string
+          description: The status
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        displayText:
+          type: string
+          description: The display text
+        classificationNames:
+          type: array
+          description: The classification (tag) names
+          items:
+            type: string
+        classifications:
+          type: array
+          description: The classifications (tags)
+          items:
+            $ref: '#/components/schemas/Classification'
+        meaningNames:
+          type: array
+          description: The meaning names
+          items:
+            type: string
+        meanings:
+          type: array
+          description: The meanings
+          items:
+            $ref: '#/components/schemas/TermAssignmentHeader'
+        isIncomplete:
+          type: boolean
+          description: Whether is incomplete
+        labels:
+          uniqueItems: true
+          type: array
+          description: The labels
+          items:
+            type: string
   securitySchemes:
     cloud-api-key:
       type: http

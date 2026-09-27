@@ -53,7 +53,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/Cluster'
 components:
+  parameters:
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
+    ClusterList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cluster'
     Cluster:
       type: object
       properties:
@@ -69,20 +83,6 @@ components:
           type: string
         region:
           type: string
-    ClusterList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Cluster'
-  parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
   securitySchemes:
     basicAuth:
       type: http

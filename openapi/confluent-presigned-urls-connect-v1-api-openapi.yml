@@ -103,212 +103,7 @@ paths:
         '500':
           $ref: '#/components/responses/DefaultSystemError'
 components:
-  responses:
-    RateLimitError:
-      description: Rate Limit Exceeded
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: The maximum number of requests you're permitted to make per time period.
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: The number of requests remaining in the current rate limit window.
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
-        Retry-After:
-          schema:
-            type: integer
-          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    UnauthenticatedError:
-      x-summary: Unauthorized
-      description: The request lacks valid authentication credentials for this resource.
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        WWW-Authenticate:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-          example: Basic error="invalid_key", error_description="The API Key is invalid"
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '401'
-              code: user_unauthenticated
-              title: Authentication Required
-              detail: Valid authentication credentials must be provided
-    BadRequestError:
-      description: Bad Request
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
-    DefaultSystemError:
-      description: Oops, something went wrong!
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
-    NotFoundError:
-      description: Not Found
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '404'
-              title: Not Found
-    UnauthorizedError:
-      x-summary: Forbidden
-      description: The access credentials were considered insufficient to grant access
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '403'
-              code: user_unauthorized
-              title: User Access Unauthorized
-              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
   schemas:
-    Failure:
-      type: object
-      description: Provides information about problems encountered while performing an operation.
-      required:
-      - errors
-      properties:
-        errors:
-          description: List of errors which caused this operation to fail
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-          uniqueItems: true
-    connect.v1.PresignedUrl:
-      type: object
-      description: 'Request a presigned upload URL for new Custom Connector Plugin. Note that
-
-        the URL policy expires in one hour. If the policy expires, you can request
-
-        a new presigned upload URL.
-
-
-        Related guide:
-
-        [Custom Connector Plugin API](https://docs.confluent.io/cloud/current/connectors/connect-api-section.html).
-
-
-
-        ## The Presigned Urls Model
-
-        <SchemaDefinition schemaRef="#/components/schemas/connect.v1.PresignedUrl" />'
-      properties:
-        api_version:
-          type: string
-          enum:
-          - connect/v1
-          description: APIVersion defines the schema version of this representation of a resource.
-          readOnly: true
-        kind:
-          type: string
-          description: Kind defines the object this REST resource represents.
-          readOnly: true
-          enum:
-          - PresignedUrl
-        content_format:
-          type: string
-          description: Content format of the Custom Connector Plugin archive.
-          example: ZIP
-          x-extensible-enum:
-          - ZIP
-          - JAR
-          readOnly: true
-        cloud:
-          type: string
-          description: Cloud provider where the Custom Connector Plugin archive is uploaded.
-          example: AWS
-          x-extensible-enum:
-          - AWS
-          - GCP
-          - AZURE
-          readOnly: true
-        upload_id:
-          type: string
-          description: Unique identifier of this upload.
-          example: e53bb2e8-8de3-49fa-9fb1-4e3fd9a16b66
-          readOnly: true
-        upload_url:
-          type: string
-          format: uri
-          description: Upload URL for the Custom Connector Plugin archive.
-          example: https://confluent-custom-connectors-stag-us-west-2.s3.dualstack.us-west-2.amazonaws.com/
-          readOnly: true
-        upload_form_data:
-          type: object
-          description: Upload form data of the Custom Connector Plugin. All values should be strings.
-          example:
-            bucket: confluent-custom-connectors-stag-us-west-2
-            key: staging/custom-plugin/2f37f0b6-f8da-4e8b-bc5f-282ebb0511be/connect-e53bb2e8-8de3-49fa-9fb1-4e3fd9a16b66/plugin.zip
-            policy: string
-            x-amz-algorithm: AWS4-HMAC-SHA256
-            x-amz-credential: string
-            x-amz-date: 20230725T013857Z
-            x-amz-security-token: string
-            x-amz-signature: string
-          readOnly: true
     connect.v1.PresignedUrlRequest:
       type: object
       description: 'Request schema of the presigned upload URL.
@@ -393,6 +188,18 @@ components:
           readOnly: true
           description: The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC.
       readOnly: true
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -431,6 +238,199 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    connect.v1.PresignedUrl:
+      type: object
+      description: 'Request a presigned upload URL for new Custom Connector Plugin. Note that
+
+        the URL policy expires in one hour. If the policy expires, you can request
+
+        a new presigned upload URL.
+
+
+        Related guide:
+
+        [Custom Connector Plugin API](https://docs.confluent.io/cloud/current/connectors/connect-api-section.html).
+
+
+
+        ## The Presigned Urls Model
+
+        <SchemaDefinition schemaRef="#/components/schemas/connect.v1.PresignedUrl" />'
+      properties:
+        api_version:
+          type: string
+          enum:
+          - connect/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - PresignedUrl
+        content_format:
+          type: string
+          description: Content format of the Custom Connector Plugin archive.
+          example: ZIP
+          x-extensible-enum:
+          - ZIP
+          - JAR
+          readOnly: true
+        cloud:
+          type: string
+          description: Cloud provider where the Custom Connector Plugin archive is uploaded.
+          example: AWS
+          x-extensible-enum:
+          - AWS
+          - GCP
+          - AZURE
+          readOnly: true
+        upload_id:
+          type: string
+          description: Unique identifier of this upload.
+          example: e53bb2e8-8de3-49fa-9fb1-4e3fd9a16b66
+          readOnly: true
+        upload_url:
+          type: string
+          format: uri
+          description: Upload URL for the Custom Connector Plugin archive.
+          example: https://confluent-custom-connectors-stag-us-west-2.s3.dualstack.us-west-2.amazonaws.com/
+          readOnly: true
+        upload_form_data:
+          type: object
+          description: Upload form data of the Custom Connector Plugin. All values should be strings.
+          example:
+            bucket: confluent-custom-connectors-stag-us-west-2
+            key: staging/custom-plugin/2f37f0b6-f8da-4e8b-bc5f-282ebb0511be/connect-e53bb2e8-8de3-49fa-9fb1-4e3fd9a16b66/plugin.zip
+            policy: string
+            x-amz-algorithm: AWS4-HMAC-SHA256
+            x-amz-credential: string
+            x-amz-date: 20230725T013857Z
+            x-amz-security-token: string
+            x-amz-signature: string
+          readOnly: true
+  responses:
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
+    NotFoundError:
+      description: Not Found
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '404'
+              title: Not Found
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
+    UnauthenticatedError:
+      x-summary: Unauthorized
+      description: The request lacks valid authentication credentials for this resource.
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        WWW-Authenticate:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+          example: Basic error="invalid_key", error_description="The API Key is invalid"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '401'
+              code: user_unauthenticated
+              title: Authentication Required
+              detail: Valid authentication credentials must be provided
+    RateLimitError:
+      description: Rate Limit Exceeded
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: The maximum number of requests you're permitted to make per time period.
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: The number of requests remaining in the current rate limit window.
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        Retry-After:
+          schema:
+            type: integer
+          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    UnauthorizedError:
+      x-summary: Forbidden
+      description: The access credentials were considered insufficient to grant access
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '403'
+              code: user_unauthorized
+              title: User Access Unauthorized
+              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
   securitySchemes:
     cloud-api-key:
       type: http

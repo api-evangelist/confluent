@@ -60,14 +60,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConsumerGroup'
 components:
+  parameters:
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
-    ConsumerGroupList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConsumerGroup'
     ConsumerGroup:
       type: object
       properties:
@@ -79,13 +79,13 @@ components:
           type: integer
         is_simple:
           type: boolean
-  parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
+    ConsumerGroupList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsumerGroup'
   securitySchemes:
     basicAuth:
       type: http
