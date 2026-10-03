@@ -223,54 +223,6 @@ paths:
       - external-access-token: []
 components:
   schemas:
-    CompatibilityCheckResponse:
-      type: object
-      properties:
-        is_compatible:
-          type: boolean
-          description: Whether the compared schemas are compatible
-        messages:
-          type: array
-          description: Error messages
-          example: []
-          items:
-            type: string
-            description: Error messages
-            example: '[]'
-      description: Compatibility check response
-    Metadata:
-      description: User-defined metadata
-      properties:
-        tags:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-            uniqueItems: true
-          type: object
-        properties:
-          additionalProperties:
-            type: string
-          type: object
-        sensitive:
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-      type:
-      - object
-      - 'null'
-    ErrorMessage:
-      type: object
-      properties:
-        error_code:
-          type: integer
-          description: The error code
-          format: int32
-        message:
-          type: string
-          description: The error message
-      description: Error message of this operation
     Rule:
       description: Rule
       properties:
@@ -325,6 +277,15 @@ components:
           description: Whether the rule is disabled
           type: boolean
       type: object
+    SchemaTags:
+      type: object
+      properties:
+        schemaEntity:
+          $ref: '#/components/schemas/SchemaEntity'
+        tags:
+          type: array
+          items:
+            type: string
     SchemaEntity:
       type: object
       properties:
@@ -335,23 +296,53 @@ components:
           enum:
           - sr_record
           - sr_field
-    SchemaReference:
+    RuleSet:
+      description: Schema rule set
+      properties:
+        migrationRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+        domainRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+      type:
+      - object
+      - 'null'
+    Metadata:
+      description: User-defined metadata
+      properties:
+        tags:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+            uniqueItems: true
+          type: object
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        sensitive:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+      type:
+      - object
+      - 'null'
+    ErrorMessage:
       type: object
       properties:
-        name:
-          type: string
-          description: Reference name
-          example: io.confluent.kafka.example.User
-        subject:
-          type: string
-          description: Name of the referenced subject
-          example: User
-        version:
+        error_code:
           type: integer
-          description: Version number of the referenced subject
+          description: The error code
           format: int32
-          example: 1
-      description: Schema reference
+        message:
+          type: string
+          description: The error message
+      description: Error message of this operation
     RegisterSchemaRequest:
       type: object
       properties:
@@ -389,48 +380,48 @@ components:
         propagateSchemaTags:
           type: boolean
       description: Schema register request
-    RuleSet:
-      description: Schema rule set
-      properties:
-        migrationRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-        domainRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-      type:
-      - object
-      - 'null'
-    SchemaTags:
+    SchemaReference:
       type: object
       properties:
-        schemaEntity:
-          $ref: '#/components/schemas/SchemaEntity'
-        tags:
+        name:
+          type: string
+          description: Reference name
+          example: io.confluent.kafka.example.User
+        subject:
+          type: string
+          description: Name of the referenced subject
+          example: User
+        version:
+          type: integer
+          description: Version number of the referenced subject
+          format: int32
+          example: 1
+      description: Schema reference
+    CompatibilityCheckResponse:
+      type: object
+      properties:
+        is_compatible:
+          type: boolean
+          description: Whether the compared schemas are compatible
+        messages:
           type: array
+          description: Error messages
+          example: []
           items:
             type: string
+            description: Error messages
+            example: '[]'
+      description: Compatibility check response
   responses:
-    schemaregistry.v1.ForbiddenError:
-      description: Forbidden
+    schemaregistry.v1.UnauthorizedError:
+      description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
           example:
-            error_code: 403
-            message: Forbidden
-    schemaregistry.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 400
-            message: Bad Request
+            error_code: 401
+            message: Unauthorized
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -454,15 +445,24 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    schemaregistry.v1.UnauthorizedError:
-      description: Unauthorized
+    schemaregistry.v1.ForbiddenError:
+      description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
           example:
-            error_code: 401
-            message: Unauthorized
+            error_code: 403
+            message: Forbidden
+    schemaregistry.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 400
+            message: Bad Request
   securitySchemes:
     cloud-api-key:
       type: http

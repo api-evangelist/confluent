@@ -185,67 +185,6 @@ paths:
           $ref: '#/components/responses/ServerErrorResponse'
 components:
   schemas:
-    ResourceCollectionMetadata:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-        next:
-          type:
-          - string
-          - 'null'
-    TopicData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - topic_name
-        - is_internal
-        - replication_factor
-        - partitions_count
-        - partitions
-        - configs
-        - partition_reassignments
-        properties:
-          cluster_id:
-            type: string
-          topic_name:
-            type: string
-          is_internal:
-            type: boolean
-          replication_factor:
-            type: integer
-          partitions_count:
-            type: integer
-          partitions:
-            $ref: '#/components/schemas/Relationship'
-          configs:
-            $ref: '#/components/schemas/Relationship'
-          partition_reassignments:
-            $ref: '#/components/schemas/Relationship'
-          authorized_operations:
-            $ref: '#/components/schemas/AuthorizedOperations'
-    UpdatePartitionCountRequestData:
-      type: object
-      required:
-      - partitions_count
-      properties:
-        partitions_count:
-          type: integer
-          format: int32
-    ResourceCollection:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceCollectionMetadata'
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -284,35 +223,77 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Relationship:
+    UpdatePartitionCountRequestData:
       type: object
       required:
-      - related
+      - partitions_count
       properties:
-        related:
-          type: string
-    ResourceMetadata:
+        partitions_count:
+          type: integer
+          format: int32
+    ResourceCollectionMetadata:
       type: object
       required:
       - self
       properties:
         self:
           type: string
-        resource_name:
+        next:
           type:
           - string
           - 'null'
-    TopicDataList:
+    Resource:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceMetadata'
+    ResourceCollection:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceCollectionMetadata'
+    TopicData:
       allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
+      - $ref: '#/components/schemas/Resource'
       - type: object
         required:
-        - data
+        - cluster_id
+        - topic_name
+        - is_internal
+        - replication_factor
+        - partitions_count
+        - partitions
+        - configs
+        - partition_reassignments
         properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/TopicData'
+          cluster_id:
+            type: string
+          topic_name:
+            type: string
+          is_internal:
+            type: boolean
+          replication_factor:
+            type: integer
+          partitions_count:
+            type: integer
+          partitions:
+            $ref: '#/components/schemas/Relationship'
+          configs:
+            $ref: '#/components/schemas/Relationship'
+          partition_reassignments:
+            $ref: '#/components/schemas/Relationship'
+          authorized_operations:
+            $ref: '#/components/schemas/AuthorizedOperations'
     CreateTopicRequestData:
       type: object
       required:
@@ -356,17 +337,65 @@ components:
         - DESCRIBE_CONFIGS
         - ALTER_CONFIGS
         - IDEMPOTENT_WRITE
-    Resource:
+    ResourceMetadata:
       type: object
       required:
-      - kind
-      - metadata
+      - self
       properties:
-        kind:
+        self:
           type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceMetadata'
+        resource_name:
+          type:
+          - string
+          - 'null'
+    TopicDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/TopicData'
+    Relationship:
+      type: object
+      required:
+      - related
+      properties:
+        related:
+          type: string
   responses:
+    BadRequestErrorResponse_CreateTopic:
+      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            create_topic_already_exists:
+              description: Thrown when trying to create a topic with a name already used by an existing topic.
+              value:
+                error_code: 40002
+                message: Topic 'my-topic' already exists.
+            create_topic_replication_factor_too_large:
+              description: Thrown when trying to create a topic with a replication factor larger than the number of brokers.
+              value:
+                error_code: 40002
+                message: 'Replication factor: 2 larger than available brokers: 1.'
+    UnauthorizedErrorResponse:
+      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authentication_failed:
+              description: Thrown when using Basic authentication with wrong Kafka credentials.
+              value:
+                error_code: 40101
+                message: Authentication failed
     ServerErrorResponse:
       description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
       content:
@@ -379,18 +408,23 @@ components:
               value:
                 error_code: 500
                 message: Internal Server Error
-    BadRequestErrorResponse_UpdatePartitionCountTopic:
+    BadRequestErrorResponse:
       description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            topic_update_partitions_invalid:
-              description: Thrown when trying to update the number of partitions incorrectly.
+            bad_request_cannot_deserialize:
+              description: Thrown when trying to deserialize an integer from non-integer data.
               value:
-                error_code: 40002
-                message: Topic already has 1 partitions.
+                error_code: 400
+                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
+            unsupported_version_exception:
+              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
+              value:
+                error_code: 40035
+                message: The version of this API is not supported in the underlying Kafka cluster.
     GetTopicResponse:
       description: The topic.
       content:
@@ -413,23 +447,83 @@ components:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs
             partition_reassignments:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/partitions/-/reassignments
-    BadRequestErrorResponse_CreateTopic:
+    TooManyRequestsErrorResponse:
+      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
+      content:
+        text/html:
+          schema:
+            type: string
+          example:
+            description: A sample response from Jetty's DoSFilter.
+            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
+    ForbiddenErrorResponse:
+      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authorization_failed:
+              description: Thrown when the caller is not authorized to perform the underlying operation.
+              value:
+                error_code: 40301
+                message: Request is not authorized
+    BadRequestErrorResponse_UpdatePartitionCountTopic:
       description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            create_topic_already_exists:
-              description: Thrown when trying to create a topic with a name already used by an existing topic.
+            topic_update_partitions_invalid:
+              description: Thrown when trying to update the number of partitions incorrectly.
               value:
                 error_code: 40002
-                message: Topic 'my-topic' already exists.
-            create_topic_replication_factor_too_large:
-              description: Thrown when trying to create a topic with a replication factor larger than the number of brokers.
+                message: Topic already has 1 partitions.
+    CreateTopicResponse:
+      description: The created topic.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TopicData'
+          example:
+            kind: KafkaTopic
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X
+              resource_name: crn:///kafka=cluster-1/topic=topic-X
+            cluster_id: cluster-1
+            topic_name: topic-X
+            is_internal: false
+            replication_factor: 3
+            partitions_count: 1
+            partitions:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X/partitions
+            configs:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X/configs
+            partition_reassignments:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X/partitions/-/reassignments
+    NotFoundErrorResponse:
+      description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            endpoint_not_found:
+              description: Thrown for generic HTTP 404 errors.
               value:
-                error_code: 40002
-                message: 'Replication factor: 2 larger than available brokers: 1.'
+                error_code: 404
+                message: HTTP 404 Not Found
+            cluster_not_found:
+              description: Thrown when using a non-existing cluster ID.
+              value:
+                error_code: 404
+                message: Cluster my-cluster cannot be found.
+            unknown_topic_or_partition:
+              description: Thrown when using a non-existing topic name or partition ID.
+              value:
+                error_code: 40403
+                message: This server does not host this topic-partition.
     ListTopicsResponse:
       description: The list of topics.
       content:
@@ -487,100 +581,30 @@ components:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-3/configs
               partition_reassignments:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-3/partitions/-/reassignments
-    NotFoundErrorResponse:
-      description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            endpoint_not_found:
-              description: Thrown for generic HTTP 404 errors.
-              value:
-                error_code: 404
-                message: HTTP 404 Not Found
-            cluster_not_found:
-              description: Thrown when using a non-existing cluster ID.
-              value:
-                error_code: 404
-                message: Cluster my-cluster cannot be found.
-            unknown_topic_or_partition:
-              description: Thrown when using a non-existing topic name or partition ID.
-              value:
-                error_code: 40403
-                message: This server does not host this topic-partition.
-    TooManyRequestsErrorResponse:
-      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
-      content:
-        text/html:
-          schema:
-            type: string
-          example:
-            description: A sample response from Jetty's DoSFilter.
-            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
-    UnauthorizedErrorResponse:
-      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authentication_failed:
-              description: Thrown when using Basic authentication with wrong Kafka credentials.
-              value:
-                error_code: 40101
-                message: Authentication failed
-    ForbiddenErrorResponse:
-      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authorization_failed:
-              description: Thrown when the caller is not authorized to perform the underlying operation.
-              value:
-                error_code: 40301
-                message: Request is not authorized
-    BadRequestErrorResponse:
-      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            bad_request_cannot_deserialize:
-              description: Thrown when trying to deserialize an integer from non-integer data.
-              value:
-                error_code: 400
-                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
-            unsupported_version_exception:
-              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
-              value:
-                error_code: 40035
-                message: The version of this API is not supported in the underlying Kafka cluster.
-    CreateTopicResponse:
-      description: The created topic.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TopicData'
-          example:
-            kind: KafkaTopic
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X
-              resource_name: crn:///kafka=cluster-1/topic=topic-X
-            cluster_id: cluster-1
-            topic_name: topic-X
-            is_internal: false
-            replication_factor: 3
-            partitions_count: 1
-            partitions:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X/partitions
-            configs:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X/configs
-            partition_reassignments:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-X/partitions/-/reassignments
+  parameters:
+    ClusterId:
+      name: cluster_id
+      description: The Kafka cluster ID.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: cluster-1
+    IncludeAuthorizedOperations:
+      name: include_authorized_operations
+      description: Specify if authorized operations should be included in the response.
+      in: query
+      required: false
+      schema:
+        type: boolean
+    TopicName:
+      name: topic_name
+      description: The topic name.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: topic-1
   requestBodies:
     CreateTopicRequest:
       description: The topic creation request. Note that Confluent Cloud allows only specific replication factor values. Because of that the replication factor field should either be omitted or it should use one of the allowed values (see https://docs.confluent.io/cloud/current/client-apps/optimizing/durability.html).
@@ -605,30 +629,6 @@ components:
                 partitions_count: 64
                 replication_factor: 3
                 validate_only: true
-  parameters:
-    ClusterId:
-      name: cluster_id
-      description: The Kafka cluster ID.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: cluster-1
-    TopicName:
-      name: topic_name
-      description: The topic name.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: topic-1
-    IncludeAuthorizedOperations:
-      name: include_authorized_operations
-      description: Specify if authorized operations should be included in the response.
-      in: query
-      required: false
-      schema:
-        type: boolean
   securitySchemes:
     cloud-api-key:
       type: http

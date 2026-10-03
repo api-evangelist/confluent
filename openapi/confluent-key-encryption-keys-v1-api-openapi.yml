@@ -367,6 +367,25 @@ components:
           type: boolean
           description: Whether the kek is deleted
       type: object
+    UpdateKekRequest:
+      example:
+        kmsProps:
+          key: kmsProps
+        shared: true
+        doc: doc
+      properties:
+        kmsProps:
+          type: object
+          additionalProperties:
+            type: string
+          description: Properties of the kek
+        doc:
+          type: string
+          description: Description of the kek
+        shared:
+          type: boolean
+          description: Whether the kek is shared
+      type: object
     CreateKekRequest:
       example:
         kmsProps:
@@ -400,25 +419,6 @@ components:
         deleted:
           type: boolean
           description: Whether the kek is deleted
-      type: object
-    UpdateKekRequest:
-      example:
-        kmsProps:
-          key: kmsProps
-        shared: true
-        doc: doc
-      properties:
-        kmsProps:
-          type: object
-          additionalProperties:
-            type: string
-          description: Properties of the kek
-        doc:
-          type: string
-          description: Description of the kek
-        shared:
-          type: boolean
-          description: Whether the kek is shared
       type: object
   securitySchemes:
     cloud-api-key:

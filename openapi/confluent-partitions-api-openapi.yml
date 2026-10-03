@@ -58,25 +58,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Partition'
 components:
-  parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
-    PartitionId:
-      name: partition_id
-      in: path
-      required: true
-      schema:
-        type: integer
-    TopicName:
-      name: topic_name
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
     Partition:
       type: object
@@ -96,6 +77,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Partition'
+  parameters:
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
+    PartitionId:
+      name: partition_id
+      in: path
+      required: true
+      schema:
+        type: integer
+    TopicName:
+      name: topic_name
+      in: path
+      required: true
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http

@@ -538,83 +538,6 @@ paths:
       - external-access-token: []
 components:
   schemas:
-    SchemaString:
-      type: object
-      properties:
-        schemaType:
-          type: string
-          description: Schema type
-          example: AVRO
-        schema:
-          type: string
-          description: Schema string identified by the ID
-          example: '{"schema": "{"type": "string"}"}'
-        references:
-          type: array
-          description: References to other schemas
-          items:
-            $ref: '#/components/schemas/SchemaReference'
-        metadata:
-          $ref: '#/components/schemas/Metadata'
-        ruleSet:
-          $ref: '#/components/schemas/RuleSet'
-        schemaTags:
-          type: array
-          description: Schema tags
-          items:
-            $ref: '#/components/schemas/SchemaTags'
-        maxId:
-          type: integer
-          description: Maximum ID
-          format: int32
-          example: 1
-      description: Schema definition
-    Metadata:
-      description: User-defined metadata
-      properties:
-        tags:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-            uniqueItems: true
-          type: object
-        properties:
-          additionalProperties:
-            type: string
-          type: object
-        sensitive:
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-      type:
-      - object
-      - 'null'
-    ErrorMessage:
-      type: object
-      properties:
-        error_code:
-          type: integer
-          description: The error code
-          format: int32
-        message:
-          type: string
-          description: The error message
-      description: Error message of this operation
-    SubjectVersion:
-      type: object
-      properties:
-        subject:
-          type: string
-          description: Name of the subject
-          example: User
-        version:
-          type: integer
-          description: Version number
-          format: int32
-          example: 1
-      description: Subject version pair
     Rule:
       description: Rule
       properties:
@@ -669,6 +592,15 @@ components:
           description: Whether the rule is disabled
           type: boolean
       type: object
+    SchemaTags:
+      type: object
+      properties:
+        schemaEntity:
+          $ref: '#/components/schemas/SchemaEntity'
+        tags:
+          type: array
+          items:
+            type: string
     SchemaEntity:
       type: object
       properties:
@@ -679,23 +611,73 @@ components:
           enum:
           - sr_record
           - sr_field
-    SchemaReference:
+    RuleSet:
+      description: Schema rule set
+      properties:
+        migrationRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+        domainRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+      type:
+      - object
+      - 'null'
+    Metadata:
+      description: User-defined metadata
+      properties:
+        tags:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+            uniqueItems: true
+          type: object
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        sensitive:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+      type:
+      - object
+      - 'null'
+    SchemaString:
       type: object
       properties:
-        name:
+        schemaType:
           type: string
-          description: Reference name
-          example: io.confluent.kafka.example.User
-        subject:
+          description: Schema type
+          example: AVRO
+        schema:
           type: string
-          description: Name of the referenced subject
-          example: User
-        version:
+          description: Schema string identified by the ID
+          example: '{"schema": "{"type": "string"}"}'
+        references:
+          type: array
+          description: References to other schemas
+          items:
+            $ref: '#/components/schemas/SchemaReference'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet'
+        schemaTags:
+          type: array
+          description: Schema tags
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        maxId:
           type: integer
-          description: Version number of the referenced subject
+          description: Maximum ID
           format: int32
           example: 1
-      description: Schema reference
+      description: Schema definition
     Schema:
       type: object
       properties:
@@ -736,48 +718,57 @@ components:
           items:
             $ref: '#/components/schemas/SchemaTags'
       description: Schema
-    RuleSet:
-      description: Schema rule set
-      properties:
-        migrationRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-        domainRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-      type:
-      - object
-      - 'null'
-    SchemaTags:
+    ErrorMessage:
       type: object
       properties:
-        schemaEntity:
-          $ref: '#/components/schemas/SchemaEntity'
-        tags:
-          type: array
-          items:
-            type: string
+        error_code:
+          type: integer
+          description: The error code
+          format: int32
+        message:
+          type: string
+          description: The error message
+      description: Error message of this operation
+    SchemaReference:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Reference name
+          example: io.confluent.kafka.example.User
+        subject:
+          type: string
+          description: Name of the referenced subject
+          example: User
+        version:
+          type: integer
+          description: Version number of the referenced subject
+          format: int32
+          example: 1
+      description: Schema reference
+    SubjectVersion:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Name of the subject
+          example: User
+        version:
+          type: integer
+          description: Version number
+          format: int32
+          example: 1
+      description: Subject version pair
   responses:
-    schemaregistry.v1.ForbiddenError:
-      description: Forbidden
+    schemaregistry.v1.UnauthorizedError:
+      description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
           example:
-            error_code: 403
-            message: Forbidden
-    schemaregistry.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 400
-            message: Bad Request
+            error_code: 401
+            message: Unauthorized
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -801,15 +792,24 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    schemaregistry.v1.UnauthorizedError:
-      description: Unauthorized
+    schemaregistry.v1.ForbiddenError:
+      description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
           example:
-            error_code: 401
-            message: Unauthorized
+            error_code: 403
+            message: Forbidden
+    schemaregistry.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 400
+            message: Bad Request
   securitySchemes:
     cloud-api-key:
       type: http

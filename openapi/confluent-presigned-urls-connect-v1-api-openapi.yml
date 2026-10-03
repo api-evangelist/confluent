@@ -104,102 +104,6 @@ paths:
           $ref: '#/components/responses/DefaultSystemError'
 components:
   schemas:
-    connect.v1.PresignedUrlRequest:
-      type: object
-      description: 'Request schema of the presigned upload URL.
-
-        '
-      properties:
-        api_version:
-          type: string
-          enum:
-          - connect/v1
-          description: APIVersion defines the schema version of this representation of a resource.
-          readOnly: true
-        kind:
-          type: string
-          description: Kind defines the object this REST resource represents.
-          readOnly: true
-          enum:
-          - PresignedUrlRequest
-        id:
-          description: ID is the "natural identifier" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted ("time"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace ("space").
-          type: string
-          maxLength: 255
-          readOnly: true
-          example: dlz-f3a90de
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ObjectMeta'
-          - properties:
-              self:
-                example: https://api.confluent.cloud/connect/v1/presigned-url-requests/pur-12345
-              resource_name:
-                example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/presigned-url-request=pur-12345
-        content_format:
-          type: string
-          example: ZIP
-          description: Archive format of the Custom Connector Plugin.
-          x-extensible-enum:
-          - JAR
-          - ZIP
-        cloud:
-          type: string
-          example: AWS
-          default: AWS
-          description: Cloud provider where the Custom Connector Plugin archive is uploaded.
-          x-extensible-enum:
-          - AWS
-          - GCP
-          - AZURE
-    ObjectMeta:
-      description: ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.
-      required:
-      - self
-      properties:
-        self:
-          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
-          type: string
-          format: uri
-          readOnly: true
-          example: https://api.confluent.cloud/v2/kafka-clusters/lkc-f3a90de
-        resource_name:
-          description: Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name
-          type: string
-          format: uri
-          readOnly: true
-          example: crn://confluent.cloud/kafka=lkc-f3a90de
-        created_at:
-          type: string
-          format: date-time
-          example: '2006-01-02T15:04:05-07:00'
-          readOnly: true
-          description: The date and time at which this object was created. It is represented in RFC3339 format and is in UTC.
-        updated_at:
-          type: string
-          format: date-time
-          example: '2006-01-02T15:04:05-07:00'
-          readOnly: true
-          description: The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC.
-        deleted_at:
-          type: string
-          format: date-time
-          example: '2006-01-02T15:04:05-07:00'
-          readOnly: true
-          description: The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC.
-      readOnly: true
-    Failure:
-      type: object
-      description: Provides information about problems encountered while performing an operation.
-      required:
-      - errors
-      properties:
-        errors:
-          description: List of errors which caused this operation to fail
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-          uniqueItems: true
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -238,6 +142,42 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ObjectMeta:
+      description: ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.
+      required:
+      - self
+      properties:
+        self:
+          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
+          type: string
+          format: uri
+          readOnly: true
+          example: https://api.confluent.cloud/v2/kafka-clusters/lkc-f3a90de
+        resource_name:
+          description: Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name
+          type: string
+          format: uri
+          readOnly: true
+          example: crn://confluent.cloud/kafka=lkc-f3a90de
+        created_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was created. It is represented in RFC3339 format and is in UTC.
+        updated_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC.
+        deleted_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC.
+      readOnly: true
     connect.v1.PresignedUrl:
       type: object
       description: 'Request a presigned upload URL for new Custom Connector Plugin. Note that
@@ -310,61 +250,67 @@ components:
             x-amz-security-token: string
             x-amz-signature: string
           readOnly: true
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
+    connect.v1.PresignedUrlRequest:
+      type: object
+      description: 'Request schema of the presigned upload URL.
+
+        '
+      properties:
+        api_version:
+          type: string
+          enum:
+          - connect/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - PresignedUrlRequest
+        id:
+          description: ID is the "natural identifier" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted ("time"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace ("space").
+          type: string
+          maxLength: 255
+          readOnly: true
+          example: dlz-f3a90de
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ObjectMeta'
+          - properties:
+              self:
+                example: https://api.confluent.cloud/connect/v1/presigned-url-requests/pur-12345
+              resource_name:
+                example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/presigned-url-request=pur-12345
+        content_format:
+          type: string
+          example: ZIP
+          description: Archive format of the Custom Connector Plugin.
+          x-extensible-enum:
+          - JAR
+          - ZIP
+        cloud:
+          type: string
+          example: AWS
+          default: AWS
+          description: Cloud provider where the Custom Connector Plugin archive is uploaded.
+          x-extensible-enum:
+          - AWS
+          - GCP
+          - AZURE
   responses:
-    DefaultSystemError:
-      description: Oops, something went wrong!
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
-    NotFoundError:
-      description: Not Found
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '404'
-              title: Not Found
-    BadRequestError:
-      description: Bad Request
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
     UnauthenticatedError:
       x-summary: Unauthorized
       description: The request lacks valid authentication credentials for this resource.
@@ -389,6 +335,24 @@ components:
               code: user_unauthenticated
               title: Authentication Required
               detail: Valid authentication credentials must be provided
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -412,6 +376,26 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
     UnauthorizedError:
       x-summary: Forbidden
       description: The access credentials were considered insufficient to grant access
@@ -431,6 +415,22 @@ components:
               code: user_unauthorized
               title: User Access Unauthorized
               detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
+    NotFoundError:
+      description: Not Found
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '404'
+              title: Not Found
   securitySchemes:
     cloud-api-key:
       type: http

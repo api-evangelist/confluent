@@ -937,91 +937,7 @@ paths:
       - resource-api-key: []
       - external-access-token: []
 components:
-  responses:
-    schemaregistry.v1.ForbiddenError:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 403
-            message: Forbidden
-    schemaregistry.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 400
-            message: Bad Request
-    RateLimitError:
-      description: Rate Limit Exceeded
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: The maximum number of requests you're permitted to make per time period.
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: The number of requests remaining in the current rate limit window.
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
-        Retry-After:
-          schema:
-            type: integer
-          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    schemaregistry.v1.UnauthorizedError:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 401
-            message: Unauthorized
   schemas:
-    Metadata:
-      description: User-defined metadata
-      properties:
-        tags:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-            uniqueItems: true
-          type: object
-        properties:
-          additionalProperties:
-            type: string
-          type: object
-        sensitive:
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-      type:
-      - object
-      - 'null'
-    ErrorMessage:
-      type: object
-      properties:
-        error_code:
-          type: integer
-          description: The error code
-          format: int32
-        message:
-          type: string
-          description: The error message
-      description: Error message of this operation
     Rule:
       description: Rule
       properties:
@@ -1076,15 +992,15 @@ components:
           description: Whether the rule is disabled
           type: boolean
       type: object
-    RegisterSchemaResponse:
+    SchemaTags:
       type: object
       properties:
-        id:
-          type: integer
-          description: Globally unique identifier of the schema
-          format: int32
-          example: 100001
-      description: Schema register response
+        schemaEntity:
+          $ref: '#/components/schemas/SchemaEntity'
+        tags:
+          type: array
+          items:
+            type: string
     SchemaEntity:
       type: object
       properties:
@@ -1095,23 +1011,62 @@ components:
           enum:
           - sr_record
           - sr_field
-    SchemaReference:
+    RegisterSchemaResponse:
       type: object
       properties:
-        name:
-          type: string
-          description: Reference name
-          example: io.confluent.kafka.example.User
-        subject:
-          type: string
-          description: Name of the referenced subject
-          example: User
-        version:
+        id:
           type: integer
-          description: Version number of the referenced subject
+          description: Globally unique identifier of the schema
           format: int32
-          example: 1
-      description: Schema reference
+          example: 100001
+      description: Schema register response
+    RuleSet:
+      description: Schema rule set
+      properties:
+        migrationRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+        domainRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+      type:
+      - object
+      - 'null'
+    Metadata:
+      description: User-defined metadata
+      properties:
+        tags:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+            uniqueItems: true
+          type: object
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        sensitive:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+      type:
+      - object
+      - 'null'
+    ErrorMessage:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: The error code
+          format: int32
+        message:
+          type: string
+          description: The error message
+      description: Error message of this operation
     Schema:
       type: object
       properties:
@@ -1189,29 +1144,74 @@ components:
         propagateSchemaTags:
           type: boolean
       description: Schema register request
-    RuleSet:
-      description: Schema rule set
-      properties:
-        migrationRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-        domainRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-      type:
-      - object
-      - 'null'
-    SchemaTags:
+    SchemaReference:
       type: object
       properties:
-        schemaEntity:
-          $ref: '#/components/schemas/SchemaEntity'
-        tags:
-          type: array
-          items:
+        name:
+          type: string
+          description: Reference name
+          example: io.confluent.kafka.example.User
+        subject:
+          type: string
+          description: Name of the referenced subject
+          example: User
+        version:
+          type: integer
+          description: Version number of the referenced subject
+          format: int32
+          example: 1
+      description: Schema reference
+  responses:
+    schemaregistry.v1.UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 401
+            message: Unauthorized
+    RateLimitError:
+      description: Rate Limit Exceeded
+      headers:
+        X-Request-Id:
+          schema:
             type: string
+          description: The unique identifier for the API request.
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: The maximum number of requests you're permitted to make per time period.
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: The number of requests remaining in the current rate limit window.
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        Retry-After:
+          schema:
+            type: integer
+          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    schemaregistry.v1.ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 403
+            message: Forbidden
+    schemaregistry.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 400
+            message: Bad Request
   securitySchemes:
     cloud-api-key:
       type: http

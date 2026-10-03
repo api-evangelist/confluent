@@ -263,38 +263,6 @@ paths:
           $ref: '#/components/responses/ServerErrorResponse'
 components:
   schemas:
-    ResourceCollectionMetadata:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-        next:
-          type:
-          - string
-          - 'null'
-    ConsumerGroupDataList:
-      allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ConsumerGroupData'
-    ResourceCollection:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceCollectionMetadata'
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -333,77 +301,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Relationship:
-      type: object
-      required:
-      - related
-      properties:
-        related:
-          type: string
-    ConsumerData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - consumer_group_id
-        - consumer_id
-        - client_id
-        - assignments
-        properties:
-          cluster_id:
-            type: string
-          consumer_group_id:
-            type: string
-          consumer_id:
-            type: string
-          instance_id:
-            type:
-            - string
-            - 'null'
-          client_id:
-            type: string
-          assignments:
-            $ref: '#/components/schemas/Relationship'
-    ResourceMetadata:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-        resource_name:
-          type:
-          - string
-          - 'null'
-    Resource:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceMetadata'
-    ConsumerGroupType:
-      type: string
-      x-extensible-enum:
-      - UNKNOWN
-      - CLASSIC
-      - CONSUMER
-      - SHARE
-    ConsumerGroupState:
-      type: string
-      x-extensible-enum:
-      - UNKNOWN
-      - PREPARING_REBALANCE
-      - COMPLETING_REBALANCE
-      - ASSIGNING
-      - RECONCILING
-      - STABLE
-      - DEAD
-      - EMPTY
     ConsumerGroupData:
       allOf:
       - $ref: '#/components/schemas/Resource'
@@ -440,6 +337,142 @@ components:
             $ref: '#/components/schemas/Relationship'
           lag_summary:
             $ref: '#/components/schemas/Relationship'
+    ResourceCollectionMetadata:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+        next:
+          type:
+          - string
+          - 'null'
+    ConsumerLagData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - consumer_group_id
+        - topic_name
+        - partition_id
+        - current_offset
+        - log_end_offset
+        - lag
+        - consumer_id
+        - client_id
+        properties:
+          cluster_id:
+            type: string
+          consumer_group_id:
+            type: string
+          topic_name:
+            type: string
+          partition_id:
+            type: integer
+          current_offset:
+            type: integer
+            format: int64
+          log_end_offset:
+            type: integer
+            format: int64
+          lag:
+            type: integer
+            format: int64
+          consumer_id:
+            type: string
+          instance_id:
+            type:
+            - string
+            - 'null'
+          client_id:
+            type: string
+    Resource:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceMetadata'
+    ConsumerGroupDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ConsumerGroupData'
+    ResourceCollection:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceCollectionMetadata'
+    ConsumerGroupType:
+      type: string
+      x-extensible-enum:
+      - UNKNOWN
+      - CLASSIC
+      - CONSUMER
+      - SHARE
+    ConsumerLagDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ConsumerLagData'
+    ConsumerData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - consumer_group_id
+        - consumer_id
+        - client_id
+        - assignments
+        properties:
+          cluster_id:
+            type: string
+          consumer_group_id:
+            type: string
+          consumer_id:
+            type: string
+          instance_id:
+            type:
+            - string
+            - 'null'
+          client_id:
+            type: string
+          assignments:
+            $ref: '#/components/schemas/Relationship'
+    ResourceMetadata:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+        resource_name:
+          type:
+          - string
+          - 'null'
     ConsumerDataList:
       allOf:
       - $ref: '#/components/schemas/ResourceCollection'
@@ -451,6 +484,24 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ConsumerData'
+    Relationship:
+      type: object
+      required:
+      - related
+      properties:
+        related:
+          type: string
+    ConsumerGroupState:
+      type: string
+      x-extensible-enum:
+      - UNKNOWN
+      - PREPARING_REBALANCE
+      - COMPLETING_REBALANCE
+      - ASSIGNING
+      - RECONCILING
+      - STABLE
+      - DEAD
+      - EMPTY
     ConsumerGroupLagSummaryData:
       allOf:
       - $ref: '#/components/schemas/Resource'
@@ -493,142 +544,7 @@ components:
             $ref: '#/components/schemas/Relationship'
           max_lag_partition:
             $ref: '#/components/schemas/Relationship'
-    ConsumerLagData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - consumer_group_id
-        - topic_name
-        - partition_id
-        - current_offset
-        - log_end_offset
-        - lag
-        - consumer_id
-        - client_id
-        properties:
-          cluster_id:
-            type: string
-          consumer_group_id:
-            type: string
-          topic_name:
-            type: string
-          partition_id:
-            type: integer
-          current_offset:
-            type: integer
-            format: int64
-          log_end_offset:
-            type: integer
-            format: int64
-          lag:
-            type: integer
-            format: int64
-          consumer_id:
-            type: string
-          instance_id:
-            type:
-            - string
-            - 'null'
-          client_id:
-            type: string
-    ConsumerLagDataList:
-      allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ConsumerLagData'
   responses:
-    ServerErrorResponse:
-      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            generic_internal_server_error:
-              description: Thrown for generic HTTP 500 errors.
-              value:
-                error_code: 500
-                message: Internal Server Error
-    GetConsumerLagResponse:
-      description: The consumer lag.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ConsumerLagData'
-          example:
-            kind: KafkaConsumerLag
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/1
-              resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=1
-            cluster_id: cluster-1
-            consumer_group_id: consumer-group-1
-            topic_name: topic-1
-            partition_id: 1
-            consumer_id: consumer-1
-            instance_id: consumer-instance-1
-            client_id: client-1
-            current_offset: 1
-            log_end_offset: 101
-            lag: 100
-    GetConsumerResponse:
-      description: The consumer.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ConsumerData'
-          example:
-            kind: KafkaConsumer
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers/consumer-1
-              resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/consumer=consumer-1
-            cluster_id: cluster-1
-            consumer_group_id: consumer-group-1
-            consumer_id: consumer-1
-            instance_id: consumer-instance-1
-            client_id: client-1
-            assignments:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers/consumer-1/assignments
-    GetConsumerGroupResponse:
-      description: The consumer group.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ConsumerGroupData'
-          example:
-            kind: KafkaConsumerGroup
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1
-              resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1
-            cluster_id: cluster-1
-            consumer_group_id: consumer-group-1
-            is_simple: false
-            partition_assignor: org.apache.kafka.clients.consumer.RoundRobinAssignor
-            state: STABLE
-            type: CLASSIC
-            is_mixed_consumer_group: false
-            coordinator:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/brokers/1
-            consumers:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers
-            lag_summary:
-              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lag-summary
-    TooManyRequestsErrorResponse:
-      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
-      content:
-        text/html:
-          schema:
-            type: string
-          example:
-            description: A sample response from Jetty's DoSFilter.
-            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
     ListConsumersResponse:
       description: The list of consumers.
       content:
@@ -674,6 +590,24 @@ components:
               client_id: client-2
               assignments:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers/consumer-2/assignments
+    GetConsumerResponse:
+      description: The consumer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsumerData'
+          example:
+            kind: KafkaConsumer
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers/consumer-1
+              resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/consumer=consumer-1
+            cluster_id: cluster-1
+            consumer_group_id: consumer-group-1
+            consumer_id: consumer-1
+            instance_id: consumer-instance-1
+            client_id: client-1
+            assignments:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers/consumer-1/assignments
     UnauthorizedErrorResponse:
       description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
       content:
@@ -686,72 +620,6 @@ components:
               value:
                 error_code: 40101
                 message: Authentication failed
-    ListConsumerLagsResponse:
-      description: The list of consumer lags.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ConsumerLagDataList'
-          example:
-            kind: KafkaConsumerLagList
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags
-              next: null
-            data:
-            - kind: KafkaConsumerLag
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/1
-                resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=1
-              cluster_id: cluster-1
-              consumer_group_id: consumer-group-1
-              topic_name: topic-1
-              partition_id: 1
-              consumer_id: consumer-1
-              instance_id: consumer-instance-1
-              client_id: client-1
-              current_offset: 1
-              log_end_offset: 101
-              lag: 100
-            - kind: KafkaConsumerLag
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/2
-                resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=2
-              cluster_id: cluster-1
-              consumer_group_id: consumer-group-1
-              topic_name: topic-1
-              partition_id: 2
-              consumer_id: consumer-2
-              instance_id: consumer-instance-2
-              client_id: client-2
-              current_offset: 1
-              log_end_offset: 11
-              lag: 10
-            - kind: KafkaConsumerLag
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/3
-                resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=3
-              cluster_id: cluster-1
-              consumer_group_id: consumer-group-1
-              topic_name: topic-1
-              partition_id: 3
-              consumer_id: consumer-3
-              instance_id: consumer-instance-3
-              client_id: client-3
-              current_offset: 1
-              log_end_offset: 1
-              lag: 0
-    ForbiddenErrorResponse:
-      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authorization_failed:
-              description: Thrown when the caller is not authorized to perform the underlying operation.
-              value:
-                error_code: 40301
-                message: Request is not authorized
     ListConsumerGroupsResponse:
       description: The list of consumer groups.
       content:
@@ -815,23 +683,18 @@ components:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-3/consumers
               lag_summary:
                 related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-3/lag-summary
-    BadRequestErrorResponse:
-      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
+    ServerErrorResponse:
+      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            bad_request_cannot_deserialize:
-              description: Thrown when trying to deserialize an integer from non-integer data.
+            generic_internal_server_error:
+              description: Thrown for generic HTTP 500 errors.
               value:
-                error_code: 400
-                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
-            unsupported_version_exception:
-              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
-              value:
-                error_code: 40035
-                message: The version of this API is not supported in the underlying Kafka cluster.
+                error_code: 500
+                message: Internal Server Error
     GetConsumerGroupLagSummaryResponse:
       description: The max and total consumer lag in a consumer group.
       content:
@@ -856,15 +719,144 @@ components:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers/consumer-1
             max_lag_partition:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/partitions/1
+    BadRequestErrorResponse:
+      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            bad_request_cannot_deserialize:
+              description: Thrown when trying to deserialize an integer from non-integer data.
+              value:
+                error_code: 400
+                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
+            unsupported_version_exception:
+              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
+              value:
+                error_code: 40035
+                message: The version of this API is not supported in the underlying Kafka cluster.
+    GetConsumerLagResponse:
+      description: The consumer lag.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsumerLagData'
+          example:
+            kind: KafkaConsumerLag
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/1
+              resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=1
+            cluster_id: cluster-1
+            consumer_group_id: consumer-group-1
+            topic_name: topic-1
+            partition_id: 1
+            consumer_id: consumer-1
+            instance_id: consumer-instance-1
+            client_id: client-1
+            current_offset: 1
+            log_end_offset: 101
+            lag: 100
+    TooManyRequestsErrorResponse:
+      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
+      content:
+        text/html:
+          schema:
+            type: string
+          example:
+            description: A sample response from Jetty's DoSFilter.
+            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
+    ForbiddenErrorResponse:
+      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authorization_failed:
+              description: Thrown when the caller is not authorized to perform the underlying operation.
+              value:
+                error_code: 40301
+                message: Request is not authorized
+    GetConsumerGroupResponse:
+      description: The consumer group.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsumerGroupData'
+          example:
+            kind: KafkaConsumerGroup
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1
+              resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1
+            cluster_id: cluster-1
+            consumer_group_id: consumer-group-1
+            is_simple: false
+            partition_assignor: org.apache.kafka.clients.consumer.RoundRobinAssignor
+            state: STABLE
+            type: CLASSIC
+            is_mixed_consumer_group: false
+            coordinator:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/brokers/1
+            consumers:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/consumers
+            lag_summary:
+              related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lag-summary
+    ListConsumerLagsResponse:
+      description: The list of consumer lags.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConsumerLagDataList'
+          example:
+            kind: KafkaConsumerLagList
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags
+              next: null
+            data:
+            - kind: KafkaConsumerLag
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/1
+                resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=1
+              cluster_id: cluster-1
+              consumer_group_id: consumer-group-1
+              topic_name: topic-1
+              partition_id: 1
+              consumer_id: consumer-1
+              instance_id: consumer-instance-1
+              client_id: client-1
+              current_offset: 1
+              log_end_offset: 101
+              lag: 100
+            - kind: KafkaConsumerLag
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/2
+                resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=2
+              cluster_id: cluster-1
+              consumer_group_id: consumer-group-1
+              topic_name: topic-1
+              partition_id: 2
+              consumer_id: consumer-2
+              instance_id: consumer-instance-2
+              client_id: client-2
+              current_offset: 1
+              log_end_offset: 11
+              lag: 10
+            - kind: KafkaConsumerLag
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/consumer-groups/consumer-group-1/lags/topic-1/partitions/3
+                resource_name: crn:///kafka=cluster-1/consumer-group=consumer-group-1/lag=topic-1/partition=3
+              cluster_id: cluster-1
+              consumer_group_id: consumer-group-1
+              topic_name: topic-1
+              partition_id: 3
+              consumer_id: consumer-3
+              instance_id: consumer-instance-3
+              client_id: client-3
+              current_offset: 1
+              log_end_offset: 1
+              lag: 0
   parameters:
-    ConsumerGroupId:
-      name: consumer_group_id
-      description: The consumer group ID.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: consumer-group-1
     ClusterId:
       name: cluster_id
       description: The Kafka cluster ID.
@@ -873,14 +865,14 @@ components:
       schema:
         type: string
       example: cluster-1
-    PartitionId:
-      name: partition_id
-      description: The partition ID.
+    ConsumerGroupId:
+      name: consumer_group_id
+      description: The consumer group ID.
       in: path
       required: true
       schema:
-        type: integer
-      example: 0
+        type: string
+      example: consumer-group-1
     TopicName:
       name: topic_name
       description: The topic name.
@@ -897,6 +889,14 @@ components:
       schema:
         type: string
       example: consumer-1
+    PartitionId:
+      name: partition_id
+      description: The partition ID.
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 0
   securitySchemes:
     cloud-api-key:
       type: http

@@ -96,82 +96,6 @@ paths:
           $ref: '#/components/responses/DefaultSystemError'
 components:
   schemas:
-    sql.v1.StatementException:
-      type: object
-      properties:
-        kind:
-          type: string
-          description: Kind defines the object this REST resource represents.
-          enum:
-          - StatementException
-        name:
-          type: string
-          description: Name of the SQL statement exception.
-          example: java.lang.RuntimeException
-          readOnly: true
-        message:
-          type: string
-          description: Error message of the statement exception.
-          example: 'java.lang.RuntimeException: An error occurred'
-          readOnly: true
-        timestamp:
-          type: string
-          format: date-time
-          example: '2025-11-10T16:20:00Z'
-          description: The date and time at which the exception occurred. It is represented in RFC3339 format and is in UTC.
-          readOnly: true
-      x-enable-objectmeta: true
-    Failure:
-      type: object
-      description: Provides information about problems encountered while performing an operation.
-      required:
-      - errors
-      properties:
-        errors:
-          description: List of errors which caused this operation to fail
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-          uniqueItems: true
-    sql.v1.StatementExceptionList:
-      type: object
-      description: 'StatementExceptionList is a list of exceptions coming from FAILED or FAILING Statements created by
-
-        the SQL Statements API.'
-      required:
-      - api_version
-      - kind
-      - metadata
-      - data
-      properties:
-        api_version:
-          type: string
-          enum:
-          - sql/v1
-          description: APIVersion defines the schema version of this representation of a resource.
-          example: sql/v1
-        kind:
-          type: string
-          description: Kind defines the object this REST resource represents.
-          enum:
-          - StatementExceptionList
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ExceptionListMeta'
-        data:
-          type: array
-          description: A data property that contains an array of resource items. Each entry in the array is a separate resource.
-          items:
-            allOf:
-            - $ref: '#/components/schemas/sql.v1.StatementException'
-    ExceptionListMeta:
-      type: object
-      description: ListMeta describes metadata that resource collections may have
-      properties:
-        self:
-          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
-          type: string
-          example: https://flink.us-west1.aws.confluent.cloud/sql/v1/environments/env-123/statements/sql123/exceptions
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -210,61 +134,83 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ExceptionListMeta:
+      type: object
+      description: ListMeta describes metadata that resource collections may have
+      properties:
+        self:
+          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
+          type: string
+          example: https://flink.us-west1.aws.confluent.cloud/sql/v1/environments/env-123/statements/sql123/exceptions
+    sql.v1.StatementExceptionList:
+      type: object
+      description: 'StatementExceptionList is a list of exceptions coming from FAILED or FAILING Statements created by
+
+        the SQL Statements API.'
+      required:
+      - api_version
+      - kind
+      - metadata
+      - data
+      properties:
+        api_version:
+          type: string
+          enum:
+          - sql/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          example: sql/v1
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          enum:
+          - StatementExceptionList
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ExceptionListMeta'
+        data:
+          type: array
+          description: A data property that contains an array of resource items. Each entry in the array is a separate resource.
+          items:
+            allOf:
+            - $ref: '#/components/schemas/sql.v1.StatementException'
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
+    sql.v1.StatementException:
+      type: object
+      properties:
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          enum:
+          - StatementException
+        name:
+          type: string
+          description: Name of the SQL statement exception.
+          example: java.lang.RuntimeException
+          readOnly: true
+        message:
+          type: string
+          description: Error message of the statement exception.
+          example: 'java.lang.RuntimeException: An error occurred'
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          example: '2025-11-10T16:20:00Z'
+          description: The date and time at which the exception occurred. It is represented in RFC3339 format and is in UTC.
+          readOnly: true
+      x-enable-objectmeta: true
   responses:
-    DefaultSystemError:
-      description: Oops, something went wrong!
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
-    NotFoundError:
-      description: Not Found
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '404'
-              title: Not Found
-    BadRequestError:
-      description: Bad Request
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
     UnauthenticatedError:
       x-summary: Unauthorized
       description: The request lacks valid authentication credentials for this resource.
@@ -289,6 +235,24 @@ components:
               code: user_unauthenticated
               title: Authentication Required
               detail: Valid authentication credentials must be provided
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -312,6 +276,26 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
     UnauthorizedError:
       x-summary: Forbidden
       description: The access credentials were considered insufficient to grant access
@@ -331,6 +315,22 @@ components:
               code: user_unauthorized
               title: User Access Unauthorized
               detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
+    NotFoundError:
+      description: Not Found
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '404'
+              title: Not Found
   securitySchemes:
     cloud-api-key:
       type: http

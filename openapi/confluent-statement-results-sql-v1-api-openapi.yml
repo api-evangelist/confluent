@@ -115,64 +115,6 @@ paths:
           $ref: '#/components/responses/DefaultSystemError'
 components:
   schemas:
-    ResultListMeta:
-      type: object
-      description: ListMeta describes metadata that resource collections may have
-      properties:
-        self:
-          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
-          type: string
-          example: https://flink.us-west1.aws.confluent.cloud/sql/v1/environments/env-123/statements
-        next:
-          description: A URL that can be followed to get the next batch of results.
-          type: string
-          example: https://flink.us-west1.aws.confluent.cloud/sql/v1/environments/env-abc123/statements?page_token=UvmDWOB1iwfAIBPj6EYb
-        created_at:
-          type: string
-          format: date-time
-          example: '2006-01-02T15:04:05-07:00'
-          readOnly: true
-          description: The date and time at which this object was created. It is represented in RFC3339 format and is in UTC.
-    sql.v1.StatementResult:
-      type: object
-      description: '`Statement Result` represents a resource used to model results of SQL statements.
-
-        The API allows you to read your SQL statement result.'
-      required:
-      - api_version
-      - kind
-      - metadata
-      - data
-      properties:
-        api_version:
-          type: string
-          enum:
-          - sql/v1
-          description: APIVersion defines the schema version of this representation of a resource.
-          example: sql/v1
-        kind:
-          type: string
-          description: Kind defines the object this REST resource represents.
-          enum:
-          - StatementResult
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ResultListMeta'
-        results:
-          allOf:
-          - $ref: '#/components/schemas/sql.v1.StatementResultResults'
-    Failure:
-      type: object
-      description: Provides information about problems encountered while performing an operation.
-      required:
-      - errors
-      properties:
-        errors:
-          description: List of errors which caused this operation to fail
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-          uniqueItems: true
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -211,6 +153,64 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ResultListMeta:
+      type: object
+      description: ListMeta describes metadata that resource collections may have
+      properties:
+        self:
+          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
+          type: string
+          example: https://flink.us-west1.aws.confluent.cloud/sql/v1/environments/env-123/statements
+        next:
+          description: A URL that can be followed to get the next batch of results.
+          type: string
+          example: https://flink.us-west1.aws.confluent.cloud/sql/v1/environments/env-abc123/statements?page_token=UvmDWOB1iwfAIBPj6EYb
+        created_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was created. It is represented in RFC3339 format and is in UTC.
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
+    sql.v1.StatementResult:
+      type: object
+      description: '`Statement Result` represents a resource used to model results of SQL statements.
+
+        The API allows you to read your SQL statement result.'
+      required:
+      - api_version
+      - kind
+      - metadata
+      - data
+      properties:
+        api_version:
+          type: string
+          enum:
+          - sql/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          example: sql/v1
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          enum:
+          - StatementResult
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResultListMeta'
+        results:
+          allOf:
+          - $ref: '#/components/schemas/sql.v1.StatementResultResults'
     sql.v1.StatementResultResults:
       type: object
       description: A results property that contains a data property that contains an array of results.
@@ -266,60 +266,6 @@ components:
               - - '42'
                 - Bob
   responses:
-    DefaultSystemError:
-      description: Oops, something went wrong!
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
-    NotFoundError:
-      description: Not Found
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '404'
-              title: Not Found
-    BadRequestError:
-      description: Bad Request
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
     UnauthenticatedError:
       x-summary: Unauthorized
       description: The request lacks valid authentication credentials for this resource.
@@ -344,6 +290,24 @@ components:
               code: user_unauthenticated
               title: Authentication Required
               detail: Valid authentication credentials must be provided
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -367,6 +331,26 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
     UnauthorizedError:
       x-summary: Forbidden
       description: The access credentials were considered insufficient to grant access
@@ -386,6 +370,22 @@ components:
               code: user_unauthorized
               title: User Access Unauthorized
               detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
+    NotFoundError:
+      description: Not Found
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '404'
+              title: Not Found
   securitySchemes:
     cloud-api-key:
       type: http

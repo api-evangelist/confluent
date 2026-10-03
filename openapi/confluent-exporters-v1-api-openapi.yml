@@ -535,50 +535,6 @@ paths:
       - external-access-token: []
 components:
   schemas:
-    ExporterReference:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the exporter
-          example: test-exporter
-        contextType:
-          description: Context type of the exporter. One of CUSTOM, NONE or AUTO (default)
-          type: string
-          example: CUSTOM
-          x-extensible-enum:
-          - CUSTOM
-          - AUTO
-          - NONE
-        context:
-          type: string
-          description: Customized context of the exporter if contextType equals CUSTOM.
-          example: User
-        subjects:
-          type: array
-          description: Name of each exporter subject
-          items:
-            type: string
-        kekRenameFormat:
-          type: string
-          description: Format string for the KEK name in the destination cluster, which may contain ${kek} as a placeholder for the originating KEK name. For example, dc_${kek} for the KEK aws_key will map to the destination KEK name dc_aws_key.
-        subjectRenameFormat:
-          type: string
-          description: Format string for the subject name in the destination cluster, which may contain ${subject} as a placeholder for the originating subject name. For example, dc_${subject} for the subject orders will map to the destination subject name dc_orders.
-        config:
-          type: object
-          description: The map containing exporter's configurations
-          additionalProperties:
-            type: string
-      description: The format for a typical exporter object
-    ExporterResponse:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the exporter
-          example: test-exporter
-      description: Exporter register response
     ExporterConfigResponse:
       type: object
       properties:
@@ -594,6 +550,14 @@ components:
           description: Config SR User Info
           type: string
       description: The map containing exporter's configurations
+    ExporterResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the exporter
+          example: test-exporter
+      description: Exporter register response
     ExporterStatusResponse:
       type: object
       properties:
@@ -635,6 +599,42 @@ components:
           type: string
           description: The error message
       description: Error message of this operation
+    ExporterReference:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the exporter
+          example: test-exporter
+        contextType:
+          description: Context type of the exporter. One of CUSTOM, NONE or AUTO (default)
+          type: string
+          example: CUSTOM
+          x-extensible-enum:
+          - CUSTOM
+          - AUTO
+          - NONE
+        context:
+          type: string
+          description: Customized context of the exporter if contextType equals CUSTOM.
+          example: User
+        subjects:
+          type: array
+          description: Name of each exporter subject
+          items:
+            type: string
+        kekRenameFormat:
+          type: string
+          description: Format string for the KEK name in the destination cluster, which may contain ${kek} as a placeholder for the originating KEK name. For example, dc_${kek} for the KEK aws_key will map to the destination KEK name dc_aws_key.
+        subjectRenameFormat:
+          type: string
+          description: Format string for the subject name in the destination cluster, which may contain ${subject} as a placeholder for the originating subject name. For example, dc_${subject} for the subject orders will map to the destination subject name dc_orders.
+        config:
+          type: object
+          description: The map containing exporter's configurations
+          additionalProperties:
+            type: string
+      description: The format for a typical exporter object
     ExporterUpdateRequest:
       type: object
       properties:
@@ -680,6 +680,47 @@ components:
             type: string
       description: Exporter update request
   responses:
+    schemaregistry.v1.UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 401
+            message: Unauthorized
+    RateLimitError:
+      description: Rate Limit Exceeded
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: The maximum number of requests you're permitted to make per time period.
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: The number of requests remaining in the current rate limit window.
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        Retry-After:
+          schema:
+            type: integer
+          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    schemaregistry.v1.DefaultSystemError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 500
+            message: Oops, something went wrong
     schemaregistry.v1.ForbiddenError:
       description: Forbidden
       content:
@@ -707,47 +748,6 @@ components:
           example:
             error_code: 400
             message: Bad Request
-    schemaregistry.v1.DefaultSystemError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 500
-            message: Oops, something went wrong
-    RateLimitError:
-      description: Rate Limit Exceeded
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: The maximum number of requests you're permitted to make per time period.
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: The number of requests remaining in the current rate limit window.
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
-        Retry-After:
-          schema:
-            type: integer
-          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    schemaregistry.v1.UnauthorizedError:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 401
-            message: Unauthorized
   securitySchemes:
     cloud-api-key:
       type: http

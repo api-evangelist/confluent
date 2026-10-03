@@ -572,110 +572,6 @@ paths:
           $ref: '#/components/responses/ServerErrorResponse'
 components:
   schemas:
-    ResourceCollectionMetadata:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-        next:
-          type:
-          - string
-          - 'null'
-    AbstractConfigData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - name
-        - is_default
-        - is_read_only
-        - is_sensitive
-        - source
-        - synonyms
-        properties:
-          cluster_id:
-            type: string
-          name:
-            type: string
-          value:
-            type:
-            - string
-            - 'null'
-          is_default:
-            type: boolean
-          is_read_only:
-            type: boolean
-          is_sensitive:
-            type: boolean
-          source:
-            $ref: '#/components/schemas/ConfigSource'
-          synonyms:
-            type: array
-            items:
-              $ref: '#/components/schemas/ConfigSynonymData'
-    TopicConfigData:
-      allOf:
-      - $ref: '#/components/schemas/AbstractConfigData'
-      - type: object
-        required:
-        - topic_name
-        properties:
-          topic_name:
-            type: string
-    ConfigSynonymData:
-      type: object
-      required:
-      - name
-      - source
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-        source:
-          $ref: '#/components/schemas/ConfigSource'
-    UpdateGroupConfigRequestData:
-      properties:
-        value:
-          type: string
-      required:
-      - value
-      type: object
-    ResourceCollection:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceCollectionMetadata'
-    ClusterConfigData:
-      allOf:
-      - $ref: '#/components/schemas/AbstractConfigData'
-      - type: object
-        required:
-        - config_type
-        properties:
-          config_type:
-            $ref: '#/components/schemas/ClusterConfigType'
-    ClusterConfigDataList:
-      allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ClusterConfigData'
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -718,14 +614,90 @@ components:
       type: string
       x-extensible-enum:
       - BROKER
-    ResourceMetadata:
+    ResourceCollectionMetadata:
       type: object
       required:
       - self
       properties:
         self:
           type: string
-        resource_name:
+        next:
+          type:
+          - string
+          - 'null'
+    AlterConfigBatchRequestData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                type: string
+              value:
+                type:
+                - string
+                - 'null'
+              operation:
+                type:
+                - string
+                - 'null'
+                x-extensible-enum:
+                - SET
+                - DELETE
+        validate_only:
+          type: boolean
+    ConfigSynonymData:
+      type: object
+      required:
+      - name
+      - source
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+        source:
+          $ref: '#/components/schemas/ConfigSource'
+    Resource:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceMetadata'
+    UpdateGroupConfigRequestData:
+      properties:
+        value:
+          type: string
+      required:
+      - value
+      type: object
+    ClusterConfigDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ClusterConfigData'
+    UpdateConfigRequestData:
+      type: object
+      properties:
+        value:
           type:
           - string
           - 'null'
@@ -765,72 +737,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ConfigSynonymData'
-    AlterConfigBatchRequestData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            required:
-            - name
-            properties:
-              name:
-                type: string
-              value:
-                type:
-                - string
-                - 'null'
-              operation:
-                type:
-                - string
-                - 'null'
-                x-extensible-enum:
-                - SET
-                - DELETE
-        validate_only:
-          type: boolean
-    Resource:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceMetadata'
-    ConfigSource:
-      type: string
-      x-extensible-enum:
-      - DYNAMIC_CLUSTER_LINK_CONFIG
-      - DYNAMIC_TOPIC_CONFIG
-      - DYNAMIC_BROKER_LOGGER_CONFIG
-      - DYNAMIC_BROKER_CONFIG
-      - DYNAMIC_DEFAULT_BROKER_CONFIG
-      - STATIC_BROKER_CONFIG
-      - DEFAULT_CONFIG
-      - UNKNOWN
-    UpdateConfigRequestData:
-      type: object
-      properties:
-        value:
-          type:
-          - string
-          - 'null'
-    TopicConfigDataList:
-      allOf:
-      - $ref: '#/components/schemas/ResourceCollection'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/TopicConfigData'
     GroupConfigDataList:
       allOf:
       - $ref: '#/components/schemas/ResourceCollection'
@@ -842,19 +748,109 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/GroupConfigData'
+    ResourceCollection:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceCollectionMetadata'
+    TopicConfigDataList:
+      allOf:
+      - $ref: '#/components/schemas/ResourceCollection'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/TopicConfigData'
+    ResourceMetadata:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+        resource_name:
+          type:
+          - string
+          - 'null'
+    ConfigSource:
+      type: string
+      x-extensible-enum:
+      - DYNAMIC_CLUSTER_LINK_CONFIG
+      - DYNAMIC_TOPIC_CONFIG
+      - DYNAMIC_BROKER_LOGGER_CONFIG
+      - DYNAMIC_BROKER_CONFIG
+      - DYNAMIC_DEFAULT_BROKER_CONFIG
+      - STATIC_BROKER_CONFIG
+      - DEFAULT_CONFIG
+      - UNKNOWN
+    TopicConfigData:
+      allOf:
+      - $ref: '#/components/schemas/AbstractConfigData'
+      - type: object
+        required:
+        - topic_name
+        properties:
+          topic_name:
+            type: string
+    ClusterConfigData:
+      allOf:
+      - $ref: '#/components/schemas/AbstractConfigData'
+      - type: object
+        required:
+        - config_type
+        properties:
+          config_type:
+            $ref: '#/components/schemas/ClusterConfigType'
+    AbstractConfigData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - name
+        - is_default
+        - is_read_only
+        - is_sensitive
+        - source
+        - synonyms
+        properties:
+          cluster_id:
+            type: string
+          name:
+            type: string
+          value:
+            type:
+            - string
+            - 'null'
+          is_default:
+            type: boolean
+          is_read_only:
+            type: boolean
+          is_sensitive:
+            type: boolean
+          source:
+            $ref: '#/components/schemas/ConfigSource'
+          synonyms:
+            type: array
+            items:
+              $ref: '#/components/schemas/ConfigSynonymData'
   requestBodies:
-    AlterClusterConfigBatchRequest:
-      description: The alter cluster configuration parameter batch request.
+    UpdateGroupConfigRequest:
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/AlterConfigBatchRequestData'
           example:
-            data:
-            - name: max.connections
-              operation: DELETE
-            - name: compression.type
-              value: gzip
+            value: '45000'
+          schema:
+            $ref: '#/components/schemas/UpdateGroupConfigRequestData'
+      description: Group config value to update
     UpdateTopicConfigRequest:
       description: The topic configuration parameter update request.
       content:
@@ -885,6 +881,26 @@ components:
                 - name: compression.type
                   value: gzip
                 validate_only: true
+    AlterClusterConfigBatchRequest:
+      description: The alter cluster configuration parameter batch request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AlterConfigBatchRequestData'
+          example:
+            data:
+            - name: max.connections
+              operation: DELETE
+            - name: compression.type
+              value: gzip
+    UpdateClusterConfigRequest:
+      description: The cluster configuration parameter update request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConfigRequestData'
+          example:
+            value: gzip
     AlterGroupConfigBatchRequest:
       content:
         application/json:
@@ -896,37 +912,33 @@ components:
               value: '5000'
           schema:
             $ref: '#/components/schemas/AlterConfigBatchRequestData'
-    UpdateClusterConfigRequest:
-      description: The cluster configuration parameter update request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdateConfigRequestData'
-          example:
-            value: gzip
-    UpdateGroupConfigRequest:
-      content:
-        application/json:
-          example:
-            value: '45000'
-          schema:
-            $ref: '#/components/schemas/UpdateGroupConfigRequestData'
-      description: Group config value to update
   responses:
-    NoContentResponse:
-      description: Operation succeeded, no content in the response
-    ServerErrorResponse:
-      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
+    GetClusterConfigResponse:
+      description: The cluster configuration parameter.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            generic_internal_server_error:
-              description: Thrown for generic HTTP 500 errors.
-              value:
-                error_code: 500
-                message: Internal Server Error
+            $ref: '#/components/schemas/ClusterConfigData'
+          example:
+            kind: KafkaClusterConfig
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/broker-configs/compression.type
+              resource_name: crn:///kafka=cluster-1/broker-config=compression.type
+            cluster_id: cluster-1
+            config_type: BROKER
+            name: compression.type
+            value: gzip
+            is_default: false
+            is_read_only: false
+            is_sensitive: false
+            source: DYNAMIC_DEFAULT_BROKER_CONFIG
+            synonyms:
+            - name: compression.type
+              value: gzip
+              source: DYNAMIC_DEFAULT_BROKER_CONFIG
+            - name: compression.type
+              value: producer
+              source: DEFAULT_CONFIG
     ListGroupConfigsResponse:
       description: Config name and value for group configurations.
       content:
@@ -974,63 +986,6 @@ components:
               - name: share.heartbeat.interval.ms
                 value: '3000'
                 source: DEFAULT_CONFIG
-    TooManyRequestsErrorResponse:
-      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
-      content:
-        text/html:
-          schema:
-            type: string
-          example:
-            description: A sample response from Jetty's DoSFilter.
-            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
-    GetClusterConfigResponse:
-      description: The cluster configuration parameter.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ClusterConfigData'
-          example:
-            kind: KafkaClusterConfig
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/broker-configs/compression.type
-              resource_name: crn:///kafka=cluster-1/broker-config=compression.type
-            cluster_id: cluster-1
-            config_type: BROKER
-            name: compression.type
-            value: gzip
-            is_default: false
-            is_read_only: false
-            is_sensitive: false
-            source: DYNAMIC_DEFAULT_BROKER_CONFIG
-            synonyms:
-            - name: compression.type
-              value: gzip
-              source: DYNAMIC_DEFAULT_BROKER_CONFIG
-            - name: compression.type
-              value: producer
-              source: DEFAULT_CONFIG
-    NotFoundErrorResponse:
-      description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            endpoint_not_found:
-              description: Thrown for generic HTTP 404 errors.
-              value:
-                error_code: 404
-                message: HTTP 404 Not Found
-            cluster_not_found:
-              description: Thrown when using a non-existing cluster ID.
-              value:
-                error_code: 404
-                message: Cluster my-cluster cannot be found.
-            unknown_topic_or_partition:
-              description: Thrown when using a non-existing topic name or partition ID.
-              value:
-                error_code: 40403
-                message: This server does not host this topic-partition.
     GetGroupConfigResponse:
       description: Config name and value for group configuration.
       content:
@@ -1069,82 +1024,35 @@ components:
               value:
                 error_code: 40101
                 message: Authentication failed
-    ListTopicConfigsResponse:
-      description: The list of cluster configs.
+    ServerErrorResponse:
+      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/TopicConfigDataList'
-          example:
-            kind: KafkaTopicConfigList
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs
-              next: null
-            data:
-            - kind: KafkaTopicConfig
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs/cleanup.policy
-                resource_name: crn:///kafka=cluster-1/topic=topic-1/config=cleanup.policy
-              cluster_id: cluster-1
-              topic_name: topic-1
-              name: cleanup.policy
-              value: compact
-              is_default: false
-              is_read_only: false
-              is_sensitive: false
-              source: DYNAMIC_TOPIC_CONFIG
-              synonyms:
-              - name: cleanup.policy
-                value: compact
-                source: DYNAMIC_TOPIC_CONFIG
-              - name: cleanup.policy
-                value: delete
-                source: DEFAULT_CONFIG
-            - kind: KafkaTopicConfig
-              metadata:
-                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs/compression.type
-                resource_name: crn:///kafka=cluster-1/topic=topic-1/config=compression.type
-              cluster_id: cluster-1
-              topic_name: topic-1
-              name: compression.type
-              value: gzip
-              is_default: false
-              is_read_only: false
-              is_sensitive: false
-              source: DYNAMIC_TOPIC_CONFIG
-              synonyms:
-              - name: compression.type
-                value: gzip
-                source: DYNAMIC_TOPIC_CONFIG
-              - name: compression.type
-                value: producer
-                source: DEFAULT_CONFIG
-    GetTopicConfigResponse:
-      description: The topic configuration parameter.
+            $ref: '#/components/schemas/Error'
+          examples:
+            generic_internal_server_error:
+              description: Thrown for generic HTTP 500 errors.
+              value:
+                error_code: 500
+                message: Internal Server Error
+    BadRequestErrorResponse:
+      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/TopicConfigData'
-          example:
-            kind: KafkaTopicConfig
-            metadata:
-              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/compression.type
-              resource_name: crn:///kafka=cluster-1/topic=topic-1/config=compression.type
-            cluster_id: cluster-1
-            topic_name: topic-1
-            name: compression.type
-            value: gzip
-            is_default: false
-            is_read_only: false
-            is_sensitive: false
-            source: DYNAMIC_TOPIC_CONFIG
-            synonyms:
-            - name: compression.type
-              value: gzip
-              source: DYNAMIC_TOPIC_CONFIG
-            - name: compression.type
-              value: producer
-              source: DEFAULT_CONFIG
+            $ref: '#/components/schemas/Error'
+          examples:
+            bad_request_cannot_deserialize:
+              description: Thrown when trying to deserialize an integer from non-integer data.
+              value:
+                error_code: 400
+                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
+            unsupported_version_exception:
+              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
+              value:
+                error_code: 40035
+                message: The version of this API is not supported in the underlying Kafka cluster.
     ListClusterConfigsResponse:
       description: The list of cluster configs.
       content:
@@ -1195,6 +1103,15 @@ components:
               - name: compression.type
                 value: producer
                 source: DEFAULT_CONFIG
+    TooManyRequestsErrorResponse:
+      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
+      content:
+        text/html:
+          schema:
+            type: string
+          example:
+            description: A sample response from Jetty's DoSFilter.
+            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
     ForbiddenErrorResponse:
       description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
       content:
@@ -1207,48 +1124,107 @@ components:
               value:
                 error_code: 40301
                 message: Request is not authorized
-    BadRequestErrorResponse:
-      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
+    NoContentResponse:
+      description: Operation succeeded, no content in the response
+    GetTopicConfigResponse:
+      description: The topic configuration parameter.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TopicConfigData'
+          example:
+            kind: KafkaTopicConfig
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/compression.type
+              resource_name: crn:///kafka=cluster-1/topic=topic-1/config=compression.type
+            cluster_id: cluster-1
+            topic_name: topic-1
+            name: compression.type
+            value: gzip
+            is_default: false
+            is_read_only: false
+            is_sensitive: false
+            source: DYNAMIC_TOPIC_CONFIG
+            synonyms:
+            - name: compression.type
+              value: gzip
+              source: DYNAMIC_TOPIC_CONFIG
+            - name: compression.type
+              value: producer
+              source: DEFAULT_CONFIG
+    NotFoundErrorResponse:
+      description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            bad_request_cannot_deserialize:
-              description: Thrown when trying to deserialize an integer from non-integer data.
+            endpoint_not_found:
+              description: Thrown for generic HTTP 404 errors.
               value:
-                error_code: 400
-                message: 'Cannot deserialize value of type `java.lang.Integer` from String "A": not a valid `java.lang.Integer` value'
-            unsupported_version_exception:
-              description: Thrown when the version of this API is not supported in the underlying Kafka cluster.
+                error_code: 404
+                message: HTTP 404 Not Found
+            cluster_not_found:
+              description: Thrown when using a non-existing cluster ID.
               value:
-                error_code: 40035
-                message: The version of this API is not supported in the underlying Kafka cluster.
+                error_code: 404
+                message: Cluster my-cluster cannot be found.
+            unknown_topic_or_partition:
+              description: Thrown when using a non-existing topic name or partition ID.
+              value:
+                error_code: 40403
+                message: This server does not host this topic-partition.
+    ListTopicConfigsResponse:
+      description: The list of cluster configs.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TopicConfigDataList'
+          example:
+            kind: KafkaTopicConfigList
+            metadata:
+              self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs
+              next: null
+            data:
+            - kind: KafkaTopicConfig
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs/cleanup.policy
+                resource_name: crn:///kafka=cluster-1/topic=topic-1/config=cleanup.policy
+              cluster_id: cluster-1
+              topic_name: topic-1
+              name: cleanup.policy
+              value: compact
+              is_default: false
+              is_read_only: false
+              is_sensitive: false
+              source: DYNAMIC_TOPIC_CONFIG
+              synonyms:
+              - name: cleanup.policy
+                value: compact
+                source: DYNAMIC_TOPIC_CONFIG
+              - name: cleanup.policy
+                value: delete
+                source: DEFAULT_CONFIG
+            - kind: KafkaTopicConfig
+              metadata:
+                self: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/topic-1/configs/compression.type
+                resource_name: crn:///kafka=cluster-1/topic=topic-1/config=compression.type
+              cluster_id: cluster-1
+              topic_name: topic-1
+              name: compression.type
+              value: gzip
+              is_default: false
+              is_read_only: false
+              is_sensitive: false
+              source: DYNAMIC_TOPIC_CONFIG
+              synonyms:
+              - name: compression.type
+                value: gzip
+                source: DYNAMIC_TOPIC_CONFIG
+              - name: compression.type
+                value: producer
+                source: DEFAULT_CONFIG
   parameters:
-    GroupId:
-      name: group_id
-      description: The group ID.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: group-1
-    ValidateOnly:
-      name: validate_only
-      description: 'To validate the action can be performed successfully or not. Default: false'
-      in: query
-      required: false
-      schema:
-        type: boolean
-      example: false
-    ConfigName:
-      name: name
-      description: The configuration parameter name.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: compression.type
     ClusterId:
       name: cluster_id
       description: The Kafka cluster ID.
@@ -1257,6 +1233,14 @@ components:
       schema:
         type: string
       example: cluster-1
+    ConfigName:
+      name: name
+      description: The configuration parameter name.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: compression.type
     TopicName:
       name: topic_name
       description: The topic name.
@@ -1265,6 +1249,22 @@ components:
       schema:
         type: string
       example: topic-1
+    ValidateOnly:
+      name: validate_only
+      description: 'To validate the action can be performed successfully or not. Default: false'
+      in: query
+      required: false
+      schema:
+        type: boolean
+      example: false
+    GroupId:
+      name: group_id
+      description: The group ID.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: group-1
   securitySchemes:
     cloud-api-key:
       type: http

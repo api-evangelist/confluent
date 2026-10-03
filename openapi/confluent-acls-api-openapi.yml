@@ -54,13 +54,6 @@ paths:
         '201':
           description: ACL created
 components:
-  parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
     Acl:
       type: object
@@ -86,6 +79,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Acl'
+  parameters:
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http
