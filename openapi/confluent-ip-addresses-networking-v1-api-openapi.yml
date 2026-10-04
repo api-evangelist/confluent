@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud IP Addresses (networking/v1) API
+  title: Confluent IP Addresses (networking/v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged IP Addresses (networking/v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -132,51 +126,11 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
 components:
   schemas:
-    Error:
-      type: object
-      description: Describes a particular error encountered while performing an operation.
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-          maxLength: 255
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        error_code:
-          type: integer
-          format: int32
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    MultipleSearchFilter:
-      description: Filter a collection by a string search for one or more values
-      type: array
-      items:
-        type: string
     ListMeta:
       type: object
       description: ListMeta describes metadata that resource collections may have
@@ -215,17 +169,59 @@ components:
           format: int32
           minimum: 0
           example: 123
-    Failure:
+    MultipleSearchFilter:
+      description: Filter a collection by a string search for one or more values
+      type: array
+      items:
+        type: string
+    networking.v1.IpAddressList:
       type: object
-      description: Provides information about problems encountered while performing an operation.
+      description: 'IP Addresses
+
+
+        Related guide: [Use Public Egress IP Addresses on Confluent Cloud](https://docs.confluent.io/cloud/current/networking/static-egress-ip-addresses.html)
+
+
+        ## The IP Addresses Model
+
+        <SchemaDefinition schemaRef="#/components/schemas/networking.v1.IpAddress" />'
       required:
-      - errors
+      - api_version
+      - kind
+      - metadata
+      - data
       properties:
-        errors:
-          description: List of errors which caused this operation to fail
+        api_version:
+          type: string
+          enum:
+          - networking/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - IpAddressList
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ListMeta'
+          - properties:
+              first:
+                example: https://api.confluent.cloud/networking/v1/ip-addresses
+              last:
+                example: https://api.confluent.cloud/networking/v1/ip-addresses?page_token=bcAOehAY8F16YD84Z1wT
+              prev:
+                example: https://api.confluent.cloud/networking/v1/ip-addresses?page_token=YIXRY97wWYmwzrax4dld
+              next:
+                example: https://api.confluent.cloud/networking/v1/ip-addresses?page_token=UvmDWOB1iwfAIBPj6EYb
+        data:
           type: array
+          description: A data property that contains an array of resource items. Each entry in the array is a separate resource.
           items:
-            $ref: '#/components/schemas/Error'
+            allOf:
+            - $ref: '#/components/schemas/networking.v1.IpAddress'
+            - type: object
           uniqueItems: true
     networking.v1.IpAddress:
       type: object
@@ -289,56 +285,95 @@ components:
           - INGRESS
           - EGRESS
           example: EGRESS
-    networking.v1.IpAddressList:
+    Error:
       type: object
-      description: 'IP Addresses
-
-
-        Related guide: [Use Public Egress IP Addresses on Confluent Cloud](https://docs.confluent.io/cloud/current/networking/static-egress-ip-addresses.html)
-
-
-        ## The IP Addresses Model
-
-        <SchemaDefinition schemaRef="#/components/schemas/networking.v1.IpAddress" />'
-      required:
-      - api_version
-      - kind
-      - metadata
-      - data
+      description: Describes a particular error encountered while performing an operation.
       properties:
-        api_version:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
           type: string
-          enum:
-          - networking/v1
-          description: APIVersion defines the schema version of this representation of a resource.
-          readOnly: true
-        kind:
+          maxLength: 255
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
           type: string
-          description: Kind defines the object this REST resource represents.
-          readOnly: true
-          enum:
-          - IpAddressList
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ListMeta'
-          - properties:
-              first:
-                example: https://api.confluent.cloud/networking/v1/ip-addresses
-              last:
-                example: https://api.confluent.cloud/networking/v1/ip-addresses?page_token=bcAOehAY8F16YD84Z1wT
-              prev:
-                example: https://api.confluent.cloud/networking/v1/ip-addresses?page_token=YIXRY97wWYmwzrax4dld
-              next:
-                example: https://api.confluent.cloud/networking/v1/ip-addresses?page_token=UvmDWOB1iwfAIBPj6EYb
-        data:
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        error_code:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
           type: array
-          description: A data property that contains an array of resource items. Each entry in the array is a separate resource.
           items:
-            allOf:
-            - $ref: '#/components/schemas/networking.v1.IpAddress'
-            - type: object
+            $ref: '#/components/schemas/Error'
           uniqueItems: true
   responses:
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
     UnauthenticatedError:
       x-summary: Unauthorized
       description: The request lacks valid authentication credentials for this resource.
@@ -363,43 +398,6 @@ components:
               code: user_unauthenticated
               title: Authentication Required
               detail: Valid authentication credentials must be provided
-    UnauthorizedError:
-      x-summary: Forbidden
-      description: The access credentials were considered insufficient to grant access
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '403'
-              code: user_unauthorized
-              title: User Access Unauthorized
-              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
-    DefaultSystemError:
-      description: Oops, something went wrong!
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -423,8 +421,9 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    BadRequestError:
-      description: Bad Request
+    UnauthorizedError:
+      x-summary: Forbidden
+      description: The access credentials were considered insufficient to grant access
       headers:
         X-Request-Id:
           schema:
@@ -437,12 +436,10 @@ components:
           example:
             errors:
             - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
+              status: '403'
+              code: user_unauthorized
+              title: User Access Unauthorized
+              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
   securitySchemes:
     cloud-api-key:
       type: http
@@ -481,6 +478,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

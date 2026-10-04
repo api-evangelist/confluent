@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Kafka Clusters (usm/v1) API
+  title: Confluent Kafka Clusters (usm/v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Kafka Clusters (usm/v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -206,6 +200,9 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /usm/v1/kafka-clusters/{id}:
     x-lifecycle-stage: Preview
     x-self-access: true
@@ -353,134 +350,11 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
 components:
   schemas:
-    Error:
-      type: object
-      description: Describes a particular error encountered while performing an operation.
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
-          type: string
-          maxLength: 255
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        error_code:
-          type: integer
-          format: int32
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    usm.v1.KafkaCluster:
-      type: object
-      description: '`KafkaCluster` object represent Confluent Platform Kafka clusters registered with Confluent Cloud.
-
-        The API allows you to create and delete KafkaCluster.
-
-
-
-        ## The Kafka Clusters Model
-
-        <SchemaDefinition schemaRef="#/components/schemas/usm.v1.KafkaCluster" />'
-      properties:
-        api_version:
-          type: string
-          enum:
-          - usm/v1
-          description: APIVersion defines the schema version of this representation of a resource.
-          readOnly: true
-        kind:
-          type: string
-          description: Kind defines the object this REST resource represents.
-          readOnly: true
-          enum:
-          - KafkaCluster
-        id:
-          description: ID is the "natural identifier" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted ("time"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace ("space").
-          type: string
-          maxLength: 255
-          readOnly: true
-          example: dlz-f3a90de
-        display_name:
-          type: string
-          description: A human-readable name for the Confluent Platform Kafka cluster.
-          example: My-Prod-CP-Cluster
-        confluent_platform_kafka_cluster_id:
-          type: string
-          description: The unique identifier of the Kafka cluster within the Confluent Platform environment.
-          example: 4k0R9d1GTS5tI9f4Y2xZ0Q
-          x-immutable: true
-        cloud:
-          type: string
-          description: The cloud service provider where the metadata for the Kafka Cluster should be stored.
-          x-extensible-enum:
-          - AWS
-          - GCP
-          - AZURE
-          example: AWS
-          x-immutable: true
-        region:
-          type: string
-          description: The home region of the Confluent Platform Kafka cluster where the metadata should be stored.
-          example: us-east-1
-          x-immutable: true
-        environment:
-          allOf:
-          - $ref: '#/components/schemas/EnvScopedObjectReference'
-          description: The environment to which this belongs.
-          x-immutable: true
-    EnvScopedObjectReference:
-      type: object
-      description: ObjectReference provides information for you to locate the referred object
-      required:
-      - id
-      - related
-      - resource_name
-      properties:
-        id:
-          type: string
-          description: ID of the referred resource
-          minLength: 1
-          maxLength: 255
-        environment:
-          type: string
-          description: Environment of the referred resource, if env-scoped
-          minLength: 1
-          maxLength: 255
-        related:
-          type: string
-          format: uri
-          description: API URL for accessing or modifying the referred object
-          minLength: 1
-          readOnly: true
-        resource_name:
-          type: string
-          format: uri
-          description: CRN reference to the referred resource
-          minLength: 1
-          readOnly: true
     ListMeta:
       type: object
       description: ListMeta describes metadata that resource collections may have
@@ -519,18 +393,36 @@ components:
           format: int32
           minimum: 0
           example: 123
-    Failure:
+    EnvScopedObjectReference:
       type: object
-      description: Provides information about problems encountered while performing an operation.
+      description: ObjectReference provides information for you to locate the referred object
       required:
-      - errors
+      - id
+      - related
+      - resource_name
       properties:
-        errors:
-          description: List of errors which caused this operation to fail
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-          uniqueItems: true
+        id:
+          type: string
+          description: ID of the referred resource
+          minLength: 1
+          maxLength: 255
+        environment:
+          type: string
+          description: Environment of the referred resource, if env-scoped
+          minLength: 1
+          maxLength: 255
+        related:
+          type: string
+          format: uri
+          description: API URL for accessing or modifying the referred object
+          minLength: 1
+          readOnly: true
+        resource_name:
+          type: string
+          format: uri
+          description: CRN reference to the referred resource
+          minLength: 1
+          readOnly: true
     SearchFilter:
       description: Filter a collection by a string search
       type: string
@@ -590,7 +482,153 @@ components:
               - region
               - environment
           uniqueItems: true
+    Error:
+      type: object
+      description: Describes a particular error encountered while performing an operation.
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+          maxLength: 255
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        error_code:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
+    usm.v1.KafkaCluster:
+      type: object
+      description: '`KafkaCluster` object represent Confluent Platform Kafka clusters registered with Confluent Cloud.
+
+        The API allows you to create and delete KafkaCluster.
+
+
+
+        ## The Kafka Clusters Model
+
+        <SchemaDefinition schemaRef="#/components/schemas/usm.v1.KafkaCluster" />'
+      properties:
+        api_version:
+          type: string
+          enum:
+          - usm/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - KafkaCluster
+        id:
+          description: ID is the "natural identifier" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted ("time"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace ("space").
+          type: string
+          maxLength: 255
+          readOnly: true
+          example: dlz-f3a90de
+        display_name:
+          type: string
+          description: A human-readable name for the Confluent Platform Kafka cluster.
+          example: My-Prod-CP-Cluster
+        confluent_platform_kafka_cluster_id:
+          type: string
+          description: The unique identifier of the Kafka cluster within the Confluent Platform environment.
+          example: 4k0R9d1GTS5tI9f4Y2xZ0Q
+          x-immutable: true
+        cloud:
+          type: string
+          description: The cloud service provider where the metadata for the Kafka Cluster should be stored.
+          x-extensible-enum:
+          - AWS
+          - GCP
+          - AZURE
+          example: AWS
+          x-immutable: true
+        region:
+          type: string
+          description: The home region of the Confluent Platform Kafka cluster where the metadata should be stored.
+          example: us-east-1
+          x-immutable: true
+        environment:
+          allOf:
+          - $ref: '#/components/schemas/EnvScopedObjectReference'
+          description: The environment to which this belongs.
+          x-immutable: true
   responses:
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
     UnauthenticatedError:
       x-summary: Unauthorized
       description: The request lacks valid authentication credentials for this resource.
@@ -615,6 +653,31 @@ components:
               code: user_unauthenticated
               title: Authentication Required
               detail: Valid authentication credentials must be provided
+    ConflictError:
+      x-summary: Conflict
+      description: The request is in conflict with the current server state
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        Location:
+          schema:
+            type: string
+            format: uri
+            example: https://api.confluent.cloud/{object}/{id}
+          description: Resource URI of conflicting resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '409'
+              code: resource_already_exists
+              title: Resource Already exists
+              detail: The entitlement '91e3e86f-fca6-4f14-98f5-a48e64113ce2' already exists.
     ValidationError:
       description: Validation Failed
       headers:
@@ -894,24 +957,6 @@ components:
               detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
               source:
                 pointer: /cluster/storage_size
-    DefaultSystemError:
-      description: Oops, something went wrong!
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -935,8 +980,8 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    BadRequestError:
-      description: Bad Request
+    NotFoundError:
+      description: Not Found
       headers:
         X-Request-Id:
           schema:
@@ -949,37 +994,8 @@ components:
           example:
             errors:
             - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
-    ConflictError:
-      x-summary: Conflict
-      description: The request is in conflict with the current server state
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        Location:
-          schema:
-            type: string
-            format: uri
-            example: https://api.confluent.cloud/{object}/{id}
-          description: Resource URI of conflicting resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '409'
-              code: resource_already_exists
-              title: Resource Already exists
-              detail: The entitlement '91e3e86f-fca6-4f14-98f5-a48e64113ce2' already exists.
+              status: '404'
+              title: Not Found
     UnauthorizedError:
       x-summary: Forbidden
       description: The access credentials were considered insufficient to grant access
@@ -999,8 +1015,8 @@ components:
               code: user_unauthorized
               title: User Access Unauthorized
               detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
-    NotFoundError:
-      description: Not Found
+    ValidationError_2:
+      description: Validation Failed
       headers:
         X-Request-Id:
           schema:
@@ -1012,9 +1028,286 @@ components:
             $ref: '#/components/schemas/Failure'
           example:
             errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '404'
-              title: Not Found
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
   securitySchemes:
     cloud-api-key:
       type: http
@@ -1053,6 +1346,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

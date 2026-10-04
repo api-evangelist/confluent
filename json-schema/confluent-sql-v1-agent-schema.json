@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-sql-v1-agent-schema.json",
+  "title": "sql.v1.Agent",
+  "description": "Represents an Agent resource.",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-agents-sql-v1-api-openapi.yml#/components/schemas/sql.v1.Agent",
+  "type": "object",
+  "required": [
+    "api_version",
+    "kind",
+    "metadata",
+    "name",
+    "organization_id",
+    "environment_id",
+    "spec"
+  ],
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "sql/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "enum": [
+        "Agent"
+      ],
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "self": {},
+            "uid": {},
+            "resource_version": {},
+            "resource_name": {},
+            "labels": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "The user-provided name of the agent, unique within this environment.",
+      "pattern": "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*",
+      "maxLength": 100,
+      "x-immutable": true
+    },
+    "organization_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The unique identifier for the organization.",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "environment_id": {
+      "type": "string",
+      "description": "The unique identifier for the environment.",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "spec": {
+      "$ref": "#/$defs/sql.v1.AgentSpec"
+    },
+    "status": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/sql.v1.AgentStatus"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "sql.v1.AgentSpec": {
+      "type": "object",
+      "description": "The specifications of the Agent.",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "The description of the agent."
+        },
+        "model": {
+          "type": "string",
+          "description": "The name of the model the agent uses for inferencing."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "The instruction prompt that guides the agent's behavior.",
+          "maxLength": 65536
+        },
+        "tools": {
+          "type": "array",
+          "description": "The list of tools available to the agent.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "type": "object",
+          "description": "A set of key-value option pairs that configure the agent's behavior.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sql.v1.AgentStatus": {
+      "type": "object",
+      "description": "The status of the Agent.",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "READY",
+            "RUNNING"
+          ],
+          "description": "Describes the status of the agent:\n\nREADY: The Agent is created;\n\nRUNNING: The Agent is created and running in a query;\n"
+        }
+      }
+    }
+  }
+}

@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Key Encryption Keys (v1) API
+  title: Confluent Key Encryption Keys (v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Key Encryption Keys (v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -327,6 +321,40 @@ paths:
       - external-access-token: []
 components:
   schemas:
+    CreateKekRequest:
+      example:
+        kmsProps:
+          key: kmsProps
+        shared: true
+        name: name
+        doc: doc
+        kmsKeyId: kmsKeyId
+        kmsType: kmsType
+      properties:
+        name:
+          type: string
+          description: Name of the kek
+        kmsType:
+          type: string
+          description: KMS type of the kek
+        kmsKeyId:
+          type: string
+          description: KMS key ID of the kek
+        kmsProps:
+          type: object
+          additionalProperties:
+            type: string
+          description: Properties of the kek
+        doc:
+          type: string
+          description: Description of the kek
+        shared:
+          type: boolean
+          description: Whether the kek is shared
+        deleted:
+          type: boolean
+          description: Whether the kek is deleted
+      type: object
     Kek:
       example:
         kmsProps:
@@ -386,40 +414,6 @@ components:
           type: boolean
           description: Whether the kek is shared
       type: object
-    CreateKekRequest:
-      example:
-        kmsProps:
-          key: kmsProps
-        shared: true
-        name: name
-        doc: doc
-        kmsKeyId: kmsKeyId
-        kmsType: kmsType
-      properties:
-        name:
-          type: string
-          description: Name of the kek
-        kmsType:
-          type: string
-          description: KMS type of the kek
-        kmsKeyId:
-          type: string
-          description: KMS key ID of the kek
-        kmsProps:
-          type: object
-          additionalProperties:
-            type: string
-          description: Properties of the kek
-        doc:
-          type: string
-          description: Description of the kek
-        shared:
-          type: boolean
-          description: Whether the kek is shared
-        deleted:
-          type: boolean
-          description: Whether the kek is deleted
-      type: object
   securitySchemes:
     cloud-api-key:
       type: http
@@ -458,6 +452,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

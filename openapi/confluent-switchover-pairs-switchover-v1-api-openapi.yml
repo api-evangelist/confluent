@@ -1,0 +1,1671 @@
+openapi: 3.2.0
+info:
+  title: Confluent Cloud Switchover Pairs (switchover/v1) API
+  version: ''
+  x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
+  x-audience: external-public
+  x-logo:
+    url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
+  description: '# Introduction
+
+
+    Note
+
+
+    This documents the collection of Confluent Cloud APIs.'
+servers:
+- url: https://api.confluent.cloud
+  description: Confluent Cloud API
+tags:
+- name: Switchover Pairs (switchover/v1)
+  description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/…'
+paths:
+  /switchover/v1/switchover-pairs:
+    x-lifecycle-stage: Early Access
+    x-self-access: false
+    x-request-access-name: Switchover API (Kafka Disaster Recovery)
+    get:
+      x-lifecycle-stage: Early Access
+      x-self-access: false
+      x-request-access-name: Switchover API (Kafka Disaster Recovery)
+      operationId: listSwitchoverV1SwitchoverPairs
+      summary: List of Switchover Pairs
+      description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+        Retrieve a sorted, filtered, paginated list of all switchover pairs.'
+      parameters:
+      - name: environment
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SearchFilter'
+        example: env-00000
+        description: 'Scope the operation to the environment with this ID. The bare-ID form of `environment_crn`;
+
+          it is the standard Confluent collection filter, passed as the `?environment=` query parameter.
+
+          '
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          maximum: 100
+          x-max-page-items: 500
+        description: A pagination size for collection requests.
+      - name: page_token
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 255
+        description: An opaque pagination token for collection requests.
+      tags:
+      - Switchover Pairs (switchover/v1)
+      security:
+      - cloud-api-key: []
+      - global-api-key: []
+      responses:
+        '200':
+          description: Switchover Pair.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/switchover.v1.SwitchoverPairList'
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+    post:
+      x-lifecycle-stage: Early Access
+      x-self-access: false
+      x-request-access-name: Switchover API (Kafka Disaster Recovery)
+      operationId: createSwitchoverV1SwitchoverPair
+      summary: Create a Switchover Pair
+      description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+        Make a request to create a switchover pair.'
+      tags:
+      - Switchover Pairs (switchover/v1)
+      security:
+      - cloud-api-key: []
+      - global-api-key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+              - type: object
+                required:
+                - spec
+                properties:
+                  spec:
+                    type: object
+                    required:
+                    - environment_crn
+                    - display_name
+                    - members
+                    - active_member
+      responses:
+        '202':
+          description: A Switchover Pair is being created.
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://api.confluent.cloud/switchover/v1/switchover-pairs/{id}
+              description: SwitchoverPair resource uri
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+                - type: object
+                  required:
+                  - spec
+                  - status
+                  properties:
+                    spec:
+                      type: object
+                      required:
+                      - environment_crn
+                      - display_name
+                      - members
+                      - active_member
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+  /switchover/v1/switchover-pairs/{id}:
+    x-lifecycle-stage: Early Access
+    x-self-access: false
+    x-request-access-name: Switchover API (Kafka Disaster Recovery)
+    get:
+      x-lifecycle-stage: Early Access
+      x-self-access: false
+      x-request-access-name: Switchover API (Kafka Disaster Recovery)
+      operationId: getSwitchoverV1SwitchoverPair
+      summary: Read a Switchover Pair
+      description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+        Make a request to read a switchover pair.'
+      parameters:
+      - name: environment
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SearchFilter'
+        example: env-00000
+        description: 'Scope the operation to the environment with this ID. The bare-ID form of `environment_crn`;
+
+          it is the standard Confluent collection filter, passed as the `?environment=` query parameter.
+
+          '
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the switchover pair.
+      tags:
+      - Switchover Pairs (switchover/v1)
+      security:
+      - cloud-api-key: []
+      - global-api-key: []
+      responses:
+        '200':
+          description: Switchover Pair.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+                - type: object
+                  required:
+                  - api_version
+                  - kind
+                  - id
+                  - spec
+                  - status
+                  properties:
+                    spec:
+                      type: object
+                      required:
+                      - environment_crn
+                      - display_name
+                      - members
+                      - active_member
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/switchover.v1.SwitchoverPairUpdateRequest'
+      x-codeSamples:
+      - lang: Shell
+        label: cURL
+        source: "curl --request PUT \\\n  --url 'https://api.confluent.cloud/switchover/v1/switchover-pairs/{id}?environment=env-00000' \\\n  --header 'Authorization: Basic REPLACE_BASIC_AUTH' \\\n  --header 'content-type: application/json' \\\n  --data '{\"spec\":{\"display_name\":\"prod-kafka-dr\"}}'\n"
+      x-lifecycle-stage: Early Access
+      x-self-access: false
+      x-request-access-name: Switchover API (Kafka Disaster Recovery)
+      operationId: updateSwitchoverV1SwitchoverPair
+      summary: Update a Switchover Pair
+      description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+        Make a request to update a switchover pair.'
+      parameters:
+      - name: environment
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SearchFilter'
+        example: env-00000
+        description: 'Scope the operation to the environment with this ID. The bare-ID form of `environment_crn`;
+
+          it is the standard Confluent collection filter, passed as the `?environment=` query parameter.
+
+          '
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the switchover pair.
+      tags:
+      - Switchover Pairs (switchover/v1)
+      security:
+      - cloud-api-key: []
+      - global-api-key: []
+      responses:
+        '200':
+          description: Switchover Pair.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+                - type: object
+                  required:
+                  - api_version
+                  - kind
+                  - id
+                  - spec
+                  - status
+                  properties:
+                    spec:
+                      type: object
+                      required:
+                      - environment_crn
+                      - display_name
+                      - members
+                      - active_member
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+    delete:
+      x-lifecycle-stage: Early Access
+      x-self-access: false
+      x-request-access-name: Switchover API (Kafka Disaster Recovery)
+      operationId: deleteSwitchoverV1SwitchoverPair
+      summary: Delete a Switchover Pair
+      description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+        Make a request to delete a switchover pair.'
+      parameters:
+      - name: environment
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SearchFilter'
+        example: env-00000
+        description: 'Scope the operation to the environment with this ID. The bare-ID form of `environment_crn`;
+
+          it is the standard Confluent collection filter, passed as the `?environment=` query parameter.
+
+          '
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the switchover pair.
+      tags:
+      - Switchover Pairs (switchover/v1)
+      security:
+      - cloud-api-key: []
+      - global-api-key: []
+      responses:
+        '202':
+          description: 'The switchover pair deletion has been accepted; it transitions to `DEPROVISIONING` while it is
+
+            removed asynchronously.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+  /switchover/v1/switchover-pairs/{id}:failover:
+    x-lifecycle-stage: Early Access
+    x-self-access: false
+    x-request-access-name: Switchover API (Kafka Disaster Recovery)
+    post:
+      summary: Trigger a failover on a switchover pair
+      description: '![Early Access](#section/Versioning/API-Lifecycle-Policy) ![Request Access To Switchover API (Kafka Disaster Recovery)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+        Triggers a failover (or switchback) on the switchover pair. Optionally promotes a specific
+
+        member to active and/or selects the failover semantics (`PLANNED`, `UNPLANNED`, or `RESTORE`).
+
+        Returns the updated `SwitchoverPair` whose `status.phase` transitions to `UPDATING`.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/switchover.v1.SwitchoverPairFailoverRequest'
+      x-lifecycle-stage: Early Access
+      x-self-access: false
+      x-request-access-name: Switchover API (Kafka Disaster Recovery)
+      x-name: switchover.v1.SwitchoverPair
+      operationId: failoverSwitchoverV1SwitchoverPair
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the switchover pair.
+      tags:
+      - Switchover Pairs (switchover/v1)
+      security:
+      - cloud-api-key: []
+      - global-api-key: []
+      responses:
+        '202':
+          description: 'The failover has been accepted; the switchover pair transitions to `UPDATING` while
+
+            the operation completes asynchronously.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+components:
+  responses:
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
+    ConflictError:
+      x-summary: Conflict
+      description: The request is in conflict with the current server state
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        Location:
+          schema:
+            type: string
+            format: uri
+            example: https://api.confluent.cloud/{object}/{id}
+          description: Resource URI of conflicting resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '409'
+              code: resource_already_exists
+              title: Resource Already exists
+              detail: The entitlement '91e3e86f-fca6-4f14-98f5-a48e64113ce2' already exists.
+    UnauthorizedError:
+      x-summary: Forbidden
+      description: The access credentials were considered insufficient to grant access
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '403'
+              code: user_unauthorized
+              title: User Access Unauthorized
+              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
+    NotFoundError:
+      description: Not Found
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '404'
+              title: Not Found
+    UnauthenticatedError:
+      x-summary: Unauthorized
+      description: The request lacks valid authentication credentials for this resource.
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        WWW-Authenticate:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+          example: Basic error="invalid_key", error_description="The API Key is invalid"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '401'
+              code: user_unauthenticated
+              title: Authentication Required
+              detail: Valid authentication credentials must be provided
+    ValidationError:
+      description: Validation Failed
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+            - status: '422'
+              code: invalid_configuration
+              id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              title: Validation Failed
+              detail: 'The property ''/cluster/storage_size'' of type string did not match the following type: integer'
+              source:
+                pointer: /cluster/storage_size
+    RateLimitError:
+      description: Rate Limit Exceeded
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: The maximum number of requests you're permitted to make per time period.
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: The number of requests remaining in the current rate limit window.
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        Retry-After:
+          schema:
+            type: integer
+          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+  schemas:
+    switchover.v1.SwitchoverPairStatus:
+      type: object
+      required:
+      - phase
+      description: The status of the Switchover Pair
+      properties:
+        phase:
+          type: string
+          x-extensible-enum:
+          - PROVISIONING
+          - READY_TO_FAILOVER
+          - UPDATING
+          - READY_TO_RESTORE
+          - FAILED
+          - DEPROVISIONING
+          description: "The lifecycle phase of the switchover pair:\n  PROVISIONING:      the pair is being created and validated;\n  READY_TO_FAILOVER: the pair is validated and a failover (planned or unplanned) can be triggered;\n  UPDATING:          a failover, failback, or restore operation is in progress;\n  READY_TO_RESTORE:  an unplanned failover has completed; the cluster link can be restored;\n  FAILED:            resource validation failed for the pair; it must be deleted and recreated;\n  DEPROVISIONING:    the pair is being deleted.\n"
+          readOnly: true
+          example: READY_TO_FAILOVER
+        conditions:
+          type: array
+          description: Status conditions providing detailed information about the switchover pair's current state.
+          items:
+            $ref: '#/components/schemas/switchover.v1.Condition'
+          readOnly: true
+      readOnly: true
+    switchover.v1.Condition:
+      type: object
+      description: A single status condition, following the standard Kubernetes/Confluent condition pattern.
+      required:
+      - type
+      - status
+      properties:
+        member:
+          type: string
+          description: 'The `SwitchoverPair` member this condition belongs to. Conditions are recorded per
+
+            member and flattened into a single list, so the same condition `type` can appear once
+
+            per member; this field disambiguates them. Empty for pair-level conditions that have no
+
+            member dimension.
+
+            '
+          example: east
+        type:
+          type: string
+          description: 'The condition type — one of `ResourceValidationComplete`, `ResourcePlannedFailoverComplete`,
+
+            `ResourceUnplannedFailoverComplete`, or `ResourceRestoreComplete`.
+
+            '
+          x-extensible-enum:
+          - ResourceValidationComplete
+          - ResourcePlannedFailoverComplete
+          - ResourceUnplannedFailoverComplete
+          - ResourceRestoreComplete
+          example: ResourceValidationComplete
+        status:
+          type: string
+          description: The status of the condition.
+          x-extensible-enum:
+          - 'True'
+          - 'False'
+          - Unknown
+          example: 'True'
+        reason:
+          type: string
+          description: A machine-readable reason for the condition's current status.
+          example: Reconciled
+        message:
+          type: string
+          description: A human-readable message providing additional detail about the condition.
+          example: The resource is ready.
+    switchover.v1.SwitchoverPairMember:
+      type: object
+      description: One side (cluster) of a `SwitchoverPair`.
+      required:
+      - name
+      - member_crn
+      properties:
+        name:
+          type: string
+          description: A logical name for this member (e.g. "west" or "east"), unique within the pair.
+          example: west
+        member_crn:
+          type: string
+          format: uri
+          pattern: ^crn://confluent\.cloud/organization=[^/]+/environment=[^/]+/.+$
+          description: 'The Confluent Resource Name (CRN) of the resource this member represents.
+
+
+            A CRN rather than an ID plus an environment because member types do not share a parent
+
+            hierarchy: a Kafka cluster is `environment → cloud-cluster`, a Flink compute pool is
+
+            `environment → flink-region → compute-pool`, and a Connect connector is
+
+            `environment → cloud-cluster → connector` with a *name* as its leaf, unique only within its
+
+            cluster. A single `environment` field cannot address the latter two unambiguously.
+
+
+            The environment is read from the CRN, so a pair whose two members live in different
+
+            environments needs no separate per-member environment field.
+
+
+            For a Kafka cluster both the canonical form and the variant carrying the redundant trailing
+
+            `/kafka=<lkc>` (which the cmk API returns in `metadata.resource_name`) are accepted. The
+
+            short `crn://confluent.cloud/kafka=<lkc>` form is rejected: it is a valid CRN but carries no
+
+            environment. In Terraform the value is available as
+
+            `confluent_kafka_cluster.<name>.rbac_crn`.
+
+            '
+          example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/environment=env-00000/cloud-cluster=lkc-00000
+        location:
+          type: object
+          description: 'The cloud location of this member''s cluster. Derived server-side from the cluster the
+
+            member''s CRN names; not settable by the client.
+
+            '
+          readOnly: true
+          properties:
+            cloud:
+              type: string
+              description: The cloud provider hosting this member (e.g. `aws`, `gcp`, `azure`).
+              example: aws
+            region:
+              type: string
+              description: The cloud region hosting this member (e.g. `us-west-2`).
+              example: us-west-2
+    switchover.v1.SwitchoverPairFailoverRequest:
+      type: object
+      description: Request body for the `:failover` operation on a `SwitchoverPair`.
+      required:
+      - spec
+      properties:
+        spec:
+          type: object
+          required:
+          - environment_crn
+          - failover_type
+          properties:
+            environment_crn:
+              type: string
+              format: uri
+              pattern: ^crn://confluent\.cloud/organization=[^/]+/environment=[^/]+$
+              description: 'The CRN of the switchover pair''s environment. Required; unlike the other operations,
+
+                this endpoint takes it from the request body rather than a query parameter.
+
+                '
+              example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/environment=env-00000
+            active_member:
+              type: string
+              description: 'The name of the member to promote to active. If type is PLANNED/UNPLANNED, then
+
+                `active_member` must be provided.
+
+                '
+              example: east
+            failover_type:
+              type: string
+              description: "The failover semantics to apply. Required — this field decides whether the operation\ncan lose data, so it must be stated on every call rather than defaulted.\n  PLANNED:    graceful failover after replication lag reaches zero (cluster link is reversed);\n  UNPLANNED:  immediate failover without waiting for replication (cluster link is stopped);\n  RESTORE:    re-establish the cluster link after an unplanned failover.\n"
+              x-extensible-enum:
+              - PLANNED
+              - UNPLANNED
+              - RESTORE
+              example: PLANNED
+    switchover.v1.SwitchoverPairSpec:
+      type: object
+      description: The desired state of the Switchover Pair
+      properties:
+        environment_crn:
+          type: string
+          format: uri
+          pattern: ^crn://confluent\.cloud/organization=[^/]+/environment=[^/]+$
+          description: 'The CRN of the environment this resource belongs to.
+
+
+            Every reference in a request body is a CRN (see `member_crn`), so this is one too rather
+
+            than an `{id}` relationship object — callers learn a single convention, and the
+
+            organization always travels with the reference. A CRN that names no environment is
+
+            rejected; it is not defaulted.
+
+
+            The `?environment=` query parameter on the other operations remains a bare environment ID:
+
+            it is the standard Confluent collection filter, not a reference to a stored resource.
+
+            '
+          example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/environment=env-00000
+        display_name:
+          type: string
+          description: A human-readable name for the switchover pair.
+          example: prod-kafka-dr
+          maxLength: 256
+        members:
+          type: array
+          description: 'The two clusters participating in this switchover pair. Must contain exactly 2 members.
+
+            '
+          minItems: 2
+          maxItems: 2
+          items:
+            $ref: '#/components/schemas/switchover.v1.SwitchoverPairMember'
+          x-immutable: true
+        active_member:
+          type: string
+          description: 'The name of the member that is currently active. On create, this selects which member
+
+            starts as active; it must match one of the `members[].name` values. Use the `:failover`
+
+            operation to change the active member after creation.
+
+            '
+          example: west
+          x-immutable: true
+        first_active:
+          type: string
+          description: 'The member that was active when the pair was created. Output-only and immutable; set
+
+            implicitly at create time and never accepted as input. Comparing it with `active_member`
+
+            distinguishes a pair that has failed over (they differ) from one still on its original
+
+            active member (they match).
+
+            '
+          readOnly: true
+          example: west
+        failover_type:
+          type: string
+          x-extensible-enum:
+          - PLANNED
+          - UNPLANNED
+          - RESTORE
+          description: 'The failover semantics most recently applied to this pair via the `:failover` operation.
+
+            Not settable directly; empty until a failover has been triggered.
+
+            '
+          readOnly: true
+          example: PLANNED
+      x-enable-id: true
+      x-enable-listmeta: true
+      x-enable-objectmeta: true
+    Error:
+      type: object
+      description: Describes a particular error encountered while performing an operation.
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+          maxLength: 255
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        error_code:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    switchover.v1.SwitchoverPairUpdateRequest:
+      type: object
+      description: 'Request body for updating a `SwitchoverPair`. Only `display_name` is mutable via this
+
+        operation; use the `:failover` operation to change the active member.
+
+        '
+      required:
+      - spec
+      properties:
+        spec:
+          type: object
+          properties:
+            display_name:
+              type: string
+              description: A human-readable name for the switchover pair.
+              example: prod-kafka-dr
+              maxLength: 256
+    switchover.v1.SwitchoverPairList:
+      type: object
+      description: '`SwitchoverPair` represents a cluster-level Disaster Recovery pairing between two Kafka
+
+        clusters in different regions of the same environment. Exactly one member is active at any
+
+        time; the other is passive and kept in sync via a bidirectional cluster link.
+
+
+        The API allows you to list, create, read, update, and delete switchover pairs, and to trigger
+
+        a failover (promotion of the passive member) via the `:failover` operation.
+
+
+        ## The Switchover Pairs Model
+
+        <SchemaDefinition schemaRef="#/components/schemas/switchover.v1.SwitchoverPair" />
+
+        '
+      required:
+      - api_version
+      - kind
+      - metadata
+      - data
+      properties:
+        api_version:
+          type: string
+          enum:
+          - switchover/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - SwitchoverPairList
+        metadata:
+          type: object
+          description: Metadata for this collection response.
+          required:
+          - pagination
+          properties:
+            pagination:
+              type: object
+              description: Pagination metadata for this collection response.
+              properties:
+                page_size:
+                  type: integer
+                  format: int32
+                  description: The user-requested page size for this pagination.
+                  example: 10
+                total_size:
+                  type: integer
+                  format: int32
+                  description: The total number of items available in the full result set.
+                  example: 23
+                next_page_token:
+                  type: string
+                  description: An opaque pagination token for requesting the next page of results.
+                expiration:
+                  type: integer
+                  format: int32
+                  description: The number of seconds until `next_page_token` expires.
+        data:
+          type: array
+          description: 'A data property that contains an array of resource items. Each entry in the array is a
+
+            separate resource.
+
+            '
+          uniqueItems: true
+          items:
+            allOf:
+            - $ref: '#/components/schemas/switchover.v1.SwitchoverPair'
+            - type: object
+              required:
+              - id
+              - metadata
+              - spec
+              - status
+              properties:
+                spec:
+                  type: object
+                  required:
+                  - display_name
+                  - members
+                  - active_member
+                  - environment_crn
+    SearchFilter:
+      description: Filter a collection by a string search
+      type: string
+    ObjectMeta:
+      description: ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.
+      required:
+      - self
+      properties:
+        self:
+          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
+          type: string
+          format: uri
+          readOnly: true
+          example: https://api.confluent.cloud/v2/kafka-clusters/lkc-f3a90de
+        resource_name:
+          description: Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name
+          type: string
+          format: uri
+          readOnly: true
+          example: crn://confluent.cloud/kafka=lkc-f3a90de
+        created_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was created. It is represented in RFC3339 format and is in UTC.
+        updated_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC.
+        deleted_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC.
+      readOnly: true
+    switchover.v1.SwitchoverPair:
+      type: object
+      description: '`SwitchoverPair` represents a cluster-level Disaster Recovery pairing between two Kafka
+
+        clusters in different regions of the same environment. Exactly one member is active at any
+
+        time; the other is passive and kept in sync via a bidirectional cluster link.
+
+
+        The API allows you to list, create, read, update, and delete switchover pairs, and to trigger
+
+        a failover (promotion of the passive member) via the `:failover` operation.
+
+
+
+        Related guide: [Disaster Recovery for Kafka in Confluent Cloud](https://docs.confluent.io/cloud/current/clusters/cluster-linking/index.html).
+
+
+        ## The Switchover Pairs Model
+
+        <SchemaDefinition schemaRef="#/components/schemas/switchover.v1.SwitchoverPair" />'
+      properties:
+        api_version:
+          type: string
+          enum:
+          - switchover/v1
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - SwitchoverPair
+        id:
+          description: ID is the "natural identifier" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted ("time"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace ("space").
+          type: string
+          maxLength: 255
+          readOnly: true
+          example: dlz-f3a90de
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ObjectMeta'
+          - properties:
+              self:
+                example: https://api.confluent.cloud/switchover/v1/switchover-pairs/sw-12345
+              resource_name:
+                example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/switchover-pair=sw-12345
+        spec:
+          $ref: '#/components/schemas/switchover.v1.SwitchoverPairSpec'
+        status:
+          $ref: '#/components/schemas/switchover.v1.SwitchoverPairStatus'
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
+  securitySchemes:
+    cloud-api-key:
+      type: http
+      scheme: basic
+      description: Authenticate with Cloud API Keys using HTTP Basic Auth. Treat the Cloud API Key ID as the username and Cloud API Key Secret as the password.
+    confluent-sts-access-token:
+      type: oauth2
+      description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following OAuth 2.0.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+          scopes: {}
+    global-api-key:
+      type: http
+      scheme: basic
+      description: Authenticate with Global API Keys using HTTP Basic Auth. Treat the Global API Key ID as the username and Global API Key Secret as the password.
+    resource-api-key:
+      type: http
+      scheme: basic
+      description: Authenticate with resource-specific API Keys using HTTP Basic Auth. Treat the resource-specific API Key ID as the username and resource-specific API Key Secret as the password.
+    external-access-token:
+      type: oauth2
+      description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following OAuth 2.0.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+          scopes: {}
+    oauth:
+      type: oauth2
+      description: Authenticate with OAuth 2.0. Currently this is only supported for partner APIs.
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            partner:alter: enables partners to alter entitlements
+            partner:create: enables partners to create entitlements and signup on behalf of customers
+            partner:delete: enables partners to delete entitlements and organizations
+            partner:describe: enables partners to read and list entitlements and organizations
+x-tagGroups:
+- name: Identity Access Management (v2)
+  tags:
+  - API Keys (iam/v2)
+  - Users (iam/v2)
+  - Service Accounts (iam/v2)
+  - Invitations (iam/v2)
+  - IP Groups (iam/v2)
+  - IP Filters (iam/v2)
+  - IP Filter Summaries (iam/v2)
+  - Role Bindings (iam/v2)
+  - Identity Providers (iam/v2)
+  - Jwks (iam/v2)
+  - Identity Pools (iam/v2)
+  - Group Mappings (iam/v2/sso)
+  - Certificate Authorities (iam/v2)
+  - Certificate Identity Pools (iam/v2)
+- name: Org API (v2)
+  tags:
+  - Environments (org/v2)
+  - Organizations (org/v2)
+  - Scim Tokens (org/v2)
+- name: Notifications API (v1)
+  tags:
+  - Subscriptions (notifications/v1)
+  - Integrations (notifications/v1)
+  - Notification Types (notifications/v1)
+  - Resource Preferences (notifications/v1)
+  - Resource Subscriptions (notifications/v1)
+  - User Notifications (notifications/v1)
+- name: Cluster Mgmt for Kafka (v2)
+  tags:
+  - Clusters (cmk/v2)
+- name: Cluster Mgmt for ksqlDB (v2)
+  tags:
+  - Clusters (ksqldbcm/v2)
+- name: Connect API (v1)
+  tags:
+  - Connectors (connect/v1)
+  - Lifecycle (connect/v1)
+  - Status (connect/v1)
+  - Managed Connector Plugins (connect/v1)
+  - Offsets (connect/v1)
+  - Custom Connector Plugins (connect/v1)
+  - Presigned Urls (connect/v1)
+  - Custom Connector Runtimes (connect/v1)
+- name: Connect Artifact Management (v1)
+  tags:
+  - Connect Artifacts (cam/v1)
+  - Presigned Urls (cam/v1)
+- name: Kafka API (v3)
+  tags:
+  - Cluster (v3)
+  - Configs (v3)
+  - ACL (v3)
+  - Consumer Group (v3)
+  - Partition (v3)
+  - Topic (v3)
+  - Records (v3)
+  - Cluster Linking (v3)
+  - Share Group (v3)
+  - Streams Group (v3)
+- name: Service Quota API (v1)
+  tags:
+  - Applied Quotas (service-quota/v1)
+  - Scopes (service-quota/v1)
+- name: Partner API (v2)
+  tags:
+  - Entitlements (partner/v2)
+  - Organizations (partner/v2)
+  - Signup (partner/v2)
+- name: Cluster Mgmt for Schema Registry (v2)
+  tags:
+  - Regions (srcm/v2)
+  - Clusters (srcm/v2)
+- name: Cluster Mgmt for Schema Registry (v3)
+  tags:
+  - Clusters (srcm/v3)
+- name: Schema Registry API (v1)
+  tags:
+  - Compatibility (v1)
+  - Config (v1)
+  - Contexts (v1)
+  - Exporters (v1)
+  - Modes (v1)
+  - Schemas (v1)
+  - Subjects (v1)
+  - Key Encryption Keys (v1)
+  - Data Encryption Keys (v1)
+- name: Catalog API (v1)
+  tags:
+  - Entity (v1)
+  - Search (v1)
+  - Types (v1)
+- name: Stream Sharing API (v1)
+  tags:
+  - Provider Shared Resources (cdx/v1)
+  - Provider Shares (cdx/v1)
+  - Consumer Shared Resources (cdx/v1)
+  - Consumer Shares (cdx/v1)
+  - Shared Tokens (cdx/v1)
+  - Opt Ins (cdx/v1)
+- name: Networking (v1)
+  tags:
+  - Networks (networking/v1)
+  - Peerings (networking/v1)
+  - Transit Gateway Attachments (networking/v1)
+  - Private Link Accesses (networking/v1)
+  - Network Link Services (networking/v1)
+  - Network Link Endpoints (networking/v1)
+  - Network Link Service Associations (networking/v1)
+  - IP Addresses (networking/v1)
+  - Private Link Attachments (networking/v1)
+  - Private Link Attachment Connections (networking/v1)
+  - DNS Forwarders (networking/v1)
+  - Access Points (networking/v1)
+  - DNS Records (networking/v1)
+  - Gateways (networking/v1)
+- name: Security Token Service (v1)
+  tags:
+  - OAuth Tokens (sts/v1)
+- name: Kafka Quota (v1)
+  tags:
+  - Client Quotas (kafka-quotas/v1)
+- name: Bring Your Own Key (BYOK) Management (v1)
+  tags:
+  - Keys (byok/v1)
+- name: Billing API (v1)
+  tags:
+  - Costs (billing/v1)
+- name: Compute Pool Mgmt for Flink (v2)
+  tags:
+  - Compute Pools (fcpm/v2)
+  - Regions (fcpm/v2)
+  - Org Compute Pool Configs (fcpm/v2)
+- name: SQL API (v1)
+  tags:
+  - Statements (sql/v1)
+  - Statement Results (sql/v1)
+  - Statement Exceptions (sql/v1)
+  - Connections (sql/v1)
+  - Agents (sql/v1)
+  - Tools (sql/v1)
+  - Materialized Tables (sql/v1)
+  - Materialized Table Versions (sql/v1)
+- name: Provider Integration Management (v1)
+  tags:
+  - Integrations (pim/v1)
+- name: Provider Integration Management (v2)
+  tags:
+  - Integrations (pim/v2)
+- name: Artifact API (v1)
+  tags:
+  - Flink Artifacts (artifact/v1)
+  - Presigned Urls (artifact/v1)
+  - Flink Artifact Versions (artifact/v1)
+- name: Custom Code Logging API (v1)
+  tags:
+  - Custom Code Loggings (ccl/v1)
+- name: Tableflow (v1)
+  tags:
+  - Regions (tableflow/v1)
+  - Tableflow Topics (tableflow/v1)
+  - Catalog Integrations (tableflow/v1)
+- name: Custom Connect Plugin Management (v1)
+  tags:
+  - Custom Connect Plugins (ccpm/v1)
+  - Presigned Urls (ccpm/v1)
+  - Custom Connect Plugin Versions (ccpm/v1)
+- name: Unified Stream Manager (v1)
+  tags:
+  - Kafka Clusters (usm/v1)
+  - Connect Clusters (usm/v1)
+- name: Endpoint (v1)
+  tags:
+  - Endpoints (endpoint/v1)
+- name: Real Time Context Engine (v1)
+  tags:
+  - Rtce Topics (rtce/v1)
+  - Regions (rtce/v1)
+- name: Analytics (v1alpha1)
+  tags:
+  - Statements (query/v1alpha1)
+- name: SCIM API (v2)
+  tags:
+  - Users (scim/v2)
+- name: Switchover (v1)
+  tags:
+  - Switchover Pairs (switchover/v1)
+  - Switchover Endpoints (switchover/v1)

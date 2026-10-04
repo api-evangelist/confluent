@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-cdx-v1-consumer-shared-resource-schema.json",
+  "title": "cdx.v1.ConsumerSharedResource",
+  "description": "`ConsumerSharedResource` object contains details of the data stream\n(topic, schema registry subjects, sharing metadata) that you received through Stream Sharing.\n\n\n## The Consumer Shared Resources Model\n<SchemaDefinition schemaRef=\"#/components/schemas/cdx.v1.ConsumerSharedResource\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-consumer-shared-resources-cdx-v1-api-openapi.yml#/components/schemas/cdx.v1.ConsumerSharedResource",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "cdx/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "ConsumerSharedResource"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "cloud": {
+      "type": "string",
+      "description": "The cloud service provider of the provider shared cluster.",
+      "x-extensible-enum": [
+        "AWS",
+        "AZURE",
+        "GCP"
+      ],
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "network_connection_types": {
+      "type": "array",
+      "description": "The network connection types of the provider shared cluster. If the shared cluster is on public internet,\nthen the list will be empty\n",
+      "items": {
+        "$ref": "#/$defs/cdx.v1.ConnectionType"
+      },
+      "uniqueItems": true,
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Consumer resource display name",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of consumer resource",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "list of tags",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "schemas": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/cdx.v1.Schema"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "description": "List of schemas in JSON format. This field is work in progress and subject to changes.",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "organization_name": {
+      "type": "string",
+      "description": "Shared resource's organization name",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "organization_description": {
+      "type": "string",
+      "description": "Shared resource's organization description",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "organization_contact": {
+      "type": "string",
+      "format": "email",
+      "description": "Email of the shared resource's organization contact",
+      "x-immutable": true,
+      "readOnly": true
+    },
+    "logo_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Resource logo url",
+      "x-immutable": true,
+      "readOnly": true
+    }
+  },
+  "$defs": {
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "cdx.v1.ConnectionType": {
+      "type": "string",
+      "description": "Network connection type.",
+      "x-extensible-enum": [
+        "PRIVATELINK"
+      ]
+    },
+    "cdx.v1.Schema": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "Name of the subject"
+        },
+        "version": {
+          "type": "integer",
+          "description": "Version number",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "description": "Globally unique identifier of the schema",
+          "format": "int32"
+        },
+        "schema_type": {
+          "type": "string",
+          "description": "Schema type"
+        },
+        "schema": {
+          "type": "string",
+          "description": "Schema definition string"
+        }
+      },
+      "description": "Schema"
+    }
+  }
+}

@@ -1,0 +1,500 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-cmk-v2-cluster-schema.json",
+  "title": "cmk.v2.Cluster",
+  "description": "`Clusters` objects represent Apache Kafka Clusters on Confluent Cloud.\n\nThe API allows you to list, create, read, update, and delete your Kafka clusters.\n\n\nRelated guide: [Confluent Cloud Cluster Management for Apache Kafka APIs](https://docs.confluent.io/cloud/current/clusters/cluster-api.html).\n\n## The Clusters Model\n<SchemaDefinition schemaRef=\"#/components/schemas/cmk.v2.Cluster\" />\n\n## Quotas and Limits\nThis resource is subject to the [following quotas](https://docs.confluent.io/cloud/current/quotas/overview.html):\n\n| Quota | Description |\n| --- | --- |\n| `kafka_clusters_per_environment` | Number of clusters in one Confluent Cloud environment |",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-clusters-cmk-v2-api-openapi.yml#/components/schemas/cmk.v2.Cluster",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "cmk/v2"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "Cluster"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "spec": {
+      "$ref": "#/$defs/cmk.v2.ClusterSpec"
+    },
+    "status": {
+      "$ref": "#/$defs/cmk.v2.ClusterStatus"
+    }
+  },
+  "$defs": {
+    "EnvScopedObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "GlobalObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "cmk.v2.Basic": {
+      "type": "object",
+      "description": "The basic cluster type.\n",
+      "properties": {
+        "kind": {
+          "description": "Basic cluster type.\n",
+          "type": "string",
+          "enum": [
+            "Basic"
+          ]
+        },
+        "max_ecku": {
+          "description": "The maximum number of Elastic Confluent Kafka Units (eCKUs) that Kafka clusters should auto-scale to.\nFor more details, see [Maximum eCKU requirements](https://docs.confluent.io/cloud/current/clusters/cluster-types.html#minimum-maximum-ecku-requirements).\n",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "cmk.v2.ClusterSpec": {
+      "type": "object",
+      "description": "The desired state of the Cluster",
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "description": "The name of the cluster."
+        },
+        "availability": {
+          "type": "string",
+          "description": "The availability zone configuration of the cluster\n",
+          "x-extensible-enum": [
+            "MULTI_ZONE",
+            "SINGLE_ZONE",
+            "HIGH",
+            "LOW"
+          ]
+        },
+        "cloud": {
+          "type": "string",
+          "description": "The cloud service provider in which the cluster is running.",
+          "x-extensible-enum": [
+            "AWS",
+            "GCP",
+            "AZURE"
+          ],
+          "x-immutable": true
+        },
+        "region": {
+          "type": "string",
+          "description": "The cloud service provider region where the cluster is running.",
+          "x-immutable": true
+        },
+        "config": {
+          "description": "The configuration of the Kafka cluster.\n\nNote: Clusters can be upgraded from Basic to Standard, but cannot be downgraded from Standard to Basic.\n",
+          "default": {
+            "kind": "Basic"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/cmk.v2.Basic"
+            },
+            {
+              "$ref": "#/$defs/cmk.v2.Standard"
+            },
+            {
+              "$ref": "#/$defs/cmk.v2.Dedicated"
+            },
+            {
+              "$ref": "#/$defs/cmk.v2.Enterprise"
+            },
+            {
+              "$ref": "#/$defs/cmk.v2.Freight"
+            }
+          ]
+        },
+        "kafka_bootstrap_endpoint": {
+          "type": "string",
+          "description": "The bootstrap endpoint used by Kafka clients to connect to the cluster.\n\nDEPRECATED - Please use the `endpoints` attribute instead.\n",
+          "deprecated": true,
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "http_endpoint": {
+          "type": "string",
+          "description": "The cluster HTTP request URL.\n\nDEPRECATED - Please use the `endpoints` attribute instead.\n",
+          "format": "uri",
+          "deprecated": true,
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "api_endpoint": {
+          "type": "string",
+          "description": "The Kafka API cluster endpoint used by Kafka clients to connect to the cluster.\n\nDEPRECATED - Please use the `endpoints` attribute instead.\n",
+          "deprecated": true,
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "endpoints": {
+          "description": "A map of endpoints for connecting to the Kafka cluster,\nkeyed by access_point_id. Access Point ID 'PUBLIC' and 'PRIVATE_LINK' are reserved.\nThese can be used for different network access methods or regions.\n",
+          "allOf": [
+            {
+              "$ref": "#/$defs/cmk.v2.EndpointsMap"
+            }
+          ],
+          "readOnly": true
+        },
+        "deletion_protection": {
+          "type": "boolean",
+          "description": "Enable deletion protection for the cluster"
+        },
+        "environment": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EnvScopedObjectReference"
+            }
+          ],
+          "description": "The environment to which this belongs."
+        },
+        "network": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EnvScopedObjectReference"
+            }
+          ],
+          "description": "The network associated with this object.",
+          "x-immutable": true
+        },
+        "byok": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlobalObjectReference"
+            }
+          ],
+          "description": "Note: For Pre-BYOK v1 clusters, API responses might show both\n`encryption_key` and `byok`.\nTo manage Pre-BYOK v1 keys, refer to:\nhttps://docs.confluent.io/cloud/current/security/encrypt/byok/legacy-byok.html\n#manage-pre-byok-api-v1-self-managed-encryption-keys\n",
+          "x-immutable": true
+        }
+      },
+      "x-enable-id": true,
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    },
+    "cmk.v2.ClusterStatus": {
+      "type": "object",
+      "required": [
+        "phase"
+      ],
+      "description": "The status of the Cluster",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "PROVISIONING",
+            "PROVISIONED",
+            "FAILED"
+          ],
+          "description": "The lifecyle phase of the cluster:\n  PROVISIONED:  cluster is provisioned;\n  PROVISIONING:  cluster provisioning is in progress;\n  FAILED:  provisioning failed\n",
+          "readOnly": true
+        },
+        "cku": {
+          "description": "The number of Confluent Kafka Units (CKUs) the Dedicated cluster currently has.\n",
+          "readOnly": true,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        }
+      },
+      "readOnly": true
+    },
+    "cmk.v2.Dedicated": {
+      "type": "object",
+      "description": "A dedicated cluster with its parameters.\n",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Dedicated"
+          ],
+          "description": "Dedicated cluster type.\n"
+        },
+        "cku": {
+          "description": "The number of Confluent Kafka Units (CKUs) for Dedicated cluster types.\nMULTI_ZONE dedicated clusters must have at least two CKUs.\n",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        },
+        "encryption_key": {
+          "type": "string",
+          "description": "The id of the encryption key that is used to encrypt the data in the Kafka cluster.\n(e.g. for Amazon Web Services, the Amazon Resource Name of the key).\n",
+          "deprecated": true,
+          "x-immutable": true
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 3,
+          "description": "The list of zones the cluster is in.\n\nOn AWS, zones are AWS [AZ IDs](https://docs.aws.amazon.com/ram/latest/userguide/working-with-az-ids.html)\n (e.g. use1-az3)\n\nOn GCP, zones are GCP [zones](https://cloud.google.com/compute/docs/regions-zones)\n (e.g. us-central1-c).\n",
+          "readOnly": false,
+          "x-immutable": true
+        },
+        "release_priority": {
+          "type": "string",
+          "x-extensible-enum": [
+            "REGULAR",
+            "PRIORITY"
+          ],
+          "description": "Specifies the release priority for cluster updates. Defaults to REGULAR. Clusters with PRIORITY are updated before clusters with REGULAR.\n",
+          "default": "REGULAR"
+        }
+      },
+      "required": [
+        "kind",
+        "cku"
+      ]
+    },
+    "cmk.v2.Endpoints": {
+      "type": "object",
+      "description": "Given a gateway type, endpoints to connect to the Kafka cluster.\n",
+      "properties": {
+        "kafka_bootstrap_endpoint": {
+          "type": "string",
+          "description": "The bootstrap endpoint used by Kafka clients to connect to the cluster.\n"
+        },
+        "http_endpoint": {
+          "type": "string",
+          "description": "The REST endpoint for the Kafka cluster.\n",
+          "format": "uri"
+        },
+        "connection_type": {
+          "type": "string",
+          "description": "The type of connection used for the endpoint.\n",
+          "x-extensible-enum": [
+            "PUBLIC",
+            "PRIVATE_LINK",
+            "PRIVATE_NETWORK_INTERFACE"
+          ]
+        }
+      },
+      "required": [
+        "kafka_bootstrap_endpoint",
+        "http_endpoint",
+        "connection_type"
+      ],
+      "readOnly": true
+    },
+    "cmk.v2.EndpointsMap": {
+      "type": "object",
+      "description": "Map of endpoints for a Kafka cluster, keyed by access point ID.\n",
+      "additionalProperties": {
+        "$ref": "#/$defs/cmk.v2.Endpoints"
+      },
+      "readOnly": true
+    },
+    "cmk.v2.Enterprise": {
+      "type": "object",
+      "description": "The enterprise cluster type.\n",
+      "properties": {
+        "kind": {
+          "description": "Enterprise cluster type.\n",
+          "type": "string",
+          "enum": [
+            "Enterprise"
+          ]
+        },
+        "max_ecku": {
+          "description": "The maximum number of Elastic Confluent Kafka Units (eCKUs) that Kafka clusters should auto-scale to.\nKafka clusters with `HIGH` availability must have at least two eCKUs.\nFor more details, see [Maximum eCKU requirements](https://docs.confluent.io/cloud/current/clusters/cluster-types.html#minimum-maximum-ecku-requirements).\n",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "cmk.v2.Freight": {
+      "type": "object",
+      "description": "A freight cluster with its parameters.\n",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Freight"
+          ],
+          "description": "Freight cluster type.\n"
+        },
+        "max_ecku": {
+          "description": "The maximum number of Elastic Confluent Kafka Units (eCKUs) that Kafka clusters should auto-scale to.\nKafka clusters with `HIGH` availability must have at least two eCKUs.\nFor more details, see [Maximum eCKU requirements](https://docs.confluent.io/cloud/current/clusters/cluster-types.html#minimum-maximum-ecku-requirements).\n",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 3,
+          "description": "The list of zones the cluster is in.\n\nOn AWS, zones are AWS [AZ IDs](https://docs.aws.amazon.com/ram/latest/userguide/working-with-az-ids.html)\n (e.g. use1-az3)\n\nOn GCP, zones are GCP [zones](https://cloud.google.com/compute/docs/regions-zones)\n (e.g. us-central1-c).\n",
+          "readOnly": true,
+          "x-immutable": true
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "cmk.v2.Standard": {
+      "type": "object",
+      "description": "The standard cluster type.\n",
+      "properties": {
+        "kind": {
+          "description": "Standard cluster type.\n",
+          "type": "string",
+          "enum": [
+            "Standard"
+          ]
+        },
+        "max_ecku": {
+          "description": "The maximum number of Elastic Confluent Kafka Units (eCKUs) that Kafka clusters should auto-scale to.\nKafka clusters with `HIGH` availability must have at least two eCKUs.\nFor more details, see [Maximum eCKU requirements](https://docs.confluent.io/cloud/current/clusters/cluster-types.html#minimum-maximum-ecku-requirements).\n",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    }
+  }
+}

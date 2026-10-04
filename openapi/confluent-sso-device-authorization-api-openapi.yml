@@ -1,0 +1,334 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS SSO - Device Authorization API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: 'Endpoints for the OAuth 2.0 Device Authorization Grant flow. This flow is used by CLI
+
+    to enable SSO login.'
+  name: SSO - Device Authorization
+paths:
+  /security/1.0/oidc/device/authenticate:
+    post:
+      description: 'This initiates user authentication in CLI.
+
+
+        Response contains
+
+        1. `user_code` and `verification_uri` which are used by user to authenticate from the identity provider (IdP).
+
+        2. `key` is used to poll the IdP to check if the user has authorized and logged in.
+
+        3. `interval` to hint client about polling frequency.'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitDeviceAuthResponse'
+          description: Successful authentication initiation
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Provides user authentication details and device polling for authentication…
+      tags:
+      - SSO - Device Authorization
+      operationId: postSecurity10OidcDeviceAuthenticate
+      x-operation-id-source: derived
+  /security/1.0/oidc/device/check-auth:
+    post:
+      description: 'Checks if the user has authorized and logged in. If the user has authorized, then the response contains the auth token, and the complete flag is set to true.
+
+
+        If the user has not authorized in right time or some other error occurred, then the response contains the error details, and again complete flag is set to true.
+
+
+        Otherwise, in case of pending auth, the response contains the status, description and the complete flag is set to false.'
+      operationId: checkDeviceAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckDeviceAuthRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                authorization_pending:
+                  value:
+                    user_code: CRMCWZLK
+                    complete: false
+                    status: authorization_pending
+                    description: The device authorization is pending. Please try again later.
+                slow_down:
+                  value:
+                    user_code: CRMCWZLK
+                    complete: false
+                    status: slow_down
+                    description: Slow down the polling frequency. Please try again later.
+                expired_token:
+                  value:
+                    user_code: CRMCWZLK
+                    complete: false
+                    status: expired_token
+                    description: The device code has expired. You have already requested token.
+                authentication_success:
+                  value:
+                    user_code: CRMCWZLK
+                    complete: true
+                    status: success
+                    description: Authentication successful.
+                    auth_token: json web token
+                    expires_in: 900
+              schema:
+                $ref: '#/components/schemas/CheckDeviceAuthResponse'
+          description: Successful response
+        '403':
+          content:
+            application/json:
+              examples:
+                invalid_key:
+                  value:
+                    status_code: 403
+                    message: Invalid key!
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        '500':
+          content:
+            application/json:
+              examples:
+                wrong_token_endpoint:
+                  value:
+                    status_code: 500
+                    message: Server Error
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Some error happened when autheticating
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Provides information about current status of user authentication
+      tags:
+      - SSO - Device Authorization
+  /security/1.0/oidc/device/extend-auth:
+    post:
+      description: 'Attempts to refresh the Confluent token if applicable, based on the provided JwtPrincipal.
+
+
+        If refresh token is configured to be used, the session is extended until expiry time of new ID token requested using the refresh token.
+
+
+        Else session is extended until min(`mex`, `currentTime`+ `sessionTokenExpiryConfig`) where `mex` is the claim already present in auth token.'
+      operationId: extendDeviceAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendAuthRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    auth_token: json web token
+                    expires_in: 900
+              schema:
+                $ref: '#/components/schemas/ExtendAuthResponse'
+          description: 'Get a token with extended expiry.
+
+            '
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Extend auth by generating a new token
+      tags:
+      - SSO - Device Authorization
+components:
+  schemas:
+    ExtendAuthResponse:
+      example:
+        auth_token: auth_token
+        expires_in: 0
+      properties:
+        auth_token:
+          description: The authentication token
+          type: string
+        expires_in:
+          description: The duration (in seconds) for which the token is valid
+          format: int64
+          type: integer
+      type: object
+    ExtendAuthRequest:
+      example:
+        access_token: access_token
+        refresh_token: refresh_token
+      properties:
+        access_token:
+          description: The auth token received from the device authentication
+          type: string
+        refresh_token:
+          description: The encrypted refresh token
+          type: string
+      type: object
+    CheckDeviceAuthRequest:
+      example:
+        user_code: user_code
+        key: key
+      properties:
+        user_code:
+          description: The user code associated with the authentication request
+          type: string
+        key:
+          description: An encrypted key to check the status of authentication
+          type: string
+      required:
+      - key
+      - user_code
+      type: object
+    InitDeviceAuthResponse:
+      example:
+        user_code: CRMCWZLK
+        interval: 5
+        verification_uri: https://my-good-ipd.com/activate?user_code=CRMCWZLK
+        expires_in: 600
+        key: Ue+LZNFU6fNXBjR90Kr7hqdmbVZ1gmZnCwCJNrqHA=
+      properties:
+        user_code:
+          description: The user code for device authentication
+          example: CRMCWZLK
+          type: string
+        verification_uri:
+          description: The verification URI for the user to visit
+          example: https://my-good-ipd.com/activate?user_code=CRMCWZLK
+          type: string
+        key:
+          description: The key to be used for checking authentication
+          example: Ue+LZNFU6fNXBjR90Kr7hqdmbVZ1gmZnCwCJNrqHA=
+          type: string
+        interval:
+          description: The interval for polling to check authentication
+          example: 5
+          type: integer
+        expires_in:
+          description: The validity of verification URI in seconds. User must authorize within this time
+          example: 600
+          type: number
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    CheckDeviceAuthResponse:
+      example:
+        refresh_token: refresh_token
+        user_code: user_code
+        description: description
+        complete: true
+        error: error
+        auth_token: auth_token
+        expires_in: 0
+        status: status
+      properties:
+        user_code:
+          description: The user code associated with the authentication request
+          type: string
+        complete:
+          description: Indicates whether the authentication is complete or error happened
+          type: boolean
+        error:
+          description: The error message, if some error happened
+          type: string
+        status:
+          description: The status of the authentication process
+          type: string
+        description:
+          description: A description of the error or status
+          type: string
+        auth_token:
+          description: The authentication token, if available
+          type: string
+        refresh_token:
+          description: The encrypted refresh token, if available
+          type: string
+        expires_in:
+          description: The duration (in seconds) for which the token is valid
+          type: integer
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

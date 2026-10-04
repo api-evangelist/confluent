@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-iam-v2-certificate-identity-pool-schema.json",
+  "title": "iam.v2.CertificateIdentityPool",
+  "description": "`Identitypool` objects represent workload identities in Confluent Cloud.\n\nThe API allows you to list, create, read, update, and delete your identity pools associated\nwith Certificate Authorities\n\n\nRelated guide: [Manage Certificate Identity Pools for Granular Client Access Management](https://docs.confluent.io/cloud/current/access-management/authenticate/mtls/configure.html#step-2-create-certificate-identity-pools-for-granular-access-control).\n\n## The Certificate Identity Pools Model\n<SchemaDefinition schemaRef=\"#/components/schemas/iam.v2.CertificateIdentityPool\" />\n\n## Quotas and Limits\nThis resource is subject to the [following quotas](https://docs.confluent.io/cloud/current/quotas/overview.html):\n\n| Quota | Description |\n| --- | --- |\n| `identity_pools_per_certificate_authority` | Number of Identity Pools per Certificate Authority |",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-certificate-identity-pools-iam-v2-api-openapi.yml#/components/schemas/iam.v2.CertificateIdentityPool",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "iam/v2"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "CertificateIdentityPool"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "display_name": {
+      "type": "string",
+      "description": "The name of the `IdentityPool`."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of how this `IdentityPool` is used"
+    },
+    "external_identifier": {
+      "type": "string",
+      "description": "The certificate field that will be used to represent the\npool's external identifier for audit logging."
+    },
+    "filter": {
+      "type": "string",
+      "description": "A filter expression in [Supported Common Expression Language (CEL)](https://docs.confluent.io/cloud/current/access-management/authenticate/mtls/cel-filters.html) that specifies which identities can authenticate using your certificate identity pool (see [CEL filter for mTLS](https://docs.confluent.io/cloud/current/access-management/authenticate/mtls/cel-filters.html) for more details).",
+      "maxLength": 300
+    },
+    "principal": {
+      "type": "string",
+      "description": "Represents the federated identity associated with this pool.",
+      "readOnly": true
+    },
+    "state": {
+      "type": "string",
+      "x-extensible-enum": [
+        "ENABLED"
+      ],
+      "description": "The current state of the identity pool",
+      "readOnly": true
+    }
+  },
+  "$defs": {
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    }
+  }
+}

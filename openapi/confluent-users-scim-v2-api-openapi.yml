@@ -1,0 +1,1555 @@
+openapi: 3.2.0
+info:
+  title: Confluent Cloud Users (scim/v2) API
+  version: ''
+  x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
+  x-audience: external-public
+  x-logo:
+    url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
+  description: '# Introduction
+
+
+    Note
+
+
+    This documents the collection of Confluent Cloud APIs.'
+servers:
+- url: https://api.confluent.cloud
+  description: Confluent Cloud API
+tags:
+- name: Users (scim/v2)
+  description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+    `Users` objects represent user accounts in your Confluent Cloud organization that are
+
+    managed through your SSO identity provider integration.'
+paths:
+  /scim/v2/sso/{connection_name}/Users:
+    x-lifecycle-stage: General Availability
+    x-self-access: true
+    post:
+      summary: Create a User
+      requestBody:
+        content:
+          application/scim+json:
+            schema:
+              type: object
+              required:
+              - schemas
+              - userName
+              properties:
+                schemas:
+                  type: array
+                  description: The SCIM schema.
+                  items:
+                    type: string
+                    example: urn:ietf:params:scim:schemas:core:2.0:User
+                userName:
+                  type: string
+                  description: 'The user''s email address, which serves as their unique identifier in Confluent Cloud.
+
+                    '
+                  example: marty.mcfly@example.com
+                name:
+                  $ref: '#/components/schemas/scim.v2.Name'
+      x-lifecycle-stage: General Availability
+      x-self-access: true
+      operationId: createScimV2User
+      description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+        Make a request to create a user.'
+      parameters:
+      - name: connection_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The Connection Name
+      tags:
+      - Users (scim/v2)
+      security:
+      - cloud-api-key: []
+      - confluent-sts-access-token: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.User'
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+              description: The URI of the created User resource.
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        '400':
+          description: Bad Request
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '400'
+                detail: Bad Request
+        '401':
+          description: Unauthorized
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            WWW-Authenticate:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+              example: Basic error="invalid_key", error_description="The API Key is invalid"
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '401'
+                detail: Unauthorized
+        '402':
+          description: Over Quota
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '402'
+                detail: Over Quota
+        '403':
+          description: Forbidden
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '403'
+                detail: Forbidden
+        '409':
+          description: Conflict
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://api.confluent.cloud/{object}/{id}
+              description: Resource URI of conflicting resource
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '409'
+                detail: Conflict
+        '429':
+          description: Rate Limit Exceeded
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Retry-After:
+              schema:
+                type: integer
+              description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '429'
+                detail: Rate Limit Exceeded
+        '500':
+          description: Internal Server Error
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '500'
+                detail: Internal Server Error
+    get:
+      summary: Search for Users
+      x-lifecycle-stage: General Availability
+      x-self-access: true
+      x-name: scim.v2.Users
+      operationId: findScimV2User
+      description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+        Make a request to find a user.
+
+
+        Search for users in the organization using SCIM filter expressions. This endpoint supports
+
+        filtering by user attributes such as userName to locate existing users or verify if a user
+
+        account already exists before provisioning.'
+      parameters:
+      - name: filter
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SearchFilter'
+        example: userName eq "marty.mcfly@example.com"
+        description: 'SCIM filter expression for searching users. Supports filtering by user attributes
+
+          using SCIM filter syntax (e.g., `userName eq "user@example.com"` to find a user by email).
+
+          '
+      - name: connection_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The Connection Name
+      tags:
+      - Users (scim/v2)
+      security:
+      - cloud-api-key: []
+      - confluent-sts-access-token: []
+      responses:
+        '200':
+          description: OK
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                allOf:
+                - type: object
+                  description: 'A SCIM ListResponse containing a list of User resources and pagination information.
+
+                    '
+                  properties:
+                    schemas:
+                      type: array
+                      description: The SCIM schema.
+                      items:
+                        type: string
+                        example: urn:ietf:params:scim:api:messages:2.0:ListResponse
+                    totalResults:
+                      type: integer
+                      format: int32
+                      description: The total number of results returned by the list or query operation.
+                      example: 2
+                    startIndex:
+                      type: integer
+                      format: int32
+                      description: The 1-based index of the first result in the current set of list results.
+                      example: 1
+                    itemsPerPage:
+                      type: integer
+                      format: int32
+                      description: The number of resources returned in a list response page.
+                      example: 1
+                    Resources:
+                      type: array
+                      description: A multi-valued list of complex objects containing the requested resources.
+                      items:
+                        $ref: '#/components/schemas/scim.v2.User'
+        '400':
+          description: Bad Request
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '400'
+                detail: Bad Request
+        '401':
+          description: Unauthorized
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            WWW-Authenticate:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+              example: Basic error="invalid_key", error_description="The API Key is invalid"
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '401'
+                detail: Unauthorized
+        '403':
+          description: Forbidden
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '403'
+                detail: Forbidden
+        '429':
+          description: Rate Limit Exceeded
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Retry-After:
+              schema:
+                type: integer
+              description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '429'
+                detail: Rate Limit Exceeded
+        '500':
+          description: Internal Server Error
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '500'
+                detail: Internal Server Error
+  /scim/v2/sso/{connection_name}/Users/{id}:
+    x-lifecycle-stage: General Availability
+    x-self-access: true
+    get:
+      summary: Read a User
+      parameters:
+      - name: connection_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The Connection Name
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the users.
+      x-lifecycle-stage: General Availability
+      x-self-access: true
+      operationId: getScimV2User
+      description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+        Make a request to read a user.'
+      tags:
+      - Users (scim/v2)
+      security:
+      - cloud-api-key: []
+      - confluent-sts-access-token: []
+      responses:
+        '200':
+          description: OK
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.User'
+        '400':
+          description: Bad Request
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '400'
+                detail: Bad Request
+        '401':
+          description: Unauthorized
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            WWW-Authenticate:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+              example: Basic error="invalid_key", error_description="The API Key is invalid"
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '401'
+                detail: Unauthorized
+        '403':
+          description: Forbidden
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '403'
+                detail: Forbidden
+        '404':
+          description: Not Found
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '404'
+                detail: Not Found
+        '429':
+          description: Rate Limit Exceeded
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Retry-After:
+              schema:
+                type: integer
+              description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '429'
+                detail: Rate Limit Exceeded
+        '500':
+          description: Internal Server Error
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '500'
+                detail: Internal Server Error
+    put:
+      summary: Update a User
+      parameters:
+      - name: connection_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The Connection Name
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the users.
+      requestBody:
+        content:
+          application/scim+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/scim.v2.User'
+              - type: object
+                required:
+                - schemas
+                - userName
+      x-lifecycle-stage: General Availability
+      x-self-access: true
+      operationId: updateScimV2User
+      description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+        Make a request to update a user.'
+      tags:
+      - Users (scim/v2)
+      security:
+      - cloud-api-key: []
+      - confluent-sts-access-token: []
+      responses:
+        '200':
+          description: OK
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.User'
+        '400':
+          description: Bad Request
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '400'
+                detail: Bad Request
+        '401':
+          description: Unauthorized
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            WWW-Authenticate:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+              example: Basic error="invalid_key", error_description="The API Key is invalid"
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '401'
+                detail: Unauthorized
+        '403':
+          description: Forbidden
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '403'
+                detail: Forbidden
+        '404':
+          description: Not Found
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '404'
+                detail: Not Found
+        '429':
+          description: Rate Limit Exceeded
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Retry-After:
+              schema:
+                type: integer
+              description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '429'
+                detail: Rate Limit Exceeded
+        '500':
+          description: Internal Server Error
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '500'
+                detail: Internal Server Error
+    delete:
+      summary: Delete a User
+      parameters:
+      - name: connection_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The Connection Name
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the users.
+      x-lifecycle-stage: General Availability
+      x-self-access: true
+      operationId: deleteScimV2User
+      description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+        Make a request to delete a user.
+
+
+        Permanently removes the user from the organization. This operation will also cascade delete
+
+        all of the user''s associated resources, including API keys and any other user-specific configurations.
+
+        This action cannot be undone.'
+      tags:
+      - Users (scim/v2)
+      security:
+      - cloud-api-key: []
+      - confluent-sts-access-token: []
+      responses:
+        '204':
+          description: No Content
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+        '400':
+          description: Bad Request
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '400'
+                detail: Bad Request
+        '401':
+          description: Unauthorized
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            WWW-Authenticate:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+              example: Basic error="invalid_key", error_description="The API Key is invalid"
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '401'
+                detail: Unauthorized
+        '403':
+          description: Forbidden
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '403'
+                detail: Forbidden
+        '404':
+          description: Not Found
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '404'
+                detail: Not Found
+        '429':
+          description: Rate Limit Exceeded
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Retry-After:
+              schema:
+                type: integer
+              description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '429'
+                detail: Rate Limit Exceeded
+        '500':
+          description: Internal Server Error
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '500'
+                detail: Internal Server Error
+    patch:
+      summary: Patch a User
+      parameters:
+      - name: connection_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The Connection Name
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the users.
+      requestBody:
+        content:
+          application/scim+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/scim.v2.PatchOp'
+              - type: object
+                required:
+                - schemas
+          application/json:
+            schema:
+              $ref: '#/components/schemas/scim.v2.PatchOp'
+      x-lifecycle-stage: General Availability
+      x-self-access: true
+      x-name: scim.v2.Users
+      operationId: patchScimV2User
+      description: '![General Availability](#section/Versioning/API-Lifecycle-Policy)
+
+
+        Make a request to patch a user.'
+      tags:
+      - Users (scim/v2)
+      security:
+      - cloud-api-key: []
+      - confluent-sts-access-token: []
+      responses:
+        '200':
+          description: OK
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.User'
+        '400':
+          description: Bad Request
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '400'
+                detail: Bad Request
+        '401':
+          description: Unauthorized
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            WWW-Authenticate:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+              example: Basic error="invalid_key", error_description="The API Key is invalid"
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '401'
+                detail: Unauthorized
+        '403':
+          description: Forbidden
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '403'
+                detail: Forbidden
+        '404':
+          description: Not Found
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '404'
+                detail: Not Found
+        '429':
+          description: Rate Limit Exceeded
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: The maximum number of requests you're permitted to make per time period.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests remaining in the current rate limit window.
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: "The relative time in seconds until the current rate-limit window resets.  \n \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+            Retry-After:
+              schema:
+                type: integer
+              description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '429'
+                detail: Rate Limit Exceeded
+        '500':
+          description: Internal Server Error
+          x-minispec-transform-ignore: true
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: The unique identifier for the API request.
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim.v2.Error'
+              example:
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:Error
+                status: '500'
+                detail: Internal Server Error
+components:
+  schemas:
+    scim.v2.Error:
+      type: object
+      description: 'Standard SCIM error response format containing error details and status information.
+
+        Returned when SCIM operations encounter validation errors or other issues.
+
+        '
+      properties:
+        schemas:
+          type: array
+          description: The SCIM schema for the error response.
+          items:
+            type: string
+            example: urn:ietf:params:scim:api:messages:2.0:Error
+        status:
+          type: string
+          description: The HTTP status code of the error response.
+        detail:
+          type: string
+          description: A human-readable description of the error.
+    scim.v2.Meta:
+      description: Metadata about the SCIM resource.
+      type: object
+      readOnly: true
+      properties:
+        resourceType:
+          type: string
+          description: The name of the resource type of the resource.
+          example: User
+        created:
+          type: string
+          format: date-time
+          description: The DateTime the Resource was added to Confluent Cloud.
+          example: '2025-01-01T12:00:00Z'
+        lastModified:
+          type: string
+          format: date-time
+          description: The most recent DateTime that the details of this Resource were updated.
+          example: '2025-01-01T12:00:00Z'
+        location:
+          type: string
+          format: uri
+          description: The URI of the SCIM resource being returned.
+          example: https://api.confluent.cloud/scim/v2/Users/u-12345
+    SearchFilter:
+      description: Filter a collection by a string search
+      type: string
+    scim.v2.User:
+      type: object
+      description: 'Represents a user account in Confluent Cloud managed through SCIM protocol.
+
+        '
+      properties:
+        schemas:
+          type: array
+          description: The SCIM schema.
+          items:
+            type: string
+            example: urn:ietf:params:scim:schemas:core:2.0:User
+        id:
+          type: string
+          maxLength: 255
+          description: Unique identifier for the User. Automatically assigned by Confluent Cloud.
+          readOnly: true
+          example: u-12345
+        userName:
+          type: string
+          description: 'The user''s email address, which serves as their unique identifier in Confluent Cloud.
+
+            '
+          example: marty.mcfly@example.com
+        name:
+          type: object
+          description: The user's full name.
+          allOf:
+          - $ref: '#/components/schemas/scim.v2.Name'
+        active:
+          type: boolean
+          description: 'Indicates whether the user account is active and can access Confluent Cloud resources.
+
+            '
+          example: true
+        meta:
+          type: object
+          description: Metadata about the resource.
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/scim.v2.Meta'
+    scim.v2.Name:
+      description: The user's full name.
+      type: object
+      properties:
+        givenName:
+          type: string
+          description: The user's first name.
+          example: Marty
+        familyName:
+          type: string
+          description: The user's last name.
+          example: McFly
+    scim.v2.PatchOp:
+      type: object
+      description: 'SCIM Patch operation for making partial updates to user attributes.
+
+        Supports add, remove, and replace operations on specific user properties
+
+        without requiring a full user object update.
+
+        '
+      properties:
+        api_version:
+          type: string
+          enum:
+          - scim/v2
+          description: APIVersion defines the schema version of this representation of a resource.
+          readOnly: true
+        kind:
+          type: string
+          description: Kind defines the object this REST resource represents.
+          readOnly: true
+          enum:
+          - PatchOp
+        id:
+          description: ID is the "natural identifier" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted ("time"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace ("space").
+          type: string
+          maxLength: 255
+          readOnly: true
+          example: dlz-f3a90de
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ObjectMeta'
+          - properties:
+              self:
+                example: https://api.confluent.cloud/scim/v2/patch-ops/po-12345
+              resource_name:
+                example: crn://confluent.cloud/organization=9bb441c4-edef-46ac-8a41-c49e44a3fd9a/patch-op=po-12345
+        schemas:
+          type: array
+          description: The SCIM schema.
+          items:
+            type: string
+            example: urn:ietf:params:scim:api:messages:2.0:PatchOp
+        Operations:
+          type: array
+          description: A list of patch operations.
+          items:
+            type: object
+            required:
+            - op
+            properties:
+              op:
+                type: string
+                description: The operation to perform.
+                enum:
+                - add
+                - remove
+                - replace
+                example: replace
+              path:
+                type: string
+                description: The attribute path describing the target of the operation.
+                example: active
+              value:
+                oneOf:
+                - type: string
+                - type: boolean
+                - type: object
+                - type: array
+                description: The value to be used within the operation.
+                example: false
+    ObjectMeta:
+      description: ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.
+      required:
+      - self
+      properties:
+        self:
+          description: Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time
+          type: string
+          format: uri
+          readOnly: true
+          example: https://api.confluent.cloud/v2/kafka-clusters/lkc-f3a90de
+        resource_name:
+          description: Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name
+          type: string
+          format: uri
+          readOnly: true
+          example: crn://confluent.cloud/kafka=lkc-f3a90de
+        created_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was created. It is represented in RFC3339 format and is in UTC.
+        updated_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC.
+        deleted_at:
+          type: string
+          format: date-time
+          example: '2006-01-02T15:04:05-07:00'
+          readOnly: true
+          description: The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC.
+      readOnly: true
+  securitySchemes:
+    cloud-api-key:
+      type: http
+      scheme: basic
+      description: Authenticate with Cloud API Keys using HTTP Basic Auth. Treat the Cloud API Key ID as the username and Cloud API Key Secret as the password.
+    confluent-sts-access-token:
+      type: oauth2
+      description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following OAuth 2.0.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+          scopes: {}
+    global-api-key:
+      type: http
+      scheme: basic
+      description: Authenticate with Global API Keys using HTTP Basic Auth. Treat the Global API Key ID as the username and Global API Key Secret as the password.
+    resource-api-key:
+      type: http
+      scheme: basic
+      description: Authenticate with resource-specific API Keys using HTTP Basic Auth. Treat the resource-specific API Key ID as the username and resource-specific API Key Secret as the password.
+    external-access-token:
+      type: oauth2
+      description: Authenticate with Confluent API using this credentials (JSON Web Tokens) following OAuth 2.0.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.confluent.cloud/sts/v1/oauth2/token
+          scopes: {}
+    oauth:
+      type: oauth2
+      description: Authenticate with OAuth 2.0. Currently this is only supported for partner APIs.
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            partner:alter: enables partners to alter entitlements
+            partner:create: enables partners to create entitlements and signup on behalf of customers
+            partner:delete: enables partners to delete entitlements and organizations
+            partner:describe: enables partners to read and list entitlements and organizations
+x-tagGroups:
+- name: Identity Access Management (v2)
+  tags:
+  - API Keys (iam/v2)
+  - Users (iam/v2)
+  - Service Accounts (iam/v2)
+  - Invitations (iam/v2)
+  - IP Groups (iam/v2)
+  - IP Filters (iam/v2)
+  - IP Filter Summaries (iam/v2)
+  - Role Bindings (iam/v2)
+  - Identity Providers (iam/v2)
+  - Jwks (iam/v2)
+  - Identity Pools (iam/v2)
+  - Group Mappings (iam/v2/sso)
+  - Certificate Authorities (iam/v2)
+  - Certificate Identity Pools (iam/v2)
+- name: Org API (v2)
+  tags:
+  - Environments (org/v2)
+  - Organizations (org/v2)
+  - Scim Tokens (org/v2)
+- name: Notifications API (v1)
+  tags:
+  - Subscriptions (notifications/v1)
+  - Integrations (notifications/v1)
+  - Notification Types (notifications/v1)
+  - Resource Preferences (notifications/v1)
+  - Resource Subscriptions (notifications/v1)
+  - User Notifications (notifications/v1)
+- name: Cluster Mgmt for Kafka (v2)
+  tags:
+  - Clusters (cmk/v2)
+- name: Cluster Mgmt for ksqlDB (v2)
+  tags:
+  - Clusters (ksqldbcm/v2)
+- name: Connect API (v1)
+  tags:
+  - Connectors (connect/v1)
+  - Lifecycle (connect/v1)
+  - Status (connect/v1)
+  - Managed Connector Plugins (connect/v1)
+  - Offsets (connect/v1)
+  - Custom Connector Plugins (connect/v1)
+  - Presigned Urls (connect/v1)
+  - Custom Connector Runtimes (connect/v1)
+- name: Connect Artifact Management (v1)
+  tags:
+  - Connect Artifacts (cam/v1)
+  - Presigned Urls (cam/v1)
+- name: Kafka API (v3)
+  tags:
+  - Cluster (v3)
+  - Configs (v3)
+  - ACL (v3)
+  - Consumer Group (v3)
+  - Partition (v3)
+  - Topic (v3)
+  - Records (v3)
+  - Cluster Linking (v3)
+  - Share Group (v3)
+  - Streams Group (v3)
+- name: Service Quota API (v1)
+  tags:
+  - Applied Quotas (service-quota/v1)
+  - Scopes (service-quota/v1)
+- name: Partner API (v2)
+  tags:
+  - Entitlements (partner/v2)
+  - Organizations (partner/v2)
+  - Signup (partner/v2)
+- name: Cluster Mgmt for Schema Registry (v2)
+  tags:
+  - Regions (srcm/v2)
+  - Clusters (srcm/v2)
+- name: Cluster Mgmt for Schema Registry (v3)
+  tags:
+  - Clusters (srcm/v3)
+- name: Schema Registry API (v1)
+  tags:
+  - Compatibility (v1)
+  - Config (v1)
+  - Contexts (v1)
+  - Exporters (v1)
+  - Modes (v1)
+  - Schemas (v1)
+  - Subjects (v1)
+  - Key Encryption Keys (v1)
+  - Data Encryption Keys (v1)
+- name: Catalog API (v1)
+  tags:
+  - Entity (v1)
+  - Search (v1)
+  - Types (v1)
+- name: Stream Sharing API (v1)
+  tags:
+  - Provider Shared Resources (cdx/v1)
+  - Provider Shares (cdx/v1)
+  - Consumer Shared Resources (cdx/v1)
+  - Consumer Shares (cdx/v1)
+  - Shared Tokens (cdx/v1)
+  - Opt Ins (cdx/v1)
+- name: Networking (v1)
+  tags:
+  - Networks (networking/v1)
+  - Peerings (networking/v1)
+  - Transit Gateway Attachments (networking/v1)
+  - Private Link Accesses (networking/v1)
+  - Network Link Services (networking/v1)
+  - Network Link Endpoints (networking/v1)
+  - Network Link Service Associations (networking/v1)
+  - IP Addresses (networking/v1)
+  - Private Link Attachments (networking/v1)
+  - Private Link Attachment Connections (networking/v1)
+  - DNS Forwarders (networking/v1)
+  - Access Points (networking/v1)
+  - DNS Records (networking/v1)
+  - Gateways (networking/v1)
+- name: Security Token Service (v1)
+  tags:
+  - OAuth Tokens (sts/v1)
+- name: Kafka Quota (v1)
+  tags:
+  - Client Quotas (kafka-quotas/v1)
+- name: Bring Your Own Key (BYOK) Management (v1)
+  tags:
+  - Keys (byok/v1)
+- name: Billing API (v1)
+  tags:
+  - Costs (billing/v1)
+- name: Compute Pool Mgmt for Flink (v2)
+  tags:
+  - Compute Pools (fcpm/v2)
+  - Regions (fcpm/v2)
+  - Org Compute Pool Configs (fcpm/v2)
+- name: SQL API (v1)
+  tags:
+  - Statements (sql/v1)
+  - Statement Results (sql/v1)
+  - Statement Exceptions (sql/v1)
+  - Connections (sql/v1)
+  - Agents (sql/v1)
+  - Tools (sql/v1)
+  - Materialized Tables (sql/v1)
+  - Materialized Table Versions (sql/v1)
+- name: Provider Integration Management (v1)
+  tags:
+  - Integrations (pim/v1)
+- name: Provider Integration Management (v2)
+  tags:
+  - Integrations (pim/v2)
+- name: Artifact API (v1)
+  tags:
+  - Flink Artifacts (artifact/v1)
+  - Presigned Urls (artifact/v1)
+  - Flink Artifact Versions (artifact/v1)
+- name: Custom Code Logging API (v1)
+  tags:
+  - Custom Code Loggings (ccl/v1)
+- name: Tableflow (v1)
+  tags:
+  - Regions (tableflow/v1)
+  - Tableflow Topics (tableflow/v1)
+  - Catalog Integrations (tableflow/v1)
+- name: Custom Connect Plugin Management (v1)
+  tags:
+  - Custom Connect Plugins (ccpm/v1)
+  - Presigned Urls (ccpm/v1)
+  - Custom Connect Plugin Versions (ccpm/v1)
+- name: Unified Stream Manager (v1)
+  tags:
+  - Kafka Clusters (usm/v1)
+  - Connect Clusters (usm/v1)
+- name: Endpoint (v1)
+  tags:
+  - Endpoints (endpoint/v1)
+- name: Real Time Context Engine (v1)
+  tags:
+  - Rtce Topics (rtce/v1)
+  - Regions (rtce/v1)
+- name: Analytics (v1alpha1)
+  tags:
+  - Statements (query/v1alpha1)
+- name: SCIM API (v2)
+  tags:
+  - Users (scim/v2)
+- name: Switchover (v1)
+  tags:
+  - Switchover Pairs (switchover/v1)
+  - Switchover Endpoints (switchover/v1)

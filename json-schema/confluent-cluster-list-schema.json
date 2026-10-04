@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-cluster-list-schema.json",
+  "title": "ClusterList",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-clusters-api-openapi.yml#/components/schemas/ClusterList",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Cluster"
+      }
+    }
+  },
+  "$defs": {
+    "Cluster": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "cluster_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "availability": {
+          "type": "string"
+        },
+        "cloud": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

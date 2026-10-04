@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-usm-v1-connect-cluster-list-schema.json",
+  "title": "usm.v1.ConnectClusterList",
+  "description": "`ConnectCluster` object represent Confluent Platform Connect clusters registered with Confluent Cloud.\nThe API allows you to create and delete ConnectCluster.\n\n\n## The Connect Clusters Model\n<SchemaDefinition schemaRef=\"#/components/schemas/usm.v1.ConnectCluster\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-connect-clusters-usm-v1-api-openapi.yml#/components/schemas/usm.v1.ConnectClusterList",
+  "type": "object",
+  "required": [
+    "api_version",
+    "kind",
+    "metadata",
+    "data"
+  ],
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "usm/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "ConnectClusterList"
+      ]
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ListMeta"
+        },
+        {
+          "properties": {
+            "first": {},
+            "last": {},
+            "prev": {},
+            "next": {}
+          }
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "description": "A data property that contains an array of resource items. Each entry in the array is a separate resource.",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/usm.v1.ConnectCluster"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "confluent_platform_connect_cluster_id",
+              "kafka_cluster_id",
+              "environment"
+            ]
+          }
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "EnvScopedObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "ListMeta": {
+      "type": "object",
+      "description": "ListMeta describes metadata that resource collections may have",
+      "properties": {
+        "first": {
+          "description": "A link to the first page of results. If a response does not contain a first link, then direct navigation to the first page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "last": {
+          "description": "A link to the last page of results. If a response does not contain a last link, then direct navigation to the last page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "prev": {
+          "description": "A link to the previous page of results. If a response does not contain a prev link, then either there is no previous data or backwards traversal through the result set is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "next": {
+          "description": "A link to the next page of results. If a response does not contain a next link, then there is no more data available.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "total_size": {
+          "description": "Number of records in the full result set. This response may be paginated and have a smaller number of records.",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
+        }
+      }
+    },
+    "usm.v1.ConnectCluster": {
+      "type": "object",
+      "description": "`ConnectCluster` object represent Confluent Platform Connect clusters registered with Confluent Cloud.\nThe API allows you to create and delete ConnectCluster.\n\n\n## The Connect Clusters Model\n<SchemaDefinition schemaRef=\"#/components/schemas/usm.v1.ConnectCluster\" />",
+      "properties": {
+        "api_version": {
+          "type": "string",
+          "enum": [
+            "usm/v1"
+          ],
+          "description": "APIVersion defines the schema version of this representation of a resource.",
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind defines the object this REST resource represents.",
+          "readOnly": true,
+          "enum": [
+            "ConnectCluster"
+          ]
+        },
+        "id": {
+          "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+          "type": "string",
+          "maxLength": 255,
+          "readOnly": true
+        },
+        "confluent_platform_connect_cluster_id": {
+          "type": "string",
+          "description": "The unique identifier of the Connect cluster within the Confluent Platform environment.",
+          "x-immutable": true
+        },
+        "kafka_cluster_id": {
+          "type": "string",
+          "description": "The unique identifier of the metadata Kafka cluster for the Connect Cluster.\n",
+          "x-immutable": true
+        },
+        "usm_kafka_cluster_id": {
+          "type": "string",
+          "description": "The unique identifier of the metadata Kafka cluster for the Connect Cluster.",
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "cloud": {
+          "type": "string",
+          "description": "The cloud service provider where the metadata for the Connect Cluster should be stored.\nThis field is optional. If provided, 'region' must also be provided.\nIf neither 'cloud' nor 'region' are provided, the cloud provider of the associated\nmetadata Kafka cluster (identified by 'kafka_cluster_id') will be used as a fallback.\n",
+          "x-extensible-enum": [
+            "AWS",
+            "GCP",
+            "AZURE"
+          ],
+          "x-immutable": true
+        },
+        "region": {
+          "type": "string",
+          "description": "The home region of the Confluent Platform Connect cluster where the metadata should be stored.\nThis field is optional. If provided, 'cloud' must also be provided.\nIf neither 'cloud' nor 'region' are provided, the home region of the associated\nmetadata Kafka cluster (identified by 'kafka_cluster_id') will be used as a fallback.\n",
+          "x-immutable": true
+        },
+        "environment": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EnvScopedObjectReference"
+            }
+          ],
+          "description": "The environment to which this belongs.",
+          "x-immutable": true
+        }
+      }
+    }
+  }
+}

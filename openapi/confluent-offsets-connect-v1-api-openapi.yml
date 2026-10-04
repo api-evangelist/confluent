@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Offsets (connect/v1) API
+  title: Confluent Offsets (connect/v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Offsets (connect/v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -113,6 +107,9 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/connect.v1.DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connectors/{connector_name}/offsets/request:
     x-lifecycle-stage: General Availability
     parameters:
@@ -219,6 +216,9 @@ paths:
               delete:
                 value:
                   type: DELETE
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connectors/{connector_name}/offsets/request/status:
     x-lifecycle-stage: General Availability
     parameters:
@@ -336,37 +336,152 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/connect.v1.DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
 components:
+  responses:
+    connect.v1.ResourceNotFoundError:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 404
+              message: resource not found
+    connect.v1.DefaultSystemError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 500
+              message: Oops, something went wrong
+    connect.v1.ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 403
+              message: Forbidden
+    connect.v1.UnauthenticatedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 401
+              message: Unauthorized
+    connect.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 400
+              message: Bad Request
+    RateLimitError:
+      description: Rate Limit Exceeded
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: The maximum number of requests you're permitted to make per time period.
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: The number of requests remaining in the current rate limit window.
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        Retry-After:
+          schema:
+            type: integer
+          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
   schemas:
-    connect.v1.ConnectorError:
+    connect.v1.AlterOffsetRequestInfo:
       type: object
+      description: The request made to alter offsets.
       properties:
-        error:
+        id:
+          type: string
+          description: The ID of the connector.
+        name:
+          type: string
+          description: The name of the connector.
+        offsets:
+          $ref: '#/components/schemas/connect.v1.Offsets'
+        requested_at:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2024-02-20 15:14:19+00:00
+          description: The time at which the request was made. The time is in UTC, ISO 8601 format.
+        type:
+          $ref: '#/components/schemas/connect.v1.AlterOffsetRequestType'
+      required:
+      - id
+      - name
+      - type
+      - requested_at
+    connect.v1.ConnectorOffsets:
+      type: object
+      description: Offsets for a connector
+      properties:
+        name:
+          type: string
+          description: The name of the connector.
+        id:
+          type: string
+          description: The ID of the connector.
+        offsets:
+          $ref: '#/components/schemas/connect.v1.Offsets'
+        metadata:
           type: object
-          description: Connector Error with error code and message.
+          description: Metadata of the connector offset.
           properties:
-            code:
-              type: integer
-              description: Error code for the type of error
-            message:
+            observed_at:
               type: string
-              description: Human readable error message
+              format: date-time
+              example: 2024-02-20 15:14:19+00:00
+              readOnly: true
+              description: The time at which the offsets were observed. The time is in UTC, ISO 8601 format.
     connect.v1.AlterOffsetRequestType:
       type: string
       enum:
       - PATCH
       - DELETE
       description: "The type of alter operation. PATCH will update the offset to the provided values.\nThe update will only happen for the partitions provided in the request. \nDELETE will delete the offset for the provided partitions and reset them back to the\nbase state. It is as if, a fresh new connector was created.\n\nFor sink connectors PATCH/DELETE will move the offsets to the provided point in the \ntopic partition. If the offset provided is not present in the topic partition it will\nby default reset to the earliest offset in the topic partition.\n\nFor source connectors, post PATCH/DELETE the connector will attempt to read from the \nposition defined in the altered offsets."
-    connect.v1.AlterOffsetRequest:
-      type: object
-      description: Request to alter the offset of a connector. The offsets parameter is options for DELETE type.
-      properties:
-        type:
-          $ref: '#/components/schemas/connect.v1.AlterOffsetRequestType'
-        offsets:
-          $ref: '#/components/schemas/connect.v1.Offsets'
-      required:
-      - type
+    connect.v1.Offsets:
+      type: array
+      description: Array of offsets which are categorised into partitions.
+      items:
+        type: object
+        properties:
+          partition:
+            type: object
+            additionalProperties: true
+            description: "The partition information. For sink connectors this is the kafka topic and \npartition. For source connectors this is depends on the partitions defined by the \nsource connector. For example, the table which this task is pulling data from in a\nJDBC based MySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
+          offset:
+            type: object
+            additionalProperties: true
+            description: "The offset of the partition. For sink connectors this is the kafka offset. For \nsource connectors this is depends on the offset defined by the source connector. \nFor example, the timestamp and incrementing column info in a table, for a JDBC based \nMySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
     connect.v1.AlterOffsetStatus:
       type: object
       description: "Status of the alter offset operation. The previous offsets in the response \nis the offsets that the connector last processed, before the offsets were altered,\nvia a patch or delete operation."
@@ -403,141 +518,29 @@ components:
       required:
       - request
       - status
-    connect.v1.Offsets:
-      type: array
-      description: Array of offsets which are categorised into partitions.
-      items:
-        type: object
-        properties:
-          partition:
-            type: object
-            additionalProperties: true
-            description: "The partition information. For sink connectors this is the kafka topic and \npartition. For source connectors this is depends on the partitions defined by the \nsource connector. For example, the table which this task is pulling data from in a\nJDBC based MySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
-          offset:
-            type: object
-            additionalProperties: true
-            description: "The offset of the partition. For sink connectors this is the kafka offset. For \nsource connectors this is depends on the offset defined by the source connector. \nFor example, the timestamp and incrementing column info in a table, for a JDBC based \nMySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
-    connect.v1.ConnectorOffsets:
+    connect.v1.ConnectorError:
       type: object
-      description: Offsets for a connector
       properties:
-        name:
-          type: string
-          description: The name of the connector.
-        id:
-          type: string
-          description: The ID of the connector.
-        offsets:
-          $ref: '#/components/schemas/connect.v1.Offsets'
-        metadata:
+        error:
           type: object
-          description: Metadata of the connector offset.
+          description: Connector Error with error code and message.
           properties:
-            observed_at:
+            code:
+              type: integer
+              description: Error code for the type of error
+            message:
               type: string
-              format: date-time
-              example: 2024-02-20 15:14:19+00:00
-              readOnly: true
-              description: The time at which the offsets were observed. The time is in UTC, ISO 8601 format.
-    connect.v1.AlterOffsetRequestInfo:
+              description: Human readable error message
+    connect.v1.AlterOffsetRequest:
       type: object
-      description: The request made to alter offsets.
+      description: Request to alter the offset of a connector. The offsets parameter is options for DELETE type.
       properties:
-        id:
-          type: string
-          description: The ID of the connector.
-        name:
-          type: string
-          description: The name of the connector.
-        offsets:
-          $ref: '#/components/schemas/connect.v1.Offsets'
-        requested_at:
-          type: string
-          format: date-time
-          readOnly: true
-          example: 2024-02-20 15:14:19+00:00
-          description: The time at which the request was made. The time is in UTC, ISO 8601 format.
         type:
           $ref: '#/components/schemas/connect.v1.AlterOffsetRequestType'
+        offsets:
+          $ref: '#/components/schemas/connect.v1.Offsets'
       required:
-      - id
-      - name
       - type
-      - requested_at
-  responses:
-    connect.v1.ResourceNotFoundError:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 404
-              message: resource not found
-    RateLimitError:
-      description: Rate Limit Exceeded
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: The maximum number of requests you're permitted to make per time period.
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: The number of requests remaining in the current rate limit window.
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
-        Retry-After:
-          schema:
-            type: integer
-          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    connect.v1.DefaultSystemError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 500
-              message: Oops, something went wrong
-    connect.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 400
-              message: Bad Request
-    connect.v1.UnauthenticatedError:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 401
-              message: Unauthorized
-    connect.v1.ForbiddenError:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 403
-              message: Forbidden
   securitySchemes:
     cloud-api-key:
       type: http
@@ -576,6 +579,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

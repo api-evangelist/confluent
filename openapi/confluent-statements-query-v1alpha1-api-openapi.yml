@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Statements (query/v1alpha1) API
+  title: Confluent Statements (query/v1alpha1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Statements (query/v1alpha1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -369,46 +363,114 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/DefaultSystemError'
-components:
-  schemas:
-    Error:
-      type: object
-      description: Describes a particular error encountered while performing an operation.
-      properties:
-        id:
-          description: A unique identifier for this particular occurrence of the problem.
+  /query/v1alpha1/jobs/{environment_id}/{kafka_cluster_id}/{topic_name}/{statement_id}/status:
+    servers:
+    - url: https://sql.region.provider.confluent.cloud
+      description: SQL Endpoint through Analytics Gateway
+    x-lifecycle-stage: Early Access
+    get:
+      summary: Query Async Job Status
+      description: Returns status updates containing the explicit operational lifecycle states of an active background query.
+      operationId: getQueryV1alpha1JobsByEnvironmentIdByKafkaClusterIdByTopicNameByStatementIdStatus
+      x-lifecycle-stage: Early Access
+      tags:
+      - Statements (query/v1alpha1)
+      security:
+      - resource-api-key: []
+      parameters:
+      - name: environment_id
+        in: path
+        required: true
+        description: Confluent Cloud environment ID (e.g., env-xyz123) the statement was run against.
+        schema:
+          type: string
+      - name: kafka_cluster_id
+        in: path
+        required: true
+        description: Kafka cluster ID (e.g., lkc-xyz123) the statement was run against.
+        schema:
+          type: string
+      - name: topic_name
+        in: path
+        required: true
+        description: The name of the Kafka topic or Lightning table being queried.
+        schema:
+          type: string
+      - name: statement_id
+        in: path
+        required: true
+        description: The target unique identifier of the background operational query process.
+        schema:
           type: string
           maxLength: 255
-        status:
-          description: The HTTP status code applicable to this problem, expressed as a string value.
-          type: string
-        code:
-          description: An application-specific error code, expressed as a string value.
-          type: string
-        title:
-          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
-          type: string
-        detail:
-          description: A human-readable explanation specific to this occurrence of the problem.
-          type: string
-        source:
-          type: object
-          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
-          properties:
-            pointer:
-              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
-              type: string
-            parameter:
-              description: A string indicating which query parameter caused the error.
-              type: string
-        error_code:
-          type: integer
-          format: int32
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
+      responses:
+        '200':
+          description: Statement is evaluated successfully.
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query.v1alpha1.JobStatusResponse_2'
+              examples:
+                job_running:
+                  summary: Statement is still running
+                  value:
+                    api_version: query/v1alpha1
+                    kind: JobStatus
+                    result:
+                      state: RUNNING
+                job_succeeded:
+                  summary: Statement completed successfully
+                  value:
+                    api_version: query/v1alpha1
+                    kind: JobStatus
+                    result:
+                      state: SUCCEEDED
+                      result_urls:
+                      - https://s3.region.amazonaws.com/lightning-blobstorage-.../async-results/.../statement_1b2c3d4e5f6a-abcd1234.json?X-Amz-...
+                job_failed:
+                  summary: Statement failed
+                  value:
+                    api_version: query/v1alpha1
+                    kind: JobStatus
+                    result:
+                      state: FAILED
+                    errors:
+                    - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+                      status: '200'
+                      code: FE_STATEMENT_FAILED
+                      title: Statement Failed
+                      detail: The statement exceeded the maximum execution time.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/StatementNotFoundError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/DefaultSystemError'
+      x-operation-id-source: normalized
+      x-operation-id-original: getQueryV1alpha1JobStatus
+components:
+  schemas:
+    query.v1alpha1.ResultValue:
+      description: "One value within a `JSON` result row.\n\nScalar values are JSON strings encoded according to the declaring column's\n`DataType.type`. JSON `null` is SQL NULL, at any depth.\n\nComplex values are JSON arrays whose elements are themselves `ResultValue`s:\n\n- `ROW` — a positional array with one element per entry of the type's `fields`,\n  in the same order. Field names are never repeated inline; recovering them\n  requires the schema.\n- `ARRAY` — one element per collection element, in order.\n- `MAP` and `MULTISET` — an array of two-element `[key, value]` arrays.\n\nA complex value that is itself SQL NULL is JSON `null`, which is distinct from\nan array whose elements are null.\n\nCanonical scalar encodings:\n\n| `DataType.type` | Encoding |\n| --- | --- |\n| `NULL` | JSON `null` |\n| `BOOLEAN` | `\"TRUE\"` or `\"FALSE\"`, upper case |\n| `TINYINT`, `SMALLINT`, `INTEGER`, `BIGINT` | base-10 integer string, optional leading `-` |\n| `FLOAT`, `DOUBLE` | shortest round-trip decimal string, in exponent notation where Java would use it |\n| `DECIMAL` | plain decimal string with exactly `scale` fractional digits, no exponent |\n| `CHAR`, `VARCHAR` | the string value verbatim, UTF-8 |\n| `BINARY`, `VARBINARY` | hexadecimal literal, for example `\"x'7f0203'\"` |\n| `DATE` | `YYYY-MM-DD` |\n| `TIME_WITHOUT_TIME_ZONE` | `HH:MM:SS[.fff]` |\n| `TIMESTAMP_WITHOUT_TIME_ZONE` | `YYYY-MM-DD HH:MM:SS[.fff]`, space separated |\n| `TIMESTAMP_WITH_TIME_ZONE` | `YYYY-MM-DD HH:MM:SS[.fff]`, rendered in UTC. Flink's `TIMESTAMP_LTZ` is reported under this name; the instant is stored as UTC and the zone is metadata only, so no offset is emitted |\n| `INTERVAL_YEAR_MONTH` | `+YYYY-MM` |\n| `INTERVAL_DAY_TIME` | `+D HH:MM:SS.fff` |\n\nThese render SQL values, not API datetime or numeric fields — each format follows\nthe column's declared SQL type and matches Confluent Flink's documented value\nencodings, so one decoder serves both surfaces. `TIMESTAMP` therefore uses a space\nseparator rather than RFC 3339's `T`.\n\nThese encodings apply only when `result_format` is `JSON`. Under\n`ARROW_STREAM` values are carried natively, with `ROW` mapping to an Arrow\nstruct, `ARRAY` and `MULTISET` to a list, and `MAP` to a map.\n"
+      anyOf:
+      - type:
+        - string
+        - 'null'
+      - type:
+        - array
+        - 'null'
+        items:
+          $ref: '#/components/schemas/query.v1alpha1.ResultValue'
     query.v1alpha1.ColumnDetails:
       type: object
       description: A column in the result schema.
@@ -423,101 +485,6 @@ components:
           description: The logical type of the column.
           allOf:
           - $ref: '#/components/schemas/query.v1alpha1.DataType'
-    query.v1alpha1.RowFieldType:
-      type: object
-      required:
-      - name
-      - fieldType
-      description: 'One field of a `ROW`. Field names are carried here, in the schema only — never inline with the row values.
-
-        '
-      properties:
-        name:
-          type: string
-          description: The name of the field.
-        fieldType:
-          description: The data type of the field.
-          allOf:
-          - $ref: '#/components/schemas/query.v1alpha1.DataType'
-        description:
-          type: string
-          description: Optional field comment from the type declaration.
-    Failure:
-      type: object
-      description: Provides information about problems encountered while performing an operation.
-      required:
-      - errors
-      properties:
-        errors:
-          description: List of errors which caused this operation to fail
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-          uniqueItems: true
-    query.v1alpha1.QueryResult:
-      type: object
-      description: 'Query result containing schema metadata and row data.
-
-
-        This envelope is the same for every statement kind. `SHOW` and `DESCRIBE` return declared column types in `schema` and string-encoded values in `data` exactly as `SELECT` does, so a client needs only one result reader and never has to branch on the statement it sent.
-
-        '
-      required:
-      - result_format
-      - schema
-      - data
-      properties:
-        result_format:
-          type: string
-          x-extensible-enum:
-          - JSON
-          - ARROW_STREAM
-          readOnly: true
-          description: 'Encoding of `data`, echoing the `options.result_format` requested on the statement.
-
-            '
-        schema:
-          description: Column metadata describing the shape of the returned rows.
-          allOf:
-          - $ref: '#/components/schemas/query.v1alpha1.ResultSchema'
-        data:
-          description: 'Result rows in the encoding named by `result_format`: an array of rows for `JSON`, where each row is a positional array of column values ordered to match `schema.columns`; or a base64-encoded Arrow IPC stream for `ARROW_STREAM`, carrying native column types rather than stringified values. Inline Arrow payloads are size-capped by the service; larger results are delivered through the asynchronous 202 flow.
-
-
-            Under `JSON`, individual values — including those of complex `ROW`, `ARRAY`, `MAP` and `MULTISET` columns — are encoded as described by `ResultValue`.
-
-            '
-          oneOf:
-          - type: array
-            items:
-              $ref: '#/components/schemas/query.v1alpha1.ResultRow'
-          - type: string
-            format: byte
-    query.v1alpha1.JobStatusResponse:
-      type: object
-      description: Lifecycle state of a statement running in the background.
-      required:
-      - status
-      properties:
-        status:
-          description: The status of the background statement.
-          allOf:
-          - $ref: '#/components/schemas/query.v1alpha1.JobStatus'
-        errors:
-          type: array
-          description: 'Failure details for the background statement. Populated only when `status.phase` is `FAILED`; omitted otherwise.
-
-            '
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/Error'
-    query.v1alpha1.ResultRow:
-      type: array
-      description: 'A single result row — column values ordered to match `schema.columns`. Rows carry no changelog operation marker: this API returns a point-in-time snapshot rather than a changelog stream, so there are no retractions to express.
-
-        '
-      items:
-        $ref: '#/components/schemas/query.v1alpha1.ResultValue'
     query.v1alpha1.DataType:
       type: object
       required:
@@ -614,17 +581,172 @@ components:
           description: 'Class name of a structured type. Present in the Flink type model; the engine does not currently emit structured types.
 
             '
-    query.v1alpha1.ResultValue:
-      description: "One value within a `JSON` result row.\n\nScalar values are JSON strings encoded according to the declaring column's\n`DataType.type`. JSON `null` is SQL NULL, at any depth.\n\nComplex values are JSON arrays whose elements are themselves `ResultValue`s:\n\n- `ROW` — a positional array with one element per entry of the type's `fields`,\n  in the same order. Field names are never repeated inline; recovering them\n  requires the schema.\n- `ARRAY` — one element per collection element, in order.\n- `MAP` and `MULTISET` — an array of two-element `[key, value]` arrays.\n\nA complex value that is itself SQL NULL is JSON `null`, which is distinct from\nan array whose elements are null.\n\nCanonical scalar encodings:\n\n| `DataType.type` | Encoding |\n| --- | --- |\n| `NULL` | JSON `null` |\n| `BOOLEAN` | `\"TRUE\"` or `\"FALSE\"`, upper case |\n| `TINYINT`, `SMALLINT`, `INTEGER`, `BIGINT` | base-10 integer string, optional leading `-` |\n| `FLOAT`, `DOUBLE` | shortest round-trip decimal string, in exponent notation where Java would use it |\n| `DECIMAL` | plain decimal string with exactly `scale` fractional digits, no exponent |\n| `CHAR`, `VARCHAR` | the string value verbatim, UTF-8 |\n| `BINARY`, `VARBINARY` | hexadecimal literal, for example `\"x'7f0203'\"` |\n| `DATE` | `YYYY-MM-DD` |\n| `TIME_WITHOUT_TIME_ZONE` | `HH:MM:SS[.fff]` |\n| `TIMESTAMP_WITHOUT_TIME_ZONE` | `YYYY-MM-DD HH:MM:SS[.fff]`, space separated |\n| `TIMESTAMP_WITH_TIME_ZONE` | `YYYY-MM-DD HH:MM:SS[.fff]`, rendered in UTC. Flink's `TIMESTAMP_LTZ` is reported under this name; the instant is stored as UTC and the zone is metadata only, so no offset is emitted |\n| `INTERVAL_YEAR_MONTH` | `+YYYY-MM` |\n| `INTERVAL_DAY_TIME` | `+D HH:MM:SS.fff` |\n\nThese render SQL values, not API datetime or numeric fields — each format follows\nthe column's declared SQL type and matches Confluent Flink's documented value\nencodings, so one decoder serves both surfaces. `TIMESTAMP` therefore uses a space\nseparator rather than RFC 3339's `T`.\n\nThese encodings apply only when `result_format` is `JSON`. Under\n`ARROW_STREAM` values are carried natively, with `ROW` mapping to an Arrow\nstruct, `ARRAY` and `MULTISET` to a list, and `MAP` to a map.\n"
-      anyOf:
-      - type:
-        - string
-        - 'null'
-      - type:
-        - array
-        - 'null'
-        items:
-          $ref: '#/components/schemas/query.v1alpha1.ResultValue'
+    query.v1alpha1.QueryResponseInline:
+      type: object
+      description: Response structure returned directly for fast inline extractions.
+      required:
+      - api_version
+      - kind
+      - result
+      properties:
+        api_version:
+          type: string
+          x-extensible-enum:
+          - query/v1alpha1
+          readOnly: true
+          description: APIVersion defines the schema version of this representation of a resource.
+        kind:
+          type: string
+          x-extensible-enum:
+          - Statement
+          readOnly: true
+          description: Kind defines the object this REST resource represents.
+        result:
+          description: The schema and data produced by the statement.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.QueryResult'
+    query.v1alpha1.ResultSchema:
+      type: object
+      description: The table columns of the result schema.
+      required:
+      - columns
+      properties:
+        columns:
+          type: array
+          description: 'Column definitions in result order, matching the order of values within each row.
+
+            '
+          items:
+            $ref: '#/components/schemas/query.v1alpha1.ColumnDetails'
+    query.v1alpha1.RowFieldType:
+      type: object
+      required:
+      - name
+      - fieldType
+      description: 'One field of a `ROW`. Field names are carried here, in the schema only — never inline with the row values.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the field.
+        fieldType:
+          description: The data type of the field.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.DataType'
+        description:
+          type: string
+          description: Optional field comment from the type declaration.
+    Error:
+      type: object
+      description: Describes a particular error encountered while performing an operation.
+      properties:
+        id:
+          description: A unique identifier for this particular occurrence of the problem.
+          type: string
+          maxLength: 255
+        status:
+          description: The HTTP status code applicable to this problem, expressed as a string value.
+          type: string
+        code:
+          description: An application-specific error code, expressed as a string value.
+          type: string
+        title:
+          description: A short, human-readable summary of the problem. It **SHOULD NOT** change from occurrence to occurrence of the problem, except for purposes of localization.
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+        source:
+          type: object
+          description: If this error was caused by a particular part of the API request, the source will point to the query string parameter or request body property that caused it.
+          properties:
+            pointer:
+              description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/spec" for a spec object, or "/spec/title" for a specific field].
+              type: string
+            parameter:
+              description: A string indicating which query parameter caused the error.
+              type: string
+        error_code:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    query.v1alpha1.QueryResult:
+      type: object
+      description: 'Query result containing schema metadata and row data.
+
+
+        This envelope is the same for every statement kind. `SHOW` and `DESCRIBE` return declared column types in `schema` and string-encoded values in `data` exactly as `SELECT` does, so a client needs only one result reader and never has to branch on the statement it sent.
+
+        '
+      required:
+      - result_format
+      - schema
+      - data
+      properties:
+        result_format:
+          type: string
+          x-extensible-enum:
+          - JSON
+          - ARROW_STREAM
+          readOnly: true
+          description: 'Encoding of `data`, echoing the `options.result_format` requested on the statement.
+
+            '
+        schema:
+          description: Column metadata describing the shape of the returned rows.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.ResultSchema'
+        data:
+          description: 'Result rows in the encoding named by `result_format`: an array of rows for `JSON`, where each row is a positional array of column values ordered to match `schema.columns`; or a base64-encoded Arrow IPC stream for `ARROW_STREAM`, carrying native column types rather than stringified values. Inline Arrow payloads are size-capped by the service; larger results are delivered through the asynchronous 202 flow.
+
+
+            Under `JSON`, individual values — including those of complex `ROW`, `ARRAY`, `MAP` and `MULTISET` columns — are encoded as described by `ResultValue`.
+
+            '
+          oneOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/query.v1alpha1.ResultRow'
+          - type: string
+            format: byte
+    query.v1alpha1.JobStatusResponse:
+      type: object
+      description: Lifecycle state of a statement running in the background.
+      required:
+      - status
+      properties:
+        status:
+          description: The status of the background statement.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.JobStatus'
+        errors:
+          type: array
+          description: 'Failure details for the background statement. Populated only when `status.phase` is `FAILED`; omitted otherwise.
+
+            '
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Error'
+    query.v1alpha1.QueryResponseAsync:
+      type: object
+      description: Reference pointers issued when standard executions run asynchronously.
+      required:
+      - statement_id
+      - result_url
+      properties:
+        statement_id:
+          type: string
+          maxLength: 255
+          description: Unique identifier generated to trace the decoupled tracking process.
+        result_url:
+          type: string
+          format: uri
+          description: The streaming data target location where finished row sets can be downloaded.
     query.v1alpha1.QueryRequest:
       type: object
       required:
@@ -674,6 +796,25 @@ components:
           description: 'Encoding for the returned rows, echoed back as `result.result_format`. `JSON` returns `result.data` as an array of rows, requiring clients to coerce values using `result.schema`. `ARROW_STREAM` returns `result.data` as a base64-encoded Arrow IPC stream, preserving native column types. Inline `ARROW_STREAM` payloads are size-capped; larger results are delivered through the asynchronous 202 flow.
 
             '
+    query.v1alpha1.ResultRow:
+      type: array
+      description: 'A single result row — column values ordered to match `schema.columns`. Rows carry no changelog operation marker: this API returns a point-in-time snapshot rather than a changelog stream, so there are no retractions to express.
+
+        '
+      items:
+        $ref: '#/components/schemas/query.v1alpha1.ResultValue'
+    Failure:
+      type: object
+      description: Provides information about problems encountered while performing an operation.
+      required:
+      - errors
+      properties:
+        errors:
+          description: List of errors which caused this operation to fail
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          uniqueItems: true
     query.v1alpha1.JobStatus:
       type: object
       description: The status of the background statement.
@@ -704,37 +845,156 @@ components:
             '
           example: RUNNING
           readOnly: true
-    query.v1alpha1.ResultSchema:
+    query.v1alpha1.DataType_2:
       type: object
-      description: The table columns of the result schema.
       required:
-      - columns
+      - type
+      - nullable
+      description: 'Flink logical type descriptor, mirroring `DataType` in the Flink Gateway API.
+
+        Complex types nest recursively: `element_type`, `key_type`, `value_type` and
+
+        `fields[].field_type` are themselves `DataType` objects, so `ROW`, `ARRAY`,
+
+        `MAP` and `MULTISET` nest to arbitrary depth.
+
+
+        The value of `type` determines which parameter properties are present; all
+
+        others are absent.
+
+
+        | `type` | Parameters |
+
+        | --- | --- |
+
+        | `BOOLEAN`, `TINYINT`, `SMALLINT`, `INTEGER`, `BIGINT`, `FLOAT`, `DOUBLE`, `DATE`, `NULL` | none |
+
+        | `CHAR`, `VARCHAR`, `BINARY`, `VARBINARY` | `length` |
+
+        | `DECIMAL` | `precision`, `scale` |
+
+        | `TIME_WITHOUT_TIME_ZONE`, `TIMESTAMP_WITHOUT_TIME_ZONE`, `TIMESTAMP_WITH_TIME_ZONE` | `precision` |
+
+        | `INTERVAL_YEAR_MONTH` | `precision`, `resolution` |
+
+        | `INTERVAL_DAY_TIME` | `precision`, `fractional_precision`, `resolution` |
+
+        | `ARRAY`, `MULTISET` | `element_type` |
+
+        | `MAP` | `key_type`, `value_type` |
+
+        | `ROW` | `fields` |
+
+        '
       properties:
-        columns:
-          type: array
-          description: 'Column definitions in result order, matching the order of values within each row.
+        type:
+          type: string
+          description: The Flink logical type name of the column or field.
+        nullable:
+          type: boolean
+          description: Whether values of this column or field can be null.
+        length:
+          type: integer
+          format: int32
+          description: 'Declared length of `CHAR`, `VARCHAR`, `BINARY` and `VARBINARY`. Unbounded `VARCHAR` and `VARBINARY` report 2147483647.
 
             '
+        precision:
+          type: integer
+          format: int32
+          description: 'Declared precision of `DECIMAL`, the `TIME`/`TIMESTAMP` types and the `INTERVAL_*` types.
+
+            '
+        scale:
+          type: integer
+          format: int32
+          description: Declared scale of `DECIMAL`.
+        key_type:
+          description: Key type of a `MAP`.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.DataType_2'
+        value_type:
+          description: Value type of a `MAP`.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.DataType_2'
+        element_type:
+          description: Element type of an `ARRAY` or `MULTISET`.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.DataType_2'
+        fields:
+          type: array
+          description: Fields of a `ROW`, in declaration order.
           items:
-            $ref: '#/components/schemas/query.v1alpha1.ColumnDetails'
-    query.v1alpha1.QueryResponseAsync:
+            $ref: '#/components/schemas/query.v1alpha1.RowFieldType_2'
+        resolution:
+          type: string
+          description: 'Interval resolution, for example `YEAR_TO_MONTH` for `INTERVAL_YEAR_MONTH` or `DAY_TO_SECOND` for `INTERVAL_DAY_TIME`.
+
+            '
+        fractional_precision:
+          type: integer
+          format: int32
+          description: Fractional-second precision of `INTERVAL_DAY_TIME`.
+        class_name:
+          type: string
+          description: 'Class name of a structured type. Present in the Flink type model; the engine does not currently emit structured types.
+
+            '
+    query.v1alpha1.RowFieldType_2:
+      type: object
+      required:
+      - name
+      - field_type
+      description: 'One field of a `ROW`. Field names are carried here, in the schema only — never inline with the row values.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the field.
+        field_type:
+          description: The data type of the field.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.DataType_2'
+        description:
+          type: string
+          description: Optional field comment from the type declaration.
+    query.v1alpha1.JobStatusResponse_2:
+      type: object
+      description: Lifecycle state of a statement running in the background.
+      required:
+      - api_version
+      - kind
+      - result
+      properties:
+        api_version:
+          type: string
+          x-extensible-enum:
+          - query/v1alpha1
+          readOnly: true
+          description: APIVersion defines the schema version of this representation of a resource.
+        kind:
+          type: string
+          x-extensible-enum:
+          - JobStatus
+          readOnly: true
+          description: Kind defines the object this REST resource represents.
+        result:
+          description: The status of the background statement.
+          allOf:
+          - $ref: '#/components/schemas/query.v1alpha1.JobStatus_2'
+        errors:
+          type: array
+          description: 'Failure details for the background statement. Populated only when `result.state` is `FAILED`; omitted otherwise.
+
+            '
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Error'
+    query.v1alpha1.QueryResponseAsync_2:
       type: object
       description: Reference pointers issued when standard executions run asynchronously.
-      required:
-      - statement_id
-      - result_url
-      properties:
-        statement_id:
-          type: string
-          maxLength: 255
-          description: Unique identifier generated to trace the decoupled tracking process.
-        result_url:
-          type: string
-          format: uri
-          description: The streaming data target location where finished row sets can be downloaded.
-    query.v1alpha1.QueryResponseInline:
-      type: object
-      description: Response structure returned directly for fast inline extractions.
       required:
       - api_version
       - kind
@@ -753,10 +1013,169 @@ components:
           readOnly: true
           description: Kind defines the object this REST resource represents.
         result:
-          description: The schema and data produced by the statement.
+          description: Identifies the background job created for this statement.
           allOf:
-          - $ref: '#/components/schemas/query.v1alpha1.QueryResult'
+          - $ref: '#/components/schemas/query.v1alpha1.AsyncJobReference'
+    query.v1alpha1.AsyncJobReference:
+      type: object
+      description: 'Identifies the background job created for this statement. Poll for its outcome via the `Location` response header, or by building `/query/v1alpha1/jobs/{environment_id}/{kafka_cluster_id}/{topic_name}/{statement_id}/status` from these fields.
+
+        '
+      required:
+      - statement_id
+      - environment_id
+      - kafka_cluster_id
+      - topic_name
+      properties:
+        statement_id:
+          type: string
+          maxLength: 255
+          description: Unique identifier generated to trace the decoupled tracking process.
+        environment_id:
+          type: string
+          description: Confluent Cloud environment ID (echoed back from `catalog_name`).
+        kafka_cluster_id:
+          type: string
+          description: Kafka cluster ID (echoed back from `database_name`).
+        topic_name:
+          type: string
+          description: Name of the table/topic the statement queried.
+    query.v1alpha1.QueryOptions_2:
+      type: object
+      description: 'Settings that tune how this query is handled. Omitted fields fall back to service defaults.
+
+        '
+      properties:
+        max_result_rows:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 200
+          description: 'Maximum rows to return up to configured limit. This can be indefinite once async query is enabled.
+
+            '
+        result_format:
+          type: string
+          x-extensible-enum:
+          - JSON
+          - ARROW_STREAM
+          default: JSON
+          description: 'Encoding for the returned rows, echoed back as `result.result_format`. `JSON` returns `result.data` as an array of rows, requiring clients to coerce values using `result.schema`. `ARROW_STREAM` returns `result.data` as a base64-encoded Arrow IPC stream, preserving native column types. Inline `ARROW_STREAM` payloads are size-capped; larger results are delivered through the asynchronous 202 flow.
+
+            '
+    query.v1alpha1.JobStatus_2:
+      type: object
+      description: The status of the background statement.
+      required:
+      - state
+      properties:
+        state:
+          type: string
+          x-extensible-enum:
+          - RUNNING
+          - SUCCEEDED
+          - FAILED
+          description: 'The lifecycle state of the background statement. A job is always at least
+
+            RUNNING by the time it can be polled — there is no earlier "queued" state.
+
+
+            RUNNING: statement execution is in progress;
+
+
+            SUCCEEDED: statement finished successfully; see `result_urls` for where to
+
+            download the result;
+
+
+            FAILED: statement execution failed; see `errors` for details.
+
+            '
+          example: RUNNING
+          readOnly: true
+        result_urls:
+          type: array
+          description: 'Presigned URL(s) the result can be downloaded from. Always present (an empty array if there''s nothing to download yet), not just when `state` is `SUCCEEDED` — reserved for a future partial-results feature that could populate this incrementally while `state` is still `RUNNING`; today it''s only ever non-empty once `state` is `SUCCEEDED`. Empty for `FAILED`. Each URL expires after a limited time — re-poll this endpoint to obtain a fresh one if it lapses before download.
+
+            '
+          items:
+            type: string
+            format: uri
+          readOnly: true
   responses:
+    DefaultSystemError:
+      description: Oops, something went wrong!
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '500'
+              code: out_of_gas
+              title: DeLorean Out Of Gas
+              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
+    BadRequestError:
+      description: Bad Request
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '400'
+              code: invalid_filter
+              title: Invalid Filter
+              detail: The 'delorean' resource can't be filtered by 'num_doors'
+              source:
+                parameter: num_doors
+    UnauthorizedError:
+      x-summary: Forbidden
+      description: The access credentials were considered insufficient to grant access
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '403'
+              code: user_unauthorized
+              title: User Access Unauthorized
+              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
+    NotFoundError:
+      description: Not Found
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Failure'
+          example:
+            errors:
+            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+              status: '404'
+              title: Not Found
     UnauthenticatedError:
       x-summary: Unauthorized
       description: The request lacks valid authentication credentials for this resource.
@@ -781,42 +1200,6 @@ components:
               code: user_unauthenticated
               title: Authentication Required
               detail: Valid authentication credentials must be provided
-    BadRequestError:
-      description: Bad Request
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '400'
-              code: invalid_filter
-              title: Invalid Filter
-              detail: The 'delorean' resource can't be filtered by 'num_doors'
-              source:
-                parameter: num_doors
-    NotFoundError:
-      description: Not Found
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '404'
-              title: Not Found
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -840,8 +1223,10 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    DefaultSystemError:
-      description: Oops, something went wrong!
+    StatementNotFoundError:
+      description: 'No background statement matches the given identifiers, or async query is not enabled for this organization/environment/cluster.
+
+        '
       headers:
         X-Request-Id:
           schema:
@@ -851,32 +1236,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '500'
-              code: out_of_gas
-              title: DeLorean Out Of Gas
-              detail: The DeLorean has run out of gas, but Doc Brown will fill 'er up for you asap
-    UnauthorizedError:
-      x-summary: Forbidden
-      description: The access credentials were considered insufficient to grant access
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Failure'
-          example:
-            errors:
-            - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
-              status: '403'
-              code: user_unauthorized
-              title: User Access Unauthorized
-              detail: The user 'mcfly' is not allowed to access the 'delorean' resource without the 'plutonium' role.
+          examples:
+            statement_not_found:
+              summary: Unknown statement_id
+              value:
+                errors:
+                - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+                  status: '404'
+                  code: FE_STATEMENT_NOT_FOUND
+                  title: Statement Not Found
+                  detail: No background statement 'statement_1b2c3d4e5f6a' was found.
+            async_query_disabled:
+              summary: Async query not enabled for this org/environment/cluster
+              value:
+                errors:
+                - id: ed42afdc-f0d5-4c0d-b428-9fc6ed6e279d
+                  status: '404'
+                  code: FE_ASYNC_QUERY_DISABLED
+                  title: Async Query Disabled
+                  detail: Async query is not enabled for cluster 'lkc-xyz123'.
   securitySchemes:
     cloud-api-key:
       type: http
@@ -915,6 +1293,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

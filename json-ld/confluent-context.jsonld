@@ -1,0 +1,795 @@
+{
+  "@context": {
+    "@vocab": "https://confluent.io/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "confluent": "https://confluent.io/schema#",
+    "Error": "confluent:Error",
+    "id": {
+      "@id": "confluent:id",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "confluent:status",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "confluent:code",
+      "@type": "xsd:string"
+    },
+    "title": {
+      "@id": "confluent:title",
+      "@type": "xsd:string"
+    },
+    "detail": {
+      "@id": "confluent:detail",
+      "@type": "xsd:string"
+    },
+    "source": {
+      "@id": "confluent:source"
+    },
+    "error_code": {
+      "@id": "confluent:error_code",
+      "@type": "xsd:integer"
+    },
+    "message": {
+      "@id": "confluent:message",
+      "@type": "xsd:string"
+    },
+    "networking.v1.AccessPointStatus": "confluent:networking.v1.AccessPointStatus",
+    "phase": {
+      "@id": "confluent:phase",
+      "@type": "xsd:string"
+    },
+    "error_message": {
+      "@id": "confluent:error_message",
+      "@type": "xsd:string"
+    },
+    "config": {
+      "@id": "confluent:config"
+    },
+    "networking.v1.GcpEgressPrivateServiceConnectEndpoint": "confluent:networking.v1.GcpEgressPrivateServiceConnectEndpoint",
+    "kind": {
+      "@id": "confluent:kind",
+      "@type": "xsd:string"
+    },
+    "private_service_connect_endpoint_target": {
+      "@id": "confluent:private_service_connect_endpoint_target",
+      "@type": "xsd:string"
+    },
+    "target_system": {
+      "@id": "confluent:target_system",
+      "@type": "xsd:string"
+    },
+    "networking.v1.GcpIngressPrivateServiceConnectEndpoint": "confluent:networking.v1.GcpIngressPrivateServiceConnectEndpoint",
+    "private_service_connect_connection_id": {
+      "@id": "confluent:private_service_connect_connection_id",
+      "@type": "xsd:string"
+    },
+    "networking.v1.AccessPointSpec": "confluent:networking.v1.AccessPointSpec",
+    "display_name": {
+      "@id": "confluent:display_name",
+      "@type": "xsd:string"
+    },
+    "environment": {
+      "@id": "confluent:environment"
+    },
+    "gateway": {
+      "@id": "confluent:gateway"
+    },
+    "ObjectReference": "confluent:ObjectReference",
+    "related": {
+      "@id": "confluent:related",
+      "@type": "@id"
+    },
+    "resource_name": {
+      "@id": "confluent:resource_name",
+      "@type": "@id"
+    },
+    "api_version": {
+      "@id": "confluent:api_version",
+      "@type": "xsd:string"
+    },
+    "ObjectMeta": "confluent:ObjectMeta",
+    "self": {
+      "@id": "confluent:self",
+      "@type": "@id"
+    },
+    "created_at": {
+      "@id": "confluent:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "confluent:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "deleted_at": {
+      "@id": "confluent:deleted_at",
+      "@type": "xsd:dateTime"
+    },
+    "networking.v1.AwsEgressPrivateLinkEndpointStatus": "confluent:networking.v1.AwsEgressPrivateLinkEndpointStatus",
+    "vpc_endpoint_id": {
+      "@id": "confluent:vpc_endpoint_id",
+      "@type": "xsd:string"
+    },
+    "vpc_endpoint_dns_name": {
+      "@id": "confluent:vpc_endpoint_dns_name",
+      "@type": "xsd:string"
+    },
+    "networking.v1.AwsIngressPrivateLinkEndpoint": "confluent:networking.v1.AwsIngressPrivateLinkEndpoint",
+    "networking.v1.AzureIngressPrivateLinkEndpointStatus": "confluent:networking.v1.AzureIngressPrivateLinkEndpointStatus",
+    "private_link_service_alias": {
+      "@id": "confluent:private_link_service_alias",
+      "@type": "xsd:string"
+    },
+    "private_link_service_resource_id": {
+      "@id": "confluent:private_link_service_resource_id",
+      "@type": "xsd:string"
+    },
+    "private_endpoint_resource_id": {
+      "@id": "confluent:private_endpoint_resource_id",
+      "@type": "xsd:string"
+    },
+    "dns_domain": {
+      "@id": "confluent:dns_domain",
+      "@type": "xsd:string"
+    },
+    "Failure": "confluent:Failure",
+    "errors": {
+      "@id": "confluent:errors",
+      "@container": "@list"
+    },
+    "ListMeta": "confluent:ListMeta",
+    "first": {
+      "@id": "confluent:first",
+      "@type": "@id"
+    },
+    "last": {
+      "@id": "confluent:last",
+      "@type": "@id"
+    },
+    "prev": {
+      "@id": "confluent:prev",
+      "@type": "@id"
+    },
+    "next": {
+      "@id": "confluent:next",
+      "@type": "@id"
+    },
+    "total_size": {
+      "@id": "confluent:total_size",
+      "@type": "xsd:integer"
+    },
+    "networking.v1.AzureEgressPrivateLinkEndpoint": "confluent:networking.v1.AzureEgressPrivateLinkEndpoint",
+    "private_link_subresource_name": {
+      "@id": "confluent:private_link_subresource_name",
+      "@type": "xsd:string"
+    },
+    "networking.v1.AccessPoint": "confluent:networking.v1.AccessPoint",
+    "metadata": {
+      "@id": "confluent:metadata"
+    },
+    "spec": {
+      "@id": "confluent:spec",
+      "@type": "@id"
+    },
+    "networking.v1.GcpIngressPrivateServiceConnectEndpointStatus": "confluent:networking.v1.GcpIngressPrivateServiceConnectEndpointStatus",
+    "private_service_connect_service_attachment": {
+      "@id": "confluent:private_service_connect_service_attachment",
+      "@type": "xsd:string"
+    },
+    "networking.v1.AwsEgressPrivateLinkEndpoint": "confluent:networking.v1.AwsEgressPrivateLinkEndpoint",
+    "vpc_endpoint_service_name": {
+      "@id": "confluent:vpc_endpoint_service_name",
+      "@type": "xsd:string"
+    },
+    "enable_high_availability": {
+      "@id": "confluent:enable_high_availability",
+      "@type": "xsd:boolean"
+    },
+    "networking.v1.GcpEgressPrivateServiceConnectEndpointStatus": "confluent:networking.v1.GcpEgressPrivateServiceConnectEndpointStatus",
+    "private_service_connect_endpoint_connection_id": {
+      "@id": "confluent:private_service_connect_endpoint_connection_id",
+      "@type": "xsd:string"
+    },
+    "private_service_connect_endpoint_name": {
+      "@id": "confluent:private_service_connect_endpoint_name",
+      "@type": "xsd:string"
+    },
+    "private_service_connect_endpoint_ip_address": {
+      "@id": "confluent:private_service_connect_endpoint_ip_address",
+      "@type": "xsd:string"
+    },
+    "networking.v1.AwsIngressPrivateLinkEndpointStatus": "confluent:networking.v1.AwsIngressPrivateLinkEndpointStatus",
+    "networking.v1.AccessPointList": "confluent:networking.v1.AccessPointList",
+    "data": {
+      "@id": "confluent:data",
+      "@container": "@list"
+    },
+    "networking.v1.AzureIngressPrivateLinkEndpoint": "confluent:networking.v1.AzureIngressPrivateLinkEndpoint",
+    "networking.v1.AwsPrivateNetworkInterface": "confluent:networking.v1.AwsPrivateNetworkInterface",
+    "network_interfaces": {
+      "@id": "confluent:network_interfaces",
+      "@container": "@list"
+    },
+    "account": {
+      "@id": "confluent:account",
+      "@type": "xsd:string"
+    },
+    "egress_routes": {
+      "@id": "confluent:egress_routes",
+      "@container": "@list"
+    },
+    "networking.v1.AzureEgressPrivateLinkEndpointStatus": "confluent:networking.v1.AzureEgressPrivateLinkEndpointStatus",
+    "private_endpoint_domain": {
+      "@id": "confluent:private_endpoint_domain",
+      "@type": "xsd:string"
+    },
+    "private_endpoint_ip_address": {
+      "@id": "confluent:private_endpoint_ip_address",
+      "@type": "xsd:string"
+    },
+    "private_endpoint_custom_dns_config_domains": {
+      "@id": "confluent:private_endpoint_custom_dns_config_domains",
+      "@container": "@list"
+    },
+    "AclResourceType": "confluent:AclResourceType",
+    "ResourceCollectionMetadata": "confluent:ResourceCollectionMetadata",
+    "Resource": "confluent:Resource",
+    "CreateAclRequestData": "confluent:CreateAclRequestData",
+    "resource_type": {
+      "@id": "confluent:resource_type",
+      "@type": "@id"
+    },
+    "pattern_type": {
+      "@id": "confluent:pattern_type",
+      "@type": "@id"
+    },
+    "principal": {
+      "@id": "confluent:principal",
+      "@type": "xsd:string"
+    },
+    "host": {
+      "@id": "confluent:host",
+      "@type": "xsd:string"
+    },
+    "operation": {
+      "@id": "confluent:operation",
+      "@type": "@id"
+    },
+    "permission": {
+      "@id": "confluent:permission",
+      "@type": "@id"
+    },
+    "ResourceCollection": "confluent:ResourceCollection",
+    "ResourceMetadata": "confluent:ResourceMetadata",
+    "Acl": "confluent:Acl",
+    "AclList": "confluent:AclList",
+    "sql.v1.AgentStatus": "confluent:sql.v1.AgentStatus",
+    "sql.v1.AgentList": "confluent:sql.v1.AgentList",
+    "sql.v1.AgentSpec": "confluent:sql.v1.AgentSpec",
+    "description": {
+      "@id": "confluent:description",
+      "@type": "xsd:string"
+    },
+    "model": {
+      "@id": "confluent:model",
+      "@type": "xsd:string"
+    },
+    "prompt": {
+      "@id": "confluent:prompt",
+      "@type": "xsd:string"
+    },
+    "tools": {
+      "@id": "confluent:tools",
+      "@container": "@list"
+    },
+    "properties": {
+      "@id": "confluent:properties"
+    },
+    "sql.v1.Agent": "confluent:sql.v1.Agent",
+    "name": {
+      "@id": "confluent:name",
+      "@type": "xsd:string"
+    },
+    "organization_id": {
+      "@id": "confluent:organization_id",
+      "@type": "xsd:string"
+    },
+    "environment_id": {
+      "@id": "confluent:environment_id",
+      "@type": "xsd:string"
+    },
+    "ApiKey": "confluent:ApiKey",
+    "ApiKeyList": "confluent:ApiKeyList",
+    "TypedGlobalObjectReference": "confluent:TypedGlobalObjectReference",
+    "iam.v2.ApiKey": "confluent:iam.v2.ApiKey",
+    "iam.v2.ApiKeySpec": "confluent:iam.v2.ApiKeySpec",
+    "secret": {
+      "@id": "confluent:secret",
+      "@type": "xsd:string"
+    },
+    "expires_at": {
+      "@id": "confluent:expires_at",
+      "@type": "xsd:dateTime"
+    },
+    "owner": {
+      "@id": "confluent:owner"
+    },
+    "resource": {
+      "@id": "confluent:resource"
+    },
+    "iam.v2.ApiKeyList": "confluent:iam.v2.ApiKeyList",
+    "TypedEnvScopedObjectReference": "confluent:TypedEnvScopedObjectReference",
+    "service-quota.v1.AppliedQuota": "confluent:service-quota.v1.AppliedQuota",
+    "scope": {
+      "@id": "confluent:scope",
+      "@type": "xsd:string"
+    },
+    "default_limit": {
+      "@id": "confluent:default_limit",
+      "@type": "xsd:integer"
+    },
+    "applied_limit": {
+      "@id": "confluent:applied_limit",
+      "@type": "xsd:integer"
+    },
+    "usage": {
+      "@id": "confluent:usage",
+      "@type": "xsd:integer"
+    },
+    "user": {
+      "@id": "confluent:user"
+    },
+    "organization": {
+      "@id": "confluent:organization"
+    },
+    "network": {
+      "@id": "confluent:network"
+    },
+    "kafka_cluster": {
+      "@id": "confluent:kafka_cluster"
+    },
+    "service-quota.v1.AppliedQuotaList": "confluent:service-quota.v1.AppliedQuotaList",
+    "EnvScopedObjectReference": "confluent:EnvScopedObjectReference",
+    "GlobalObjectReference": "confluent:GlobalObjectReference",
+    "tableflow.v1.CatalogIntegrationAwsGlueSpec": "confluent:tableflow.v1.CatalogIntegrationAwsGlueSpec",
+    "provider_integration_id": {
+      "@id": "confluent:provider_integration_id",
+      "@type": "xsd:string"
+    },
+    "custom_database": {
+      "@id": "confluent:custom_database",
+      "@type": "xsd:string"
+    },
+    "tableflow.v1.CatalogIntegrationUpdateSpec": "confluent:tableflow.v1.CatalogIntegrationUpdateSpec",
+    "suspended": {
+      "@id": "confluent:suspended",
+      "@type": "xsd:boolean"
+    },
+    "tableflow.v1.CatalogIntegration": "confluent:tableflow.v1.CatalogIntegration",
+    "tableflow.v1.CatalogIntegrationAwsGlueUpdateSpec": "confluent:tableflow.v1.CatalogIntegrationAwsGlueUpdateSpec",
+    "tableflow.v1.CatalogIntegrationSpec": "confluent:tableflow.v1.CatalogIntegrationSpec",
+    "tableflow.v1.CatalogIntegrationUnitySpec": "confluent:tableflow.v1.CatalogIntegrationUnitySpec",
+    "workspace_endpoint": {
+      "@id": "confluent:workspace_endpoint",
+      "@type": "xsd:string"
+    },
+    "catalog_name": {
+      "@id": "confluent:catalog_name",
+      "@type": "xsd:string"
+    },
+    "client_id": {
+      "@id": "confluent:client_id",
+      "@type": "xsd:string"
+    },
+    "client_secret": {
+      "@id": "confluent:client_secret",
+      "@type": "xsd:string"
+    },
+    "custom_schema": {
+      "@id": "confluent:custom_schema",
+      "@type": "xsd:string"
+    },
+    "tableflow.v1.CatalogIntegrationSnowflakeUpdateSpec": "confluent:tableflow.v1.CatalogIntegrationSnowflakeUpdateSpec",
+    "endpoint": {
+      "@id": "confluent:endpoint",
+      "@type": "xsd:string"
+    },
+    "warehouse": {
+      "@id": "confluent:warehouse",
+      "@type": "xsd:string"
+    },
+    "allowed_scope": {
+      "@id": "confluent:allowed_scope",
+      "@type": "xsd:string"
+    },
+    "custom_namespace": {
+      "@id": "confluent:custom_namespace",
+      "@type": "xsd:string"
+    },
+    "tableflow.v1.CatalogIntegrationSnowflakeSpec": "confluent:tableflow.v1.CatalogIntegrationSnowflakeSpec",
+    "tableflow.v1.CatalogIntegrationUpdateRequest": "confluent:tableflow.v1.CatalogIntegrationUpdateRequest",
+    "tableflow.v1.CatalogIntegrationList": "confluent:tableflow.v1.CatalogIntegrationList",
+    "tableflow.v1.CatalogIntegrationStatus": "confluent:tableflow.v1.CatalogIntegrationStatus",
+    "last_sync_at": {
+      "@id": "confluent:last_sync_at",
+      "@type": "xsd:string"
+    },
+    "tableflow.v1.CatalogIntegrationUnityUpdateSpec": "confluent:tableflow.v1.CatalogIntegrationUnityUpdateSpec",
+    "iam.v2.UpdateCertRequest": "confluent:iam.v2.UpdateCertRequest",
+    "certificate_chain": {
+      "@id": "confluent:certificate_chain",
+      "@type": "xsd:string"
+    },
+    "certificate_chain_filename": {
+      "@id": "confluent:certificate_chain_filename",
+      "@type": "xsd:string"
+    },
+    "crl_url": {
+      "@id": "confluent:crl_url",
+      "@type": "@id"
+    },
+    "crl_chain": {
+      "@id": "confluent:crl_chain",
+      "@type": "xsd:string"
+    },
+    "require_crl_on_client_certificate": {
+      "@id": "confluent:require_crl_on_client_certificate",
+      "@type": "xsd:boolean"
+    },
+    "iam.v2.CertificateAuthorityList": "confluent:iam.v2.CertificateAuthorityList",
+    "iam.v2.CertificateAuthority": "confluent:iam.v2.CertificateAuthority",
+    "fingerprints": {
+      "@id": "confluent:fingerprints",
+      "@container": "@list"
+    },
+    "expiration_dates": {
+      "@id": "confluent:expiration_dates",
+      "@container": "@list"
+    },
+    "serial_numbers": {
+      "@id": "confluent:serial_numbers",
+      "@container": "@list"
+    },
+    "crl_source": {
+      "@id": "confluent:crl_source",
+      "@type": "xsd:string"
+    },
+    "crl_updated_at": {
+      "@id": "confluent:crl_updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "state": {
+      "@id": "confluent:state",
+      "@type": "xsd:string"
+    },
+    "iam.v2.CreateCertRequest": "confluent:iam.v2.CreateCertRequest",
+    "iam.v2.CertificateIdentityPoolList": "confluent:iam.v2.CertificateIdentityPoolList",
+    "iam.v2.CertificateIdentityPool": "confluent:iam.v2.CertificateIdentityPool",
+    "external_identifier": {
+      "@id": "confluent:external_identifier",
+      "@type": "xsd:string"
+    },
+    "filter": {
+      "@id": "confluent:filter",
+      "@type": "xsd:string"
+    },
+    "kafka-quotas.v1.ClientQuotaList": "confluent:kafka-quotas.v1.ClientQuotaList",
+    "kafka-quotas.v1.ClientQuotaSpec": "confluent:kafka-quotas.v1.ClientQuotaSpec",
+    "throughput": {
+      "@id": "confluent:throughput"
+    },
+    "cluster": {
+      "@id": "confluent:cluster"
+    },
+    "principals": {
+      "@id": "confluent:principals",
+      "@container": "@list"
+    },
+    "kafka-quotas.v1.ClientQuota": "confluent:kafka-quotas.v1.ClientQuota",
+    "kafka-quotas.v1.Throughput": "confluent:kafka-quotas.v1.Throughput",
+    "ingress_byte_rate": {
+      "@id": "confluent:ingress_byte_rate",
+      "@type": "xsd:string"
+    },
+    "egress_byte_rate": {
+      "@id": "confluent:egress_byte_rate",
+      "@type": "xsd:string"
+    },
+    "org.v2.Environment": "confluent:org.v2.Environment",
+    "stream_governance_config": {
+      "@id": "confluent:stream_governance_config"
+    },
+    "org.v2.Organization": "confluent:org.v2.Organization",
+    "jit_enabled": {
+      "@id": "confluent:jit_enabled",
+      "@type": "xsd:boolean"
+    },
+    "scim_enabled": {
+      "@id": "confluent:scim_enabled",
+      "@type": "xsd:boolean"
+    },
+    "org.v2.ScimToken": "confluent:org.v2.ScimToken",
+    "connection_name": {
+      "@id": "confluent:connection_name",
+      "@type": "xsd:string"
+    },
+    "token": {
+      "@id": "confluent:token",
+      "@type": "xsd:string"
+    },
+    "org.v2.StreamGovernanceConfig": "confluent:org.v2.StreamGovernanceConfig",
+    "package": {
+      "@id": "confluent:package",
+      "@type": "xsd:string"
+    },
+    "org.v2.EnvironmentList": "confluent:org.v2.EnvironmentList",
+    "org.v2.OrganizationList": "confluent:org.v2.OrganizationList",
+    "org.v2.ScimTokenList": "confluent:org.v2.ScimTokenList",
+    "iam.v2.User": "confluent:iam.v2.User",
+    "email": {
+      "@id": "confluent:email",
+      "@type": "xsd:string"
+    },
+    "full_name": {
+      "@id": "confluent:full_name",
+      "@type": "xsd:string"
+    },
+    "auth_type": {
+      "@id": "confluent:auth_type",
+      "@type": "xsd:string"
+    },
+    "iam.v2.ServiceAccount": "confluent:iam.v2.ServiceAccount",
+    "iam.v2.Invitation": "confluent:iam.v2.Invitation",
+    "accepted_at": {
+      "@id": "confluent:accepted_at",
+      "@type": "xsd:dateTime"
+    },
+    "creator": {
+      "@id": "confluent:creator"
+    },
+    "iam.v2.User.ConfigureUserAuthRequest": "confluent:iam.v2.User.ConfigureUserAuthRequest",
+    "iam.v2.UserList": "confluent:iam.v2.UserList",
+    "iam.v2.ServiceAccountList": "confluent:iam.v2.ServiceAccountList",
+    "iam.v2.InvitationList": "confluent:iam.v2.InvitationList",
+    "iam.v2.IpGroup": "confluent:iam.v2.IpGroup",
+    "group_name": {
+      "@id": "confluent:group_name",
+      "@type": "xsd:string"
+    },
+    "cidr_blocks": {
+      "@id": "confluent:cidr_blocks",
+      "@container": "@list"
+    },
+    "iam.v2.IpFilter": "confluent:iam.v2.IpFilter",
+    "filter_name": {
+      "@id": "confluent:filter_name",
+      "@type": "xsd:string"
+    },
+    "resource_group": {
+      "@id": "confluent:resource_group",
+      "@type": "xsd:string"
+    },
+    "resource_scope": {
+      "@id": "confluent:resource_scope",
+      "@type": "@id"
+    },
+    "operation_groups": {
+      "@id": "confluent:operation_groups",
+      "@container": "@list"
+    },
+    "ip_groups": {
+      "@id": "confluent:ip_groups",
+      "@container": "@list"
+    },
+    "iam.v2.IpFilterSummary": "confluent:iam.v2.IpFilterSummary",
+    "categories": {
+      "@id": "confluent:categories",
+      "@container": "@list"
+    },
+    "iam.v2.IpGroupList": "confluent:iam.v2.IpGroupList",
+    "iam.v2.IpFilterList": "confluent:iam.v2.IpFilterList",
+    "iam.v2.RoleBinding": "confluent:iam.v2.RoleBinding",
+    "role_name": {
+      "@id": "confluent:role_name",
+      "@type": "xsd:string"
+    },
+    "crn_pattern": {
+      "@id": "confluent:crn_pattern",
+      "@type": "@id"
+    },
+    "iam.v2.RoleBindingList": "confluent:iam.v2.RoleBindingList",
+    "notifications.v1.Subscription": "confluent:notifications.v1.Subscription",
+    "current_state": {
+      "@id": "confluent:current_state",
+      "@type": "xsd:string"
+    },
+    "notification_type": {
+      "@id": "confluent:notification_type"
+    },
+    "integrations": {
+      "@id": "confluent:integrations",
+      "@container": "@list"
+    },
+    "notifications.v1.Integration": "confluent:notifications.v1.Integration",
+    "target": {
+      "@id": "confluent:target"
+    },
+    "notifications.v1.NotificationType": "confluent:notifications.v1.NotificationType",
+    "category": {
+      "@id": "confluent:category",
+      "@type": "xsd:string"
+    },
+    "subscription_priority": {
+      "@id": "confluent:subscription_priority",
+      "@type": "xsd:string"
+    },
+    "is_included_in_plan": {
+      "@id": "confluent:is_included_in_plan",
+      "@type": "xsd:boolean"
+    },
+    "severity": {
+      "@id": "confluent:severity",
+      "@type": "xsd:string"
+    },
+    "notifications.v1.ResourcePreference": "confluent:notifications.v1.ResourcePreference",
+    "notifications.v1.ResourceSubscription": "confluent:notifications.v1.ResourceSubscription",
+    "notifications.v1.UserNotification": "confluent:notifications.v1.UserNotification",
+    "read": {
+      "@id": "confluent:read",
+      "@type": "xsd:boolean"
+    },
+    "read_at": {
+      "@id": "confluent:read_at",
+      "@type": "xsd:dateTime"
+    },
+    "received_at": {
+      "@id": "confluent:received_at",
+      "@type": "xsd:dateTime"
+    },
+    "actions": {
+      "@id": "confluent:actions",
+      "@container": "@list"
+    },
+    "recommended_actions": {
+      "@id": "confluent:recommended_actions"
+    },
+    "notifications.v1.SlackTarget": "confluent:notifications.v1.SlackTarget",
+    "webhook_url": {
+      "@id": "confluent:webhook_url",
+      "@type": "@id"
+    },
+    "notifications.v1.RoleEmailTarget": "confluent:notifications.v1.RoleEmailTarget",
+    "notifications.v1.UserEmailTarget": "confluent:notifications.v1.UserEmailTarget",
+    "notifications.v1.WebhookTarget": "confluent:notifications.v1.WebhookTarget",
+    "url": {
+      "@id": "confluent:url",
+      "@type": "@id"
+    },
+    "notifications.v1.MsTeamsTarget": "confluent:notifications.v1.MsTeamsTarget",
+    "notifications.v1.InAppTarget": "confluent:notifications.v1.InAppTarget",
+    "notifications.v1.ResourceSnapshot": "confluent:notifications.v1.ResourceSnapshot",
+    "type": {
+      "@id": "confluent:type",
+      "@type": "xsd:string"
+    },
+    "crn": {
+      "@id": "confluent:crn",
+      "@type": "xsd:string"
+    },
+    "notifications.v1.NotificationAction": "confluent:notifications.v1.NotificationAction",
+    "identifier": {
+      "@id": "confluent:identifier",
+      "@type": "xsd:string"
+    },
+    "role": {
+      "@id": "confluent:role",
+      "@type": "xsd:string"
+    },
+    "notifications.v1.UpdateUserNotificationsReadRequest": "confluent:notifications.v1.UpdateUserNotificationsReadRequest",
+    "notifications.v1.Summary": "confluent:notifications.v1.Summary",
+    "unread_count": {
+      "@id": "confluent:unread_count",
+      "@type": "xsd:integer"
+    },
+    "severities": {
+      "@id": "confluent:severities",
+      "@container": "@list"
+    },
+    "notifications.v1.RecommendedActions": "confluent:notifications.v1.RecommendedActions",
+    "version": {
+      "@id": "confluent:version",
+      "@type": "xsd:integer"
+    },
+    "content": {
+      "@id": "confluent:content",
+      "@type": "xsd:string"
+    },
+    "notifications.v1.SubscriptionList": "confluent:notifications.v1.SubscriptionList",
+    "notifications.v1.IntegrationList": "confluent:notifications.v1.IntegrationList",
+    "notifications.v1.NotificationTypeList": "confluent:notifications.v1.NotificationTypeList",
+    "notifications.v1.ResourceSubscriptionList": "confluent:notifications.v1.ResourceSubscriptionList",
+    "notifications.v1.UserNotificationList": "confluent:notifications.v1.UserNotificationList",
+    "cmk.v2.Cluster": "confluent:cmk.v2.Cluster",
+    "cmk.v2.ClusterStatus": "confluent:cmk.v2.ClusterStatus",
+    "cku": {
+      "@id": "confluent:cku",
+      "@type": "xsd:integer"
+    },
+    "cmk.v2.Basic": "confluent:cmk.v2.Basic",
+    "max_ecku": {
+      "@id": "confluent:max_ecku",
+      "@type": "xsd:integer"
+    },
+    "cmk.v2.Standard": "confluent:cmk.v2.Standard",
+    "cmk.v2.Enterprise": "confluent:cmk.v2.Enterprise",
+    "cmk.v2.Dedicated": "confluent:cmk.v2.Dedicated",
+    "encryption_key": {
+      "@id": "confluent:encryption_key",
+      "@type": "xsd:string"
+    },
+    "zones": {
+      "@id": "confluent:zones",
+      "@container": "@list"
+    },
+    "release_priority": {
+      "@id": "confluent:release_priority",
+      "@type": "xsd:string"
+    },
+    "cmk.v2.Freight": "confluent:cmk.v2.Freight",
+    "cmk.v2.Endpoints": "confluent:cmk.v2.Endpoints",
+    "kafka_bootstrap_endpoint": {
+      "@id": "confluent:kafka_bootstrap_endpoint",
+      "@type": "xsd:string"
+    },
+    "http_endpoint": {
+      "@id": "confluent:http_endpoint",
+      "@type": "@id"
+    },
+    "connection_type": {
+      "@id": "confluent:connection_type",
+      "@type": "xsd:string"
+    },
+    "cmk.v2.ClusterList": "confluent:cmk.v2.ClusterList",
+    "cmk.v2.ClusterSpec": "confluent:cmk.v2.ClusterSpec",
+    "availability": {
+      "@id": "confluent:availability",
+      "@type": "xsd:string"
+    },
+    "cloud": {
+      "@id": "confluent:cloud",
+      "@type": "xsd:string"
+    },
+    "region": {
+      "@id": "confluent:region",
+      "@type": "xsd:string"
+    },
+    "api_endpoint": {
+      "@id": "confluent:api_endpoint",
+      "@type": "xsd:string"
+    },
+    "endpoints": {
+      "@id": "confluent:endpoints"
+    },
+    "deletion_protection": {
+      "@id": "confluent:deletion_protection",
+      "@type": "xsd:boolean"
+    },
+    "byok": {
+      "@id": "confluent:byok"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Confluent API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Confluent's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-04) from openapi/confluent-access-points-networking-v1-api-openapi.yml, openapi/confluent-acl-v3-api-openapi.yml, openapi/confluent-acls-api-openapi.yml.",
+  "dcterms:created": "2026-10-04",
+  "dcterms:source": [
+    "openapi/confluent-access-points-networking-v1-api-openapi.yml",
+    "openapi/confluent-acl-v3-api-openapi.yml",
+    "openapi/confluent-acls-api-openapi.yml",
+    "openapi/confluent-agents-sql-v1-api-openapi.yml",
+    "openapi/confluent-api-keys-api-openapi.yml"
+  ]
+}

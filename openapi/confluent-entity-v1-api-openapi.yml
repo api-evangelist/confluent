@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Entity (v1) API
+  title: Confluent Entity (v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Entity (v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -431,80 +425,6 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    TagResponse:
-      type: object
-      properties:
-        typeName:
-          type: string
-          description: The tag name
-        attributes:
-          type: object
-          description: The tag attributes
-        entityGuid:
-          type: string
-          description: The internal entity guid
-        entityStatus:
-          type: string
-          description: The entity status
-          enum:
-          - ACTIVE
-          - DELETED
-          - PURGED
-        propagate:
-          type: boolean
-          description: Whether to propagate the tag
-        validityPeriods:
-          type: array
-          description: The validity periods
-          items:
-            $ref: '#/components/schemas/TimeBoundary'
-        removePropagationsOnEntityDelete:
-          type: boolean
-          description: Whether to remove propagations on entity delete
-        entityType:
-          type: string
-          description: The entity type
-        entityName:
-          type: string
-          description: The qualified name of the entity
-        error:
-          $ref: '#/components/schemas/ErrorMessage'
-    Tag:
-      type: object
-      properties:
-        typeName:
-          type: string
-          description: The tag name
-        attributes:
-          type: object
-          description: The tag attributes
-        entityGuid:
-          type: string
-          description: The internal entity guid
-        entityStatus:
-          type: string
-          description: The entity status
-          enum:
-          - ACTIVE
-          - DELETED
-          - PURGED
-        propagate:
-          type: boolean
-          description: Whether to propagate the tag
-        validityPeriods:
-          type: array
-          description: The validity periods
-          items:
-            $ref: '#/components/schemas/TimeBoundary'
-        removePropagationsOnEntityDelete:
-          type: boolean
-          description: Whether to remove propagations on entity delete
-        entityType:
-          type: string
-          description: The entity type
-        entityName:
-          type: string
-          description: The qualified name of the entity
     TermAssignmentHeader:
       type: object
       properties:
@@ -547,6 +467,21 @@ components:
           - DEPRECATED
           - OBSOLETE
           - OTHER
+    BusinessMetadata:
+      properties:
+        typeName:
+          type: string
+          description: The business metadata name
+        attributes:
+          type: object
+          description: The business metadata attributes
+        entityType:
+          type: string
+          description: The entity type
+        entityName:
+          type: string
+          description: The qualified name of the entity
+      type: object
     EntityPartialUpdate:
       type: object
       properties:
@@ -556,6 +491,222 @@ components:
           items:
             $ref: '#/components/schemas/PartialUpdateParams'
       description: The updated entities.
+    TimeBoundary:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: The start time of format yyyy/MM/dd HH:mm:ss
+        endTime:
+          type: string
+          description: The end time of format yyyy/MM/dd HH:mm:ss
+        timeZone:
+          type: string
+          description: The time zone (see java.util.TimeZone)
+    Classification:
+      type: object
+      properties:
+        typeName:
+          type: string
+          description: The tag name
+        attributes:
+          type: object
+          description: The tag attributes
+          additionalProperties:
+            type: object
+        entityGuid:
+          type: string
+          description: The internal entity guid
+        entityStatus:
+          type: string
+          description: The entity status
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+          description: Whether to propagate the tag
+        validityPeriods:
+          type: array
+          description: The validity periods
+          items:
+            $ref: '#/components/schemas/TimeBoundary'
+        removePropagationsOnEntityDelete:
+          type: boolean
+          description: Whether to remove propagations on entity delete
+    Tag:
+      type: object
+      properties:
+        typeName:
+          type: string
+          description: The tag name
+        attributes:
+          type: object
+          description: The tag attributes
+        entityGuid:
+          type: string
+          description: The internal entity guid
+        entityStatus:
+          type: string
+          description: The entity status
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+          description: Whether to propagate the tag
+        validityPeriods:
+          type: array
+          description: The validity periods
+          items:
+            $ref: '#/components/schemas/TimeBoundary'
+        removePropagationsOnEntityDelete:
+          type: boolean
+          description: Whether to remove propagations on entity delete
+        entityType:
+          type: string
+          description: The entity type
+        entityName:
+          type: string
+          description: The qualified name of the entity
+    ClassificationHeader:
+      type: object
+      properties:
+        typeName:
+          type: string
+          description: The tag name
+        entityGuid:
+          type: string
+          description: The internal entity guid
+        entityStatus:
+          type: string
+          description: The entity status
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+          description: Whether to propagate the tag
+        removePropagationsOnEntityDelete:
+          type: boolean
+          description: Whether to remove propagations on entity delete
+    TagResponse:
+      type: object
+      properties:
+        typeName:
+          type: string
+          description: The tag name
+        attributes:
+          type: object
+          description: The tag attributes
+        entityGuid:
+          type: string
+          description: The internal entity guid
+        entityStatus:
+          type: string
+          description: The entity status
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+          description: Whether to propagate the tag
+        validityPeriods:
+          type: array
+          description: The validity periods
+          items:
+            $ref: '#/components/schemas/TimeBoundary'
+        removePropagationsOnEntityDelete:
+          type: boolean
+          description: Whether to remove propagations on entity delete
+        entityType:
+          type: string
+          description: The entity type
+        entityName:
+          type: string
+          description: The qualified name of the entity
+        error:
+          $ref: '#/components/schemas/ErrorMessage'
+    EntityWithExtInfo:
+      type: object
+      properties:
+        referredEntities:
+          type: object
+          description: The referred entities
+          additionalProperties:
+            $ref: '#/components/schemas/Entity'
+        entity:
+          $ref: '#/components/schemas/Entity'
+    BusinessMetadataResponse:
+      properties:
+        typeName:
+          type: string
+          description: The business metadata name
+        attributes:
+          type: object
+          description: The business metadata attributes
+        entityType:
+          type: string
+          description: The entity type
+        entityName:
+          type: string
+          description: The qualified name of the entity
+        error:
+          $ref: '#/components/schemas/ErrorMessage'
+      type: object
+    PartialUpdateParams:
+      type: object
+      properties:
+        typeName:
+          type: string
+          description: The type name
+        attributes:
+          type: object
+          description: The attributes
+        guid:
+          type: string
+          description: The internal guid
+        status:
+          type: string
+          description: The status
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        classificationNames:
+          type: array
+          description: The classification (tag) names
+          items:
+            type: string
+        classifications:
+          type: array
+          description: The classifications (tags)
+          items:
+            $ref: '#/components/schemas/ClassificationHeader'
+        isIncomplete:
+          type: boolean
+          description: Whether is incomplete
+    EntityPartialUpdateResponse:
+      type: object
+      properties:
+        mutatedEntities:
+          $ref: '#/components/schemas/EntityPartialUpdate'
+      description: The type name
+    ErrorMessage:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: The error code
+          format: int32
+        message:
+          type: string
+          description: The error message
+      description: Error message of this operation
     Entity:
       type: object
       description: The entity
@@ -640,163 +791,6 @@ components:
         proxy:
           type: boolean
           description: Whether is a proxy
-    ClassificationHeader:
-      type: object
-      properties:
-        typeName:
-          type: string
-          description: The tag name
-        entityGuid:
-          type: string
-          description: The internal entity guid
-        entityStatus:
-          type: string
-          description: The entity status
-          enum:
-          - ACTIVE
-          - DELETED
-          - PURGED
-        propagate:
-          type: boolean
-          description: Whether to propagate the tag
-        removePropagationsOnEntityDelete:
-          type: boolean
-          description: Whether to remove propagations on entity delete
-    BusinessMetadataResponse:
-      properties:
-        typeName:
-          type: string
-          description: The business metadata name
-        attributes:
-          type: object
-          description: The business metadata attributes
-        entityType:
-          type: string
-          description: The entity type
-        entityName:
-          type: string
-          description: The qualified name of the entity
-        error:
-          $ref: '#/components/schemas/ErrorMessage'
-      type: object
-    TimeBoundary:
-      type: object
-      properties:
-        startTime:
-          type: string
-          description: The start time of format yyyy/MM/dd HH:mm:ss
-        endTime:
-          type: string
-          description: The end time of format yyyy/MM/dd HH:mm:ss
-        timeZone:
-          type: string
-          description: The time zone (see java.util.TimeZone)
-    ErrorMessage:
-      type: object
-      properties:
-        error_code:
-          type: integer
-          description: The error code
-          format: int32
-        message:
-          type: string
-          description: The error message
-      description: Error message of this operation
-    PartialUpdateParams:
-      type: object
-      properties:
-        typeName:
-          type: string
-          description: The type name
-        attributes:
-          type: object
-          description: The attributes
-        guid:
-          type: string
-          description: The internal guid
-        status:
-          type: string
-          description: The status
-          enum:
-          - ACTIVE
-          - DELETED
-          - PURGED
-        classificationNames:
-          type: array
-          description: The classification (tag) names
-          items:
-            type: string
-        classifications:
-          type: array
-          description: The classifications (tags)
-          items:
-            $ref: '#/components/schemas/ClassificationHeader'
-        isIncomplete:
-          type: boolean
-          description: Whether is incomplete
-    BusinessMetadata:
-      properties:
-        typeName:
-          type: string
-          description: The business metadata name
-        attributes:
-          type: object
-          description: The business metadata attributes
-        entityType:
-          type: string
-          description: The entity type
-        entityName:
-          type: string
-          description: The qualified name of the entity
-      type: object
-    Classification:
-      type: object
-      properties:
-        typeName:
-          type: string
-          description: The tag name
-        attributes:
-          type: object
-          description: The tag attributes
-          additionalProperties:
-            type: object
-        entityGuid:
-          type: string
-          description: The internal entity guid
-        entityStatus:
-          type: string
-          description: The entity status
-          enum:
-          - ACTIVE
-          - DELETED
-          - PURGED
-        propagate:
-          type: boolean
-          description: Whether to propagate the tag
-        validityPeriods:
-          type: array
-          description: The validity periods
-          items:
-            $ref: '#/components/schemas/TimeBoundary'
-        removePropagationsOnEntityDelete:
-          type: boolean
-          description: Whether to remove propagations on entity delete
-    EntityPartialUpdateResponse:
-      type: object
-      properties:
-        mutatedEntities:
-          $ref: '#/components/schemas/EntityPartialUpdate'
-      description: The type name
-    EntityWithExtInfo:
-      type: object
-      properties:
-        referredEntities:
-          type: object
-          description: The referred entities
-          additionalProperties:
-            $ref: '#/components/schemas/Entity'
-        entity:
-          $ref: '#/components/schemas/Entity'
   securitySchemes:
     cloud-api-key:
       type: http
@@ -835,6 +829,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

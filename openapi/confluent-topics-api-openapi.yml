@@ -82,14 +82,20 @@ paths:
         '204':
           description: Deleted
 components:
+  parameters:
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
+    TopicName:
+      name: topic_name
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
-    TopicList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Topic'
     Topic:
       type: object
       properties:
@@ -101,6 +107,13 @@ components:
           type: integer
         is_internal:
           type: boolean
+    TopicList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
     TopicCreateRequest:
       type: object
       required:
@@ -121,19 +134,6 @@ components:
                 type: string
               value:
                 type: string
-  parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
-    TopicName:
-      name: topic_name
-      in: path
-      required: true
-      schema:
-        type: string
   securitySchemes:
     basicAuth:
       type: http

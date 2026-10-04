@@ -1,0 +1,274 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Private RBAC UI - My RoleBindings API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Endpoints that power the My Rolebindings UI in Confluent Control Center.
+  name: Private RBAC UI - My RoleBindings
+paths:
+  /security/1.0/lookup/rolebindings/principal/{principal}:
+    get:
+      description: 'Be aware that this simply looks at the rolebinding data, and does not mean that
+
+        the clusters actually exist.
+
+
+        Callable by Admins+User.'
+      operationId: myRoleBindingsAll
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:bob
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      - description: Filter down by a cluster type.
+        example: kafka-cluster
+        explode: true
+        in: query
+        name: clusterType
+        required: false
+        schema:
+          pattern: ^((kafka)|(ksql)|(connect)|(schema-registry))-cluster$
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ScopeRoleBindingMapping'
+                type: array
+          description: List of RoleBindings for the user per scope.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: List all rolebindings for the specifed principal for all scopes and clusters…
+      tags:
+      - Private RBAC UI - My RoleBindings
+    post:
+      description: Callable by Admins+User.
+      operationId: myRoleBindingsSingleScope
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:bob
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScopeRoleBindingMapping'
+          description: Item per Scope
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: List all rolebindings for the specifed principal and scope
+      tags:
+      - Private RBAC UI - My RoleBindings
+components:
+  schemas:
+    ScopeRoleBindingMapping:
+      example:
+        scope:
+          clusterName: StagingCluster
+          clusters:
+            kafka-cluster: kafkaClusterId
+            schema-registry-cluster: schemaRegistryClusterId
+            flink-environment: flinkEnvironmentId
+            ksql-cluster: ksqlClusterId
+            cmf: cmfId
+            connect-cluster: connectClusterId
+        rolebindings:
+          key:
+            key:
+            - name: clicksTopic1
+              patternType: LITERAL
+              resourceType: Topic
+            - name: clicksTopic1
+              patternType: LITERAL
+              resourceType: Topic
+      properties:
+        scope:
+          $ref: '#/components/schemas/MdsScope'
+        rolebindings:
+          additionalProperties:
+            additionalProperties:
+              items:
+                $ref: '#/components/schemas/ResourcePattern'
+              type: array
+            type: object
+          type: object
+      type: object
+    ResourcePattern:
+      example:
+        name: clicksTopic1
+        patternType: LITERAL
+        resourceType: Topic
+      properties:
+        resourceType:
+          example: Topic
+          type: string
+        name:
+          example: clicksTopic1
+          type: string
+        patternType:
+          example: LITERAL
+          pattern: (^LITERAL$)|(^PREFIXED$)
+          type: string
+      required:
+      - name
+      - patternType
+      - resourceType
+      type: object
+    Scope:
+      example:
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      required:
+      - clusters
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    Scope_clusters:
+      example:
+        kafka-cluster: kafkaClusterId
+        schema-registry-cluster: schemaRegistryClusterId
+        flink-environment: flinkEnvironmentId
+        ksql-cluster: ksqlClusterId
+        cmf: cmfId
+        connect-cluster: connectClusterId
+      properties:
+        kafka-cluster:
+          example: kafkaClusterId
+          type: string
+        connect-cluster:
+          example: connectClusterId
+          type: string
+        ksql-cluster:
+          example: ksqlClusterId
+          type: string
+        schema-registry-cluster:
+          example: schemaRegistryClusterId
+          type: string
+        cmf:
+          example: cmfId
+          type: string
+        flink-environment:
+          example: flinkEnvironmentId
+          type: string
+      type: object
+    MdsScope:
+      example:
+        clusterName: StagingCluster
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusterName:
+          example: StagingCluster
+          type: string
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

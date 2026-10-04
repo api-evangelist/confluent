@@ -1,0 +1,224 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS RBAC - Role Definitions API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Basic information about the roles that the system defines.
+  name: RBAC - Role Definitions
+paths:
+  /security/1.0/roles:
+    get:
+      description: 'For information and developer purposes.
+
+
+        Callable by LDAP users.'
+      operationId: roles
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Role'
+                type: array
+          description: List of roles with resourceType and allowed operations.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Returns all the roles defined in the system
+      tags:
+      - RBAC - Role Definitions
+  /security/1.0/roles/{roleName}:
+    get:
+      description: Callable by LDAP users.
+      operationId: roleDetail
+      parameters:
+      - description: Role name to look up.
+        example: DeveloperRead
+        explode: false
+        in: path
+        name: roleName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: A single role.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: List the resourceType and operations allowed for a given role
+      tags:
+      - RBAC - Role Definitions
+  /security/1.0/roleNames:
+    get:
+      description: 'For information and developer purposes.
+
+
+        Callable by LDAP users.'
+      operationId: rolenames
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+          description: The names of the roles defined in the system.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Returns the names of all the roles defined in the system
+      tags:
+      - RBAC - Role Definitions
+components:
+  schemas:
+    Operation:
+      example:
+        resourceType: Topic
+        operations:
+        - Read
+        - Write
+        - Describe
+        - DescribeConfigs
+      properties:
+        resourceType:
+          type: string
+        operations:
+          items:
+            type: string
+          type: array
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    AccessPolicy:
+      example:
+        allowedOperations:
+        - resourceType: Topic
+          operations:
+          - Read
+          - Write
+          - Describe
+          - DescribeConfigs
+        - resourceType: Topic
+          operations:
+          - Read
+          - Write
+          - Describe
+          - DescribeConfigs
+        scopeType: Resource
+      properties:
+        scopeType:
+          example: Resource
+          pattern: Cluster|Resource
+          type: string
+        allowedOperations:
+          items:
+            $ref: '#/components/schemas/Operation'
+          type: array
+      type: object
+    Role:
+      example:
+        name: DeveloperRead
+        accessPolicy:
+          allowedOperations:
+          - resourceType: Topic
+            operations:
+            - Read
+            - Write
+            - Describe
+            - DescribeConfigs
+          - resourceType: Topic
+            operations:
+            - Read
+            - Write
+            - Describe
+            - DescribeConfigs
+          scopeType: Resource
+      properties:
+        name:
+          example: DeveloperRead
+          type: string
+        accessPolicy:
+          $ref: '#/components/schemas/AccessPolicy'
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

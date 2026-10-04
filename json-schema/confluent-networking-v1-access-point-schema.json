@@ -1,0 +1,664 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-networking-v1-access-point-schema.json",
+  "title": "networking.v1.AccessPoint",
+  "description": "AccessPoint objects represent network connections in and out of Gateways.\nThis API allows you to list, create, read, update, and delete your access points.\n\n\n## The Access Points Model\n<SchemaDefinition schemaRef=\"#/components/schemas/networking.v1.AccessPoint\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-access-points-networking-v1-api-openapi.yml#/components/schemas/networking.v1.AccessPoint",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "networking/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "AccessPoint"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "spec": {
+      "$ref": "#/$defs/networking.v1.AccessPointSpec"
+    },
+    "status": {
+      "$ref": "#/$defs/networking.v1.AccessPointStatus"
+    }
+  },
+  "$defs": {
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "ObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "api_version": {
+          "type": "string",
+          "description": "API group and version of the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind of the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "networking.v1.AccessPointSpec": {
+      "type": "object",
+      "description": "The desired state of the Access Point",
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "description": "The name of the access point."
+        },
+        "config": {
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/networking.v1.AwsEgressPrivateLinkEndpoint"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AwsIngressPrivateLinkEndpoint"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AzureEgressPrivateLinkEndpoint"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AzureIngressPrivateLinkEndpoint"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AwsPrivateNetworkInterface"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.GcpEgressPrivateServiceConnectEndpoint"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.GcpIngressPrivateServiceConnectEndpoint"
+            }
+          ],
+          "description": "The specific details of the different access point configurations."
+        },
+        "environment": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectReference"
+            }
+          ],
+          "description": "The environment to which this belongs."
+        },
+        "gateway": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectReference"
+            }
+          ],
+          "description": "The gateway to which this belongs.",
+          "x-immutable": true
+        }
+      },
+      "x-enable-id": true,
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    },
+    "networking.v1.AccessPointStatus": {
+      "type": "object",
+      "required": [
+        "phase"
+      ],
+      "description": "The status of the Access Point",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "PROVISIONING",
+            "PENDING_ACCEPT",
+            "READY",
+            "FAILED",
+            "DEPROVISIONING",
+            "DISCONNECTED",
+            "DEGRADED",
+            "ERROR"
+          ],
+          "description": "The lifecycle phase of the access point:\n\n  PROVISIONING: Access point provisioning is in progress;\n\n  PENDING_ACCEPT: Access point connection request is pending acceptance by the customer;\n\n  READY:  Access point is ready;\n\n  FAILED: Access point is in a failed state;\n\n  DEPROVISIONING: Access point deprovisioning is in progress;\n\n  DISCONNECTED: Access Point has been disconnected in the cloud provider by the customer;\n\n  DEGRADED: Access Point is experiencing reduced performance or partial failure;\n\n  ERROR: Invalid customer input during Access Point creation;\n",
+          "readOnly": true
+        },
+        "error_code": {
+          "type": "string",
+          "description": "Error code if access point is in a failed state. May be used for programmatic error checking.",
+          "readOnly": true
+        },
+        "error_message": {
+          "type": "string",
+          "description": "Displayable error message if access point is in a failed state.",
+          "readOnly": true
+        },
+        "config": {
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/networking.v1.AwsEgressPrivateLinkEndpointStatus"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AwsIngressPrivateLinkEndpointStatus"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AzureEgressPrivateLinkEndpointStatus"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.AzureIngressPrivateLinkEndpointStatus"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.GcpEgressPrivateServiceConnectEndpointStatus"
+            },
+            {
+              "$ref": "#/$defs/networking.v1.GcpIngressPrivateServiceConnectEndpointStatus"
+            }
+          ],
+          "description": "Cloud specific status of the access point.",
+          "readOnly": true
+        }
+      },
+      "readOnly": true
+    },
+    "networking.v1.AwsEgressPrivateLinkEndpoint": {
+      "type": "object",
+      "description": "AWS VPC Endpoint.",
+      "required": [
+        "kind",
+        "vpc_endpoint_service_name"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "AwsEgressPrivateLinkEndpoint kind.",
+          "enum": [
+            "AwsEgressPrivateLinkEndpoint"
+          ]
+        },
+        "vpc_endpoint_service_name": {
+          "description": "ID of the VPC Endpoint service used for PrivateLink.",
+          "type": "string",
+          "minLength": 1
+        },
+        "enable_high_availability": {
+          "type": "boolean",
+          "description": "Whether a resource should be provisioned with high availability. Endpoints deployed with high availability have network interfaces deployed in multiple AZs.",
+          "x-immutable": true
+        },
+        "target_system": {
+          "type": "string",
+          "description": "[Used by the Confluent Cloud Console] The target system or service that the PrivateLink Endpoint connects to (e.g. \"MONGODB\" or \"SNOWFLAKE\")."
+        }
+      }
+    },
+    "networking.v1.AwsEgressPrivateLinkEndpointStatus": {
+      "type": "object",
+      "title": "AWS",
+      "description": "Status of an AWS PrivateLink Endpoint.",
+      "required": [
+        "kind",
+        "vpc_endpoint_id",
+        "vpc_endpoint_dns_name"
+      ],
+      "properties": {
+        "kind": {
+          "description": "AwsEgressPrivateLinkEndpointStatus kind.",
+          "type": "string",
+          "enum": [
+            "AwsEgressPrivateLinkEndpointStatus"
+          ]
+        },
+        "vpc_endpoint_id": {
+          "description": "ID of a VPC Endpoint (if any) that is connected to the VPC Endpoint service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "vpc_endpoint_dns_name": {
+          "description": "DNS name of a VPC Endpoint (if any) that is connected to the VPC Endpoint service.",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "networking.v1.AwsIngressPrivateLinkEndpoint": {
+      "type": "object",
+      "description": "AWS Ingress Private Link Endpoint.",
+      "required": [
+        "kind",
+        "vpc_endpoint_id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "AwsIngressPrivateLinkEndpoint kind.",
+          "enum": [
+            "AwsIngressPrivateLinkEndpoint"
+          ]
+        },
+        "vpc_endpoint_id": {
+          "description": "ID of a VPC Endpoint that will be connected to the VPC Endpoint service.",
+          "type": "string",
+          "minLength": 1,
+          "x-immutable": true
+        }
+      }
+    },
+    "networking.v1.AwsIngressPrivateLinkEndpointStatus": {
+      "type": "object",
+      "description": "Status of an AWS Ingress Private Link Endpoint.",
+      "required": [
+        "kind",
+        "vpc_endpoint_service_name",
+        "vpc_endpoint_id"
+      ],
+      "properties": {
+        "kind": {
+          "description": "AwsIngressPrivateLinkEndpointStatus kind.",
+          "type": "string",
+          "enum": [
+            "AwsIngressPrivateLinkEndpointStatus"
+          ]
+        },
+        "vpc_endpoint_service_name": {
+          "description": "ID of the Confluent Cloud VPC Endpoint service used for PrivateLink.",
+          "type": "string",
+          "readOnly": true
+        },
+        "vpc_endpoint_id": {
+          "description": "ID of the VPC Endpoint used for connecting to the VPC Endpoint service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "dns_domain": {
+          "description": "DNS domain name used to configure the Private Hosted Zone for the Access Point.",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "networking.v1.AwsPrivateNetworkInterface": {
+      "type": "object",
+      "description": "Confluent Private Network Interface powered by AWS ENI.",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "AwsPrivateNetworkInterface kind.",
+          "enum": [
+            "AwsPrivateNetworkInterface"
+          ]
+        },
+        "network_interfaces": {
+          "description": "List of the IDs of the Elastic Network Interfaces.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "minItems": 51
+        },
+        "account": {
+          "type": "string",
+          "pattern": "^\\d{12}$",
+          "description": "The AWS account ID associated with the ENIs you are using for the Confluent Private Network Interface.",
+          "x-immutable": true
+        },
+        "egress_routes": {
+          "type": "array",
+          "description": "List of egress CIDRs (IPv4) for egress PNI.",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "networking.v1.AzureEgressPrivateLinkEndpoint": {
+      "type": "object",
+      "description": "Azure Private Endpoint.",
+      "required": [
+        "kind",
+        "private_link_service_resource_id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "AzureEgressPrivateLinkEndpoint kind.",
+          "enum": [
+            "AzureEgressPrivateLinkEndpoint"
+          ]
+        },
+        "private_link_service_resource_id": {
+          "description": "Resource ID of the Azure Private Link service.",
+          "type": "string",
+          "minLength": 1
+        },
+        "private_link_subresource_name": {
+          "type": "string",
+          "description": "Name of the subresource for the Private Endpoint to connect to."
+        },
+        "target_system": {
+          "type": "string",
+          "description": "[Used by the Confluent Cloud Console] The target system or service that the PrivateLink Endpoint connects to (e.g. \"MONGODB\" or \"SNOWFLAKE\")."
+        }
+      }
+    },
+    "networking.v1.AzureEgressPrivateLinkEndpointStatus": {
+      "type": "object",
+      "description": "Status of an Azure Private Endpoint.",
+      "required": [
+        "kind",
+        "private_endpoint_resource_id",
+        "private_endpoint_ip_address"
+      ],
+      "properties": {
+        "kind": {
+          "description": "AzureEgressPrivateLinkEndpointStatus kind.",
+          "type": "string",
+          "enum": [
+            "AzureEgressPrivateLinkEndpointStatus"
+          ]
+        },
+        "private_endpoint_resource_id": {
+          "description": "Resource ID of the Private Endpoint (if any) that is connected to the Private Link service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_endpoint_domain": {
+          "description": "Domain of the Private Endpoint (if any) that is connected to the Private Link service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_endpoint_ip_address": {
+          "description": "IP address of the Private Endpoint (if any) that is connected to the Private Link service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_endpoint_custom_dns_config_domains": {
+          "description": "Domains of the Private Endpoint (if any) based off FQDNs in Azure custom DNS configs, which are required in your private DNS setup.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "networking.v1.AzureIngressPrivateLinkEndpoint": {
+      "type": "object",
+      "description": "Azure Ingress Private Link Endpoint.",
+      "required": [
+        "kind",
+        "private_endpoint_resource_id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "AzureIngressPrivateLinkEndpoint kind.",
+          "enum": [
+            "AzureIngressPrivateLinkEndpoint"
+          ]
+        },
+        "private_endpoint_resource_id": {
+          "description": "Resource ID of a Private Endpoint that will be connected to the Private Link service.",
+          "type": "string",
+          "minLength": 1,
+          "x-immutable": true
+        }
+      }
+    },
+    "networking.v1.AzureIngressPrivateLinkEndpointStatus": {
+      "type": "object",
+      "description": "Status of an Azure Ingress Private Link Endpoint.",
+      "required": [
+        "kind",
+        "private_link_service_alias",
+        "private_link_service_resource_id",
+        "private_endpoint_resource_id"
+      ],
+      "properties": {
+        "kind": {
+          "description": "AzureIngressPrivateLinkEndpointStatus kind.",
+          "type": "string",
+          "enum": [
+            "AzureIngressPrivateLinkEndpointStatus"
+          ]
+        },
+        "private_link_service_alias": {
+          "description": "Alias of the Confluent Cloud Private Link Service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_link_service_resource_id": {
+          "description": "Resource ID of the Confluent Cloud Private Link Service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_endpoint_resource_id": {
+          "description": "Resource ID of the Private Endpoint used for connecting to the Private Link Service.",
+          "type": "string",
+          "readOnly": true
+        },
+        "dns_domain": {
+          "description": "DNS domain name used to configure the Private DNS Zone for the Access Point.",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "networking.v1.GcpEgressPrivateServiceConnectEndpoint": {
+      "type": "object",
+      "description": "GCP Private Service Connect Endpoint.",
+      "required": [
+        "kind",
+        "private_service_connect_endpoint_target"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "GcpEgressPrivateServiceConnectEndpoint kind.",
+          "enum": [
+            "GcpEgressPrivateServiceConnectEndpoint"
+          ]
+        },
+        "private_service_connect_endpoint_target": {
+          "description": "URI of the service attachment for the published service that the Private Service Connect Endpoint connects to or \"ALL_GOOGLE_APIS\" for global Google APIs.",
+          "type": "string",
+          "minLength": 1
+        },
+        "target_system": {
+          "type": "string",
+          "description": "[Used by the Confluent Cloud Console] The target system or service that the PrivateLink Endpoint connects to (e.g. \"GCS\" or \"SNOWFLAKE\")."
+        }
+      }
+    },
+    "networking.v1.GcpEgressPrivateServiceConnectEndpointStatus": {
+      "type": "object",
+      "description": "Status of a GCP Private Service Connect Endpoint.",
+      "required": [
+        "kind",
+        "private_service_connect_endpoint_connection_id",
+        "private_service_connect_endpoint_name",
+        "private_service_connect_endpoint_ip_address"
+      ],
+      "properties": {
+        "kind": {
+          "description": "GcpEgressPrivateServiceConnectEndpointStatus kind.",
+          "type": "string",
+          "enum": [
+            "GcpEgressPrivateServiceConnectEndpointStatus"
+          ]
+        },
+        "private_service_connect_endpoint_connection_id": {
+          "description": "Connection ID of the Private Service Connect Endpoint (if any) that is connected to the endpoint target.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_service_connect_endpoint_name": {
+          "description": "Name of the Private Service Connect Endpoint (if any) that is connected to the endpoint target.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_service_connect_endpoint_ip_address": {
+          "description": "IP address of the Private Service Connect Endpoint (if any) that is connected to the endpoint target.",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "networking.v1.GcpIngressPrivateServiceConnectEndpoint": {
+      "type": "object",
+      "description": "GCP Ingress Private Service Connect Endpoint.",
+      "required": [
+        "kind",
+        "private_service_connect_connection_id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "GcpIngressPrivateServiceConnectEndpoint kind.",
+          "enum": [
+            "GcpIngressPrivateServiceConnectEndpoint"
+          ]
+        },
+        "private_service_connect_connection_id": {
+          "description": "The ID of the Private Service Connect connection.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "networking.v1.GcpIngressPrivateServiceConnectEndpointStatus": {
+      "type": "object",
+      "description": "Status of a GCP Ingress Private Service Connect Endpoint.",
+      "required": [
+        "kind",
+        "private_service_connect_service_attachment",
+        "private_service_connect_connection_id"
+      ],
+      "properties": {
+        "kind": {
+          "description": "GcpIngressPrivateServiceConnectEndpointStatus kind.",
+          "type": "string",
+          "enum": [
+            "GcpIngressPrivateServiceConnectEndpointStatus"
+          ]
+        },
+        "private_service_connect_service_attachment": {
+          "description": "URI of the Private Service Connect Service Attachment in Confluent Cloud.",
+          "type": "string",
+          "readOnly": true
+        },
+        "private_service_connect_connection_id": {
+          "description": "The ID of the Private Service Connect connection.",
+          "type": "string",
+          "readOnly": true
+        },
+        "dns_domain": {
+          "description": "DNS domain name used to configure the DNS Zone for the Access Point.",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-srcm-v3-cluster-schema.json",
+  "title": "srcm.v3.Cluster",
+  "description": "`Clusters` objects represent Schema Registry Clusters on Confluent Cloud.\n\nThe API allows you to list and read your Schema Registry clusters.\n\n\nRelated guide: [Confluent Cloud Schema Registry Cluster APIs](https://docs.confluent.io/cloud/current/stream-governance/clusters-regions-api.html#schema-registry-cluster-management).\n\n## The Clusters Model\n<SchemaDefinition schemaRef=\"#/components/schemas/srcm.v3.Cluster\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-clusters-srcm-v3-api-openapi.yml#/components/schemas/srcm.v3.Cluster",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "srcm/v3"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "Cluster"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "spec": {
+      "$ref": "#/$defs/srcm.v3.ClusterSpec"
+    },
+    "status": {
+      "$ref": "#/$defs/srcm.v3.ClusterStatus"
+    }
+  },
+  "$defs": {
+    "GlobalObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "srcm.v3.ClusterSpec": {
+      "type": "object",
+      "description": "The desired state of the Cluster",
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "description": "The cluster name.",
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "package": {
+          "type": "string",
+          "description": "The billing package.\n\nNote: Clusters can be upgraded from ESSENTIALS to ADVANCED, but cannot be\ndowngraded from ADVANCED to ESSENTIALS.\n",
+          "x-extensible-enum": [
+            "ESSENTIALS",
+            "ADVANCED"
+          ]
+        },
+        "http_endpoint": {
+          "type": "string",
+          "description": "The cluster HTTP request URL.",
+          "format": "uri",
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "catalog_http_endpoint": {
+          "type": "string",
+          "description": "The cluster's catalog HTTP request URL.",
+          "format": "uri",
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "private_http_endpoint": {
+          "type": "string",
+          "description": "The cluster's private HTTP request URL.\n\nDEPRECATED - Please use the `private_networking_config.regional_endpoints` attribute instead,\nwhich supersedes the `private_http_endpoint` attribute.\n",
+          "format": "uri",
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "private_networking_config": {
+          "type": "object",
+          "description": "Available HTTP request URLs for private connectivity.",
+          "properties": {
+            "regional_endpoints": {
+              "type": "object",
+              "description": "A map of region identifiers to their corresponding private HTTP request URL.",
+              "additionalProperties": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "cloud": {
+          "type": "string",
+          "description": "The cloud service provider in which the cluster is running.",
+          "x-extensible-enum": [
+            "AWS",
+            "GCP",
+            "AZURE"
+          ],
+          "x-immutable": true
+        },
+        "region": {
+          "type": "string",
+          "description": "The cloud service provider region where the cluster is running.",
+          "x-immutable": true
+        },
+        "environment": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlobalObjectReference"
+            }
+          ],
+          "description": "The environment to which this belongs.",
+          "x-immutable": true
+        }
+      },
+      "x-enable-id": true,
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    },
+    "srcm.v3.ClusterStatus": {
+      "type": "object",
+      "required": [
+        "phase"
+      ],
+      "description": "The status of the Cluster",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "PROVISIONING",
+            "PROVISIONED",
+            "FAILED"
+          ],
+          "description": "The lifecyle phase of the cluster:\n\n  PROVISIONED:  cluster is provisioned;\n\n  PROVISIONING:  cluster provisioning is in progress;\n\n  FAILED:  provisioning failed\n",
+          "readOnly": true
+        }
+      },
+      "readOnly": true
+    }
+  }
+}

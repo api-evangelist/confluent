@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-fcpm-v2-compute-pool-list-schema.json",
+  "title": "fcpm.v2.ComputePoolList",
+  "description": "A Compute Pool represents a set of compute resources that is used to run your Queries.\nThe resources (CPUs, memory,…) provided by a Compute Pool are shared between all Queries that use it.\nNote that the Compute Pool API supports a limited pagination API, only the `next` field will be populated.\n\n\n## The Compute Pools Model\n<SchemaDefinition schemaRef=\"#/components/schemas/fcpm.v2.ComputePool\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-compute-pools-fcpm-v2-api-openapi.yml#/components/schemas/fcpm.v2.ComputePoolList",
+  "type": "object",
+  "required": [
+    "api_version",
+    "kind",
+    "metadata",
+    "data"
+  ],
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "fcpm/v2"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "ComputePoolList"
+      ]
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ListMeta"
+        },
+        {
+          "properties": {
+            "first": {},
+            "last": {},
+            "prev": {},
+            "next": {}
+          }
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "description": "A data property that contains an array of resource items. Each entry in the array is a separate resource.",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/fcpm.v2.ComputePool"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "metadata",
+              "spec",
+              "status"
+            ],
+            "properties": {
+              "spec": {
+                "type": "object",
+                "required": [
+                  "display_name",
+                  "cloud",
+                  "region",
+                  "max_cfu",
+                  "environment"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "EnvScopedObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "GlobalObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "ListMeta": {
+      "type": "object",
+      "description": "ListMeta describes metadata that resource collections may have",
+      "properties": {
+        "first": {
+          "description": "A link to the first page of results. If a response does not contain a first link, then direct navigation to the first page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "last": {
+          "description": "A link to the last page of results. If a response does not contain a last link, then direct navigation to the last page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "prev": {
+          "description": "A link to the previous page of results. If a response does not contain a prev link, then either there is no previous data or backwards traversal through the result set is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "next": {
+          "description": "A link to the next page of results. If a response does not contain a next link, then there is no more data available.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "total_size": {
+          "description": "Number of records in the full result set. This response may be paginated and have a smaller number of records.",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "fcpm.v2.ComputePool": {
+      "type": "object",
+      "description": "A Compute Pool represents a set of compute resources that is used to run your Queries.\nThe resources (CPUs, memory,…) provided by a Compute Pool are shared between all Queries that use it.\nNote that the Compute Pool API supports a limited pagination API, only the `next` field will be populated.\n\n\n## The Compute Pools Model\n<SchemaDefinition schemaRef=\"#/components/schemas/fcpm.v2.ComputePool\" />",
+      "properties": {
+        "api_version": {
+          "type": "string",
+          "enum": [
+            "fcpm/v2"
+          ],
+          "description": "APIVersion defines the schema version of this representation of a resource.",
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind defines the object this REST resource represents.",
+          "readOnly": true,
+          "enum": [
+            "ComputePool"
+          ]
+        },
+        "id": {
+          "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+          "type": "string",
+          "maxLength": 255,
+          "readOnly": true
+        },
+        "metadata": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectMeta"
+            },
+            {
+              "properties": {
+                "self": {},
+                "resource_name": {}
+              }
+            }
+          ]
+        },
+        "spec": {
+          "$ref": "#/$defs/fcpm.v2.ComputePoolSpec"
+        },
+        "status": {
+          "$ref": "#/$defs/fcpm.v2.ComputePoolStatus"
+        }
+      }
+    },
+    "fcpm.v2.ComputePoolSpec": {
+      "type": "object",
+      "description": "The desired state of the Compute Pool",
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "description": "The name of the Flink compute pool.",
+          "pattern": "^(?:[0-9A-Za-z\\-])[\\w\\.-]{0,63}$",
+          "x-immutable": false
+        },
+        "cloud": {
+          "type": "string",
+          "description": "The cloud service provider that runs the compute pool.",
+          "x-extensible-enum": [
+            "AWS",
+            "GCP",
+            "AZURE"
+          ],
+          "x-immutable": true
+        },
+        "region": {
+          "type": "string",
+          "description": "Flink compute pools in the region provided will be able to use this identity pool",
+          "x-immutable": true
+        },
+        "max_cfu": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Maximum number of Confluent Flink Units (CFUs) that the Flink compute pool should auto-scale to.\n",
+          "x-extensible-enum": [
+            5,
+            10,
+            20,
+            30,
+            40,
+            50
+          ],
+          "x-immutable": false
+        },
+        "enable_ai": {
+          "type": "boolean",
+          "default": false,
+          "description": "The flag to enable AI computing using Ray for the Flink compute pool. It's available in the Early Access API\nlifecycle stage only.\n",
+          "x-immutable": true
+        },
+        "default_pool": {
+          "type": "boolean",
+          "default": false,
+          "description": "The flag to indicate whether the Flink compute pool is a default compute pool or not.\nOnly one default compute pool per environment and region is allowed.\n",
+          "x-immutable": false
+        },
+        "environment": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlobalObjectReference"
+            }
+          ],
+          "description": "The environment to which this belongs."
+        },
+        "network": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EnvScopedObjectReference"
+            }
+          ],
+          "description": "The network to which this belongs.",
+          "x-immutable": true
+        }
+      },
+      "x-enable-id": true,
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    },
+    "fcpm.v2.ComputePoolStatus": {
+      "type": "object",
+      "required": [
+        "phase",
+        "current_cfu"
+      ],
+      "description": "The status of the Compute Pool",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "PROVISIONING",
+            "PROVISIONED",
+            "FAILED",
+            "DEPROVISIONING"
+          ],
+          "description": "Status of the Flink compute pool.",
+          "readOnly": true
+        },
+        "current_cfu": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of Confluent Flink Units (CFUs) currently allocated to this Flink compute pool.",
+          "readOnly": true
+        }
+      },
+      "readOnly": true
+    }
+  }
+}

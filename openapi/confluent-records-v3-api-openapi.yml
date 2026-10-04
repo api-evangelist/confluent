@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Records (v3) API
+  title: Confluent Records (v3) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Records (v3) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -92,7 +86,72 @@ paths:
         5XX:
           $ref: '#/components/responses/ServerErrorResponse'
 components:
+  requestBodies:
+    ProduceRequest:
+      description: A single record to be produced to Kafka. To produce multiple records in the same request, simply concatenate the records. The delivery reports are concatenated in the same order as the records are sent.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProduceRequest'
+          examples:
+            binary_and_json:
+              description: If using type, one of "BINARY", "JSON" or "STRING" is required.
+              value:
+                partition_id: 1
+                headers:
+                - name: Header-1
+                  value: SGVhZGVyLTE=
+                - name: Header-2
+                  value: SGVhZGVyLTI=
+                key:
+                  type: BINARY
+                  data: Zm9vYmFy
+                value:
+                  type: JSON
+                  data:
+                    foo: bar
+                timestamp: '2021-02-05T19:14:42Z'
+            string:
+              description: If using type, one of "BINARY", "JSON" or "STRING" is required.
+              value:
+                value:
+                  type: STRING
+                  data: My message
+            empty_value:
+              description: key or value can be omitted entirely.
+              value:
+                key:
+                  data: 1000
   schemas:
+    ProduceResponse:
+      type: object
+      required:
+      - error_code
+      properties:
+        error_code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        cluster_id:
+          type: string
+        topic_name:
+          type: string
+        partition_id:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+        timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        key:
+          $ref: '#/components/schemas/ProduceResponseData'
+        value:
+          $ref: '#/components/schemas/ProduceResponseData'
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -131,18 +190,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    ProduceRequestHeader:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-          format: byte
     ProduceRequestData:
       type:
       - object
@@ -177,36 +224,18 @@ components:
           - string
           - 'null'
           format: date-time
-    ProduceResponse:
+    ProduceRequestHeader:
       type: object
       required:
-      - error_code
+      - name
       properties:
-        error_code:
-          type: integer
-          format: int32
-        message:
+        name:
           type: string
-        cluster_id:
-          type: string
-        topic_name:
-          type: string
-        partition_id:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int64
-        timestamp:
+        value:
           type:
           - string
           - 'null'
-          format: date-time
-        key:
-          $ref: '#/components/schemas/ProduceResponseData'
-        value:
-          $ref: '#/components/schemas/ProduceResponseData'
-    AnyValue: {}
+          format: byte
     ProduceResponseData:
       type:
       - object
@@ -223,19 +252,68 @@ components:
           - BINARY
           - JSON
           - STRING
+    AnyValue: {}
   responses:
-    BadRequestErrorResponse_ProduceRecords:
+    UnprocessableEntity_ProduceRecord:
       description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            header_not_base64_encoded:
-              description: Thrown when headers in the produce-record are not base64 encoded.
+            produce_record_empty_request_body:
+              description: Thrown when the request body is empty.
               value:
-                error_code: 400
-                message: 'Cannot deserialize value of type `byte[]` from String "": Unexpected end of base64-encoded String: base64 variant ''MIME-NO-LINEFEEDS'' expects padding (one or more ''='' characters) at the end. This Base64Variant might have been incorrectly configured'
+                error_code: 422
+                message: Payload error. Request body is empty. Data is required.
+    UnauthorizedErrorResponse:
+      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authentication_failed:
+              description: Thrown when using Basic authentication with wrong Kafka credentials.
+              value:
+                error_code: 40101
+                message: Authentication failed
+    UnsupportedMediaTypeErrorResponse:
+      description: This implies the client is sending the request payload format in an unsupported format.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            produce_records_expects_json:
+              description: Thrown by /records API if payload format content-type doesn't match expected application/json
+              value:
+                error_code: 415
+                message: HTTP 415 Unsupported Media Type
+    RequestEntityTooLargeErrorResponse:
+      description: This implies the client is sending a request payload that is larger than the maximum message size the server can accept.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            produce_records_expects_json:
+              description: Thrown by /records API if payload size exceeds the message max size
+              value:
+                error_code: 413
+                message: The request included a message larger than the maximum message size the server can accept.
+    ServerErrorResponse:
+      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            generic_internal_server_error:
+              description: Thrown for generic HTTP 500 errors.
+              value:
+                error_code: 500
+                message: Internal Server Error
     ProduceResponse:
       description: 'The response containing a delivery report for a record produced to a topic. In streaming mode,
 
@@ -267,87 +345,6 @@ components:
               value:
                 error_code: 400
                 message: 'Bad Request: data=1 is not a base64 string.'
-    UnauthorizedErrorResponse:
-      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authentication_failed:
-              description: Thrown when using Basic authentication with wrong Kafka credentials.
-              value:
-                error_code: 40101
-                message: Authentication failed
-    RequestEntityTooLargeErrorResponse:
-      description: This implies the client is sending a request payload that is larger than the maximum message size the server can accept.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            produce_records_expects_json:
-              description: Thrown by /records API if payload size exceeds the message max size
-              value:
-                error_code: 413
-                message: The request included a message larger than the maximum message size the server can accept.
-    ServerErrorResponse:
-      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            generic_internal_server_error:
-              description: Thrown for generic HTTP 500 errors.
-              value:
-                error_code: 500
-                message: Internal Server Error
-    UnprocessableEntity_ProduceRecord:
-      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            produce_record_empty_request_body:
-              description: Thrown when the request body is empty.
-              value:
-                error_code: 422
-                message: Payload error. Request body is empty. Data is required.
-    TooManyRequestsErrorResponse:
-      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
-      content:
-        text/html:
-          schema:
-            type: string
-          example:
-            description: A sample response from Jetty's DoSFilter.
-            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
-    ForbiddenErrorResponse:
-      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authorization_failed:
-              description: Thrown when the caller is not authorized to perform the underlying operation.
-              value:
-                error_code: 40301
-                message: Request is not authorized
-    UnsupportedMediaTypeErrorResponse:
-      description: This implies the client is sending the request payload format in an unsupported format.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            produce_records_expects_json:
-              description: Thrown by /records API if payload format content-type doesn't match expected application/json
-              value:
-                error_code: 415
-                message: HTTP 415 Unsupported Media Type
     NotFoundErrorResponse:
       description: Indicates attempted access to an unreachable or non-existing resource like e.g. an unknown topic or partition. GET requests to endpoints not allowed in the accesslists will also result in this response.
       content:
@@ -370,15 +367,40 @@ components:
               value:
                 error_code: 40403
                 message: This server does not host this topic-partition.
+    ForbiddenErrorResponse:
+      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authorization_failed:
+              description: Thrown when the caller is not authorized to perform the underlying operation.
+              value:
+                error_code: 40301
+                message: Request is not authorized
+    BadRequestErrorResponse_ProduceRecords:
+      description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            header_not_base64_encoded:
+              description: Thrown when headers in the produce-record are not base64 encoded.
+              value:
+                error_code: 400
+                message: 'Cannot deserialize value of type `byte[]` from String "": Unexpected end of base64-encoded String: base64 variant ''MIME-NO-LINEFEEDS'' expects padding (one or more ''='' characters) at the end. This Base64Variant might have been incorrectly configured'
+    TooManyRequestsErrorResponse:
+      description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
+      content:
+        text/html:
+          schema:
+            type: string
+          example:
+            description: A sample response from Jetty's DoSFilter.
+            value: <html> <head> <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> <title>Error 429 Too Many Requests</title> </head> <body> <h2>HTTP ERROR 429 Too Many Requests</h2> <table> <tr> <th>URI:</th> <td>/v3/clusters/my-cluster</td> </tr> <tr> <th>STATUS:</th> <td>429</td> </tr> <tr> <th>MESSAGE:</th> <td>Too Many Requests</td> </tr> <tr> <th>SERVLET:</th> <td>default</td> </tr> </table> </body> </html>
   parameters:
-    ClusterId:
-      name: cluster_id
-      description: The Kafka cluster ID.
-      in: path
-      required: true
-      schema:
-        type: string
-      example: cluster-1
     TopicName:
       name: topic_name
       description: The topic name.
@@ -387,42 +409,14 @@ components:
       schema:
         type: string
       example: topic-1
-  requestBodies:
-    ProduceRequest:
-      description: A single record to be produced to Kafka. To produce multiple records in the same request, simply concatenate the records. The delivery reports are concatenated in the same order as the records are sent.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProduceRequest'
-          examples:
-            binary_and_json:
-              description: If using type, one of "BINARY", "JSON" or "STRING" is required.
-              value:
-                partition_id: 1
-                headers:
-                - name: Header-1
-                  value: SGVhZGVyLTE=
-                - name: Header-2
-                  value: SGVhZGVyLTI=
-                key:
-                  type: BINARY
-                  data: Zm9vYmFy
-                value:
-                  type: JSON
-                  data:
-                    foo: bar
-                timestamp: '2021-02-05T19:14:42Z'
-            string:
-              description: If using type, one of "BINARY", "JSON" or "STRING" is required.
-              value:
-                value:
-                  type: STRING
-                  data: My message
-            empty_value:
-              description: key or value can be omitted entirely.
-              value:
-                key:
-                  data: 1000
+    ClusterId:
+      name: cluster_id
+      description: The Kafka cluster ID.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: cluster-1
   securitySchemes:
     cloud-api-key:
       type: http
@@ -461,6 +455,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-topic-schema.json",
+  "title": "Topic",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-topics-api-openapi.yml#/components/schemas/Topic",
+  "type": "object",
+  "properties": {
+    "topic_name": {
+      "type": "string"
+    },
+    "partitions_count": {
+      "type": "integer"
+    },
+    "replication_factor": {
+      "type": "integer"
+    },
+    "is_internal": {
+      "type": "boolean"
+    }
+  }
+}

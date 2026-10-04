@@ -1,0 +1,520 @@
+openapi: 3.2.0
+info:
+  title: Confluent Associations:batch API
+  version: v1
+  description: 'Operations tagged Associations:batch across 2 of this provider''s published API definitions: schema-registry-api-spec.yaml, schema-registry-openapi.yaml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Associations:batch
+paths:
+  /associations:batch:
+    post:
+      summary: Mutate associations in batch
+      operationId: mutateAssociations
+      parameters:
+      - name: context
+        in: query
+        description: Context
+        schema:
+          type: string
+      - name: dryRun
+        in: query
+        description: Dry run
+        schema:
+          type: boolean
+      requestBody:
+        description: The create requests
+        content:
+          application/vnd.schemaregistry.v1+json:
+            schema:
+              $ref: '#/components/schemas/AssociationBatchRequest'
+          application/vnd.schemaregistry+json:
+            schema:
+              $ref: '#/components/schemas/AssociationBatchRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationBatchRequest'
+          application/octet-stream:
+            schema:
+              $ref: '#/components/schemas/AssociationBatchRequest'
+        required: true
+      responses:
+        '207':
+          description: The batch response
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/AssociationBatchResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/AssociationBatchResponse'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/AssociationBatchResponse'
+      tags:
+      - Associations:batch
+components:
+  schemas:
+    AssociationResponse:
+      type: object
+      properties:
+        resourceName:
+          type: string
+        resourceNamespace:
+          type: string
+        resourceId:
+          type: string
+        resourceType:
+          type: string
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationInfo'
+    SchemaEntity:
+      type: object
+      properties:
+        entityPath:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - sr_record
+          - sr_field
+    Rule:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Rule name
+        doc:
+          type: string
+          description: Rule doc
+        kind:
+          type: string
+          description: Rule kind
+          enum:
+          - TRANSFORM
+          - CONDITION
+        mode:
+          type: string
+          description: Rule mode
+          enum:
+          - UPGRADE
+          - DOWNGRADE
+          - UPDOWN
+          - WRITE
+          - READ
+          - WRITEREAD
+        type:
+          type: string
+          description: Rule type
+        tags:
+          uniqueItems: true
+          type: array
+          description: The tags to which this rule applies
+          items:
+            type: string
+            description: The tags to which this rule applies
+        params:
+          type: object
+          additionalProperties:
+            type: string
+            description: Optional params for the rule
+          description: Optional params for the rule
+        expr:
+          type: string
+          description: Rule expression
+        onSuccess:
+          type: string
+          description: Rule action on success
+        onFailure:
+          type: string
+          description: Rule action on failure
+        disabled:
+          type: boolean
+          description: Whether the rule is disabled
+      description: Rule
+    Metadata:
+      type: object
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        sensitive:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+      description: User-defined metadata
+    Schema:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Name of the subject
+          example: User
+        version:
+          type: integer
+          description: Version number
+          format: int32
+          example: 1
+        id:
+          type: integer
+          description: Globally unique identifier of the schema
+          format: int32
+          example: 100001
+        guid:
+          type: string
+          description: Globally unique identifier of the schema. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        schemaType:
+          type: string
+          description: Schema type. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          example: AVRO
+        references:
+          type: array
+          description: References to other schemas
+          items:
+            $ref: '#/components/schemas/SchemaReference'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        ruleset:
+          $ref: '#/components/schemas/RuleSet'
+        schema:
+          type: string
+          description: Schema definition string
+          example: '{"schema": "{"type": "string"}"}'
+        schemaTags:
+          type: array
+          description: Schema tags
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        ts:
+          type: integer
+          description: Timestamp when the schema version's record was last written; the version was registered then unless createTs is present. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        createTs:
+          type: integer
+          description: Timestamp when the schema version was first registered. Present only when it differs from ts, i.e. the version's record was rewritten, as by a soft delete or an import; otherwise the version was registered at ts. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        deleted:
+          type: boolean
+          description: Whether the schema has been deleted. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet'
+      description: Schema
+    AssociationInfo:
+      type: object
+      properties:
+        subject:
+          type: string
+        associationType:
+          type: string
+        lifecycle:
+          type: string
+          enum:
+          - STRONG
+          - WEAK
+        frozen:
+          type: boolean
+        schema:
+          $ref: '#/components/schemas/Schema'
+    AssociationBatchRequest:
+      type: object
+      properties:
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationOpRequest'
+    AssociationBatchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationResult'
+    SchemaReference:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Reference name
+          example: io.confluent.kafka.example.User
+        subject:
+          type: string
+          description: Name of the referenced subject
+          example: User
+        version:
+          type: integer
+          description: Version number of the referenced subject
+          format: int32
+          example: 1
+      description: Schema reference
+    AssociationOpRequest:
+      type: object
+      properties:
+        resourceName:
+          type: string
+        resourceNamespace:
+          type: string
+        resourceId:
+          type: string
+        resourceType:
+          type: string
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationOp'
+    AssociationOp:
+      type: object
+      properties:
+        opType:
+          type: string
+          enum:
+          - CREATE
+          - UPSERT
+          - DELETE
+      discriminator:
+        propertyName: opType
+    ErrorMessage:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: Error code
+          format: int32
+        message:
+          type: string
+          description: Detailed error message
+      description: Error message
+    AssociationResult:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorMessage'
+        result:
+          $ref: '#/components/schemas/AssociationResponse'
+    SchemaTags:
+      type: object
+      properties:
+        schemaEntity:
+          $ref: '#/components/schemas/SchemaEntity'
+        tags:
+          type: array
+          items:
+            type: string
+    RuleSet:
+      type: object
+      properties:
+        migrationRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        domainRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        encodingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        enableAt:
+          type: string
+          enum:
+          - ALL
+          - CLIENT
+          - GATEWAY
+          - SERVER
+          - NONE
+      description: Schema rule set
+x-refined-from:
+- schema-registry-api-spec.yaml
+- schema-registry-openapi.yaml
+x-tagGroups:
+- name: Identity Access Management (v2)
+  tags:
+  - API Keys (iam/v2)
+  - Users (iam/v2)
+  - Service Accounts (iam/v2)
+  - Invitations (iam/v2)
+  - IP Groups (iam/v2)
+  - IP Filters (iam/v2)
+  - IP Filter Summaries (iam/v2)
+  - Role Bindings (iam/v2)
+  - Identity Providers (iam/v2)
+  - Jwks (iam/v2)
+  - Identity Pools (iam/v2)
+  - Group Mappings (iam/v2/sso)
+  - Certificate Authorities (iam/v2)
+  - Certificate Identity Pools (iam/v2)
+- name: Org API (v2)
+  tags:
+  - Environments (org/v2)
+  - Organizations (org/v2)
+- name: Notifications API (v1)
+  tags:
+  - Subscriptions (notifications/v1)
+  - Integrations (notifications/v1)
+  - Notification Types (notifications/v1)
+  - Resource Preferences (notifications/v1)
+  - Resource Subscriptions (notifications/v1)
+  - User Notifications (notifications/v1)
+- name: Cluster Mgmt for Kafka (v2)
+  tags:
+  - Clusters (cmk/v2)
+- name: Cluster Mgmt for ksqlDB (v2)
+  tags:
+  - Clusters (ksqldbcm/v2)
+- name: Connect API (v1)
+  tags:
+  - Connectors (connect/v1)
+  - Lifecycle (connect/v1)
+  - Status (connect/v1)
+  - Managed Connector Plugins (connect/v1)
+  - Offsets (connect/v1)
+  - Custom Connector Plugins (connect/v1)
+  - Presigned Urls (connect/v1)
+  - Custom Connector Runtimes (connect/v1)
+- name: Connect Artifact Management (v1)
+  tags:
+  - Connect Artifacts (cam/v1)
+  - Presigned Urls (cam/v1)
+- name: Kafka API (v3)
+  tags:
+  - Cluster (v3)
+  - Configs (v3)
+  - ACL (v3)
+  - Consumer Group (v3)
+  - Partition (v3)
+  - Topic (v3)
+  - Records (v3)
+  - Cluster Linking (v3)
+  - Share Group (v3)
+  - Streams Group (v3)
+- name: Service Quota API (v1)
+  tags:
+  - Applied Quotas (service-quota/v1)
+  - Scopes (service-quota/v1)
+- name: Partner API (v2)
+  tags:
+  - Entitlements (partner/v2)
+  - Organizations (partner/v2)
+  - Signup (partner/v2)
+- name: Cluster Mgmt for Schema Registry (v2)
+  tags:
+  - Regions (srcm/v2)
+  - Clusters (srcm/v2)
+- name: Cluster Mgmt for Schema Registry (v3)
+  tags:
+  - Clusters (srcm/v3)
+- name: Schema Registry API (v1)
+  tags:
+  - Compatibility (v1)
+  - Config (v1)
+  - Contexts (v1)
+  - Exporters (v1)
+  - Modes (v1)
+  - Schemas (v1)
+  - Subjects (v1)
+  - Key Encryption Keys (v1)
+  - Data Encryption Keys (v1)
+- name: Catalog API (v1)
+  tags:
+  - Entity (v1)
+  - Search (v1)
+  - Types (v1)
+- name: Stream Sharing API (v1)
+  tags:
+  - Provider Shared Resources (cdx/v1)
+  - Provider Shares (cdx/v1)
+  - Consumer Shared Resources (cdx/v1)
+  - Consumer Shares (cdx/v1)
+  - Shared Tokens (cdx/v1)
+  - Opt Ins (cdx/v1)
+- name: Networking (v1)
+  tags:
+  - Networks (networking/v1)
+  - Peerings (networking/v1)
+  - Transit Gateway Attachments (networking/v1)
+  - Private Link Accesses (networking/v1)
+  - Network Link Services (networking/v1)
+  - Network Link Endpoints (networking/v1)
+  - Network Link Service Associations (networking/v1)
+  - IP Addresses (networking/v1)
+  - Private Link Attachments (networking/v1)
+  - Private Link Attachment Connections (networking/v1)
+  - DNS Forwarders (networking/v1)
+  - Access Points (networking/v1)
+  - DNS Records (networking/v1)
+  - Gateways (networking/v1)
+- name: Security Token Service (v1)
+  tags:
+  - OAuth Tokens (sts/v1)
+- name: Kafka Quota (v1)
+  tags:
+  - Client Quotas (kafka-quotas/v1)
+- name: Bring Your Own Key (BYOK) Management (v1)
+  tags:
+  - Keys (byok/v1)
+- name: Billing API (v1)
+  tags:
+  - Costs (billing/v1)
+- name: Compute Pool Mgmt for Flink (v2)
+  tags:
+  - Compute Pools (fcpm/v2)
+  - Regions (fcpm/v2)
+  - Org Compute Pool Configs (fcpm/v2)
+- name: SQL API (v1)
+  tags:
+  - Statements (sql/v1)
+  - Statement Results (sql/v1)
+  - Statement Exceptions (sql/v1)
+  - Connections (sql/v1)
+  - Agents (sql/v1)
+  - Tools (sql/v1)
+  - Materialized Tables (sql/v1)
+  - Materialized Table Versions (sql/v1)
+- name: Provider Integration Management (v1)
+  tags:
+  - Integrations (pim/v1)
+- name: Provider Integration Management (v2)
+  tags:
+  - Integrations (pim/v2)
+- name: Artifact API (v1)
+  tags:
+  - Flink Artifacts (artifact/v1)
+  - Presigned Urls (artifact/v1)
+  - Flink Artifact Versions (artifact/v1)
+- name: Custom Code Logging API (v1)
+  tags:
+  - Custom Code Loggings (ccl/v1)
+- name: Tableflow (v1)
+  tags:
+  - Regions (tableflow/v1)
+  - Tableflow Topics (tableflow/v1)
+  - Catalog Integrations (tableflow/v1)
+- name: Custom Connect Plugin Management (v1)
+  tags:
+  - Custom Connect Plugins (ccpm/v1)
+  - Presigned Urls (ccpm/v1)
+  - Custom Connect Plugin Versions (ccpm/v1)
+- name: Unified Stream Manager (v1)
+  tags:
+  - Kafka Clusters (usm/v1)
+  - Connect Clusters (usm/v1)
+- name: Endpoint (v1)
+  tags:
+  - Endpoints (endpoint/v1)
+- name: Real Time Context Engine (v1)
+  tags:
+  - Rtce Topics (rtce/v1)
+  - Regions (rtce/v1)
+- name: Analytics (v1alpha1)
+  tags:
+  - Statements (query/v1alpha1)

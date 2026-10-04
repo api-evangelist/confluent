@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Connectors (connect/v1) API
+  title: Confluent Connectors (connect/v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Connectors (connect/v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -293,6 +287,9 @@ paths:
                       pos: 154
                       ts_sec: 1712907333
         description: ''
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connectors?expand=info,status,id:
     x-lifecycle-stage: General Availability
     get:
@@ -455,6 +452,9 @@ paths:
           - id
           - info
           - status
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connectors/{connector_name}/config:
     x-lifecycle-stage: General Availability
     parameters:
@@ -710,6 +710,9 @@ paths:
               example:
                 error_code: 500
                 message: Failed to find any class that implements Connector and which name matches io.confluent.connect.<connector-class>...
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connectors/{connector_name}:
     x-lifecycle-stage: General Availability
     parameters:
@@ -805,39 +808,98 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/connect.v1.DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
 components:
+  responses:
+    connect.v1.ResourceNotFoundError:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 404
+              message: resource not found
+    connect.v1.OK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type:
+                - object
+                - 'null'
+          example:
+            error: null
+    connect.v1.DefaultSystemError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 500
+              message: Oops, something went wrong
+    connect.v1.UnauthenticatedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 401
+              message: Unauthorized
+    connect.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 400
+              message: Bad Request
+    RateLimitError:
+      description: Rate Limit Exceeded
+      headers:
+        X-Request-Id:
+          schema:
+            type: string
+          description: The unique identifier for the API request.
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: The maximum number of requests you're permitted to make per time period.
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: The number of requests remaining in the current rate limit window.
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
+        Retry-After:
+          schema:
+            type: integer
+          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
+    connect.v1.AccountNotFoundError:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 404
+              message: account not found
   schemas:
-    connect.v1.ConnectorError:
-      type: object
-      properties:
-        error:
-          type: object
-          description: Connector Error with error code and message.
-          properties:
-            code:
-              type: integer
-              description: Error code for the type of error
-            message:
-              type: string
-              description: Human readable error message
-    connect.v1.ConnectorExpansionMap:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/connect.v1.ConnectorExpansion'
-    connect.v1.Offsets:
-      type: array
-      description: Array of offsets which are categorised into partitions.
-      items:
-        type: object
-        properties:
-          partition:
-            type: object
-            additionalProperties: true
-            description: "The partition information. For sink connectors this is the kafka topic and \npartition. For source connectors this is depends on the partitions defined by the \nsource connector. For example, the table which this task is pulling data from in a\nJDBC based MySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
-          offset:
-            type: object
-            additionalProperties: true
-            description: "The offset of the partition. For sink connectors this is the kafka offset. For \nsource connectors this is depends on the offset defined by the source connector. \nFor example, the timestamp and incrementing column info in a table, for a JDBC based \nMySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
     connect.v1.ConnectorWithOffsets:
       type: object
       properties:
@@ -1177,93 +1239,37 @@ components:
       required:
       - name
       - config
-  responses:
-    connect.v1.ResourceNotFoundError:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 404
-              message: resource not found
-    connect.v1.OK:
-      description: OK
-      content:
-        application/json:
-          schema:
+    connect.v1.Offsets:
+      type: array
+      description: Array of offsets which are categorised into partitions.
+      items:
+        type: object
+        properties:
+          partition:
             type: object
-            properties:
-              error:
-                type:
-                - object
-                - 'null'
-          example:
-            error: null
-    RateLimitError:
-      description: Rate Limit Exceeded
-      headers:
-        X-Request-Id:
-          schema:
-            type: string
-          description: The unique identifier for the API request.
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: The maximum number of requests you're permitted to make per time period.
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: The number of requests remaining in the current rate limit window.
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: "The relative time in seconds until the current rate-limit window resets.  \n  \n**Important:** This differs from Github and Twitter's same-named header which uses UTC epoch seconds. We use relative time to avoid client/server time synchronization issues."
-        Retry-After:
-          schema:
-            type: integer
-          description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    connect.v1.DefaultSystemError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 500
-              message: Oops, something went wrong
-    connect.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 400
-              message: Bad Request
-    connect.v1.AccountNotFoundError:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 404
-              message: account not found
-    connect.v1.UnauthenticatedError:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 401
-              message: Unauthorized
+            additionalProperties: true
+            description: "The partition information. For sink connectors this is the kafka topic and \npartition. For source connectors this is depends on the partitions defined by the \nsource connector. For example, the table which this task is pulling data from in a\nJDBC based MySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
+          offset:
+            type: object
+            additionalProperties: true
+            description: "The offset of the partition. For sink connectors this is the kafka offset. For \nsource connectors this is depends on the offset defined by the source connector. \nFor example, the timestamp and incrementing column info in a table, for a JDBC based \nMySQL source connector.\nPlease refer to the [documentation](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud) for \nmore information."
+    connect.v1.ConnectorExpansionMap:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/connect.v1.ConnectorExpansion'
+    connect.v1.ConnectorError:
+      type: object
+      properties:
+        error:
+          type: object
+          description: Connector Error with error code and message.
+          properties:
+            code:
+              type: integer
+              description: Error code for the type of error
+            message:
+              type: string
+              description: Human readable error message
   securitySchemes:
     cloud-api-key:
       type: http
@@ -1302,6 +1308,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

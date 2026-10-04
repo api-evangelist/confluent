@@ -55,6 +55,13 @@ paths:
           description: ACL created
 components:
   schemas:
+    AclList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Acl'
     Acl:
       type: object
       properties:
@@ -72,13 +79,6 @@ components:
           type: string
         permission:
           type: string
-    AclList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Acl'
   parameters:
     ClusterId:
       name: cluster_id

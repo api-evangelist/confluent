@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-register-schema-request-schema.json",
+  "title": "RegisterSchemaRequest",
+  "description": "Schema register request",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-compatibility-v1-api-openapi.yml#/components/schemas/RegisterSchemaRequest",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "integer",
+      "description": "Version number",
+      "format": "int32"
+    },
+    "id": {
+      "type": "integer",
+      "description": "Globally unique identifier of the schema",
+      "format": "int32"
+    },
+    "schemaType": {
+      "type": "string",
+      "description": "Schema type"
+    },
+    "references": {
+      "type": "array",
+      "description": "References to other schemas",
+      "items": {
+        "$ref": "#/$defs/SchemaReference"
+      }
+    },
+    "schema": {
+      "type": "string",
+      "description": "Schema definition string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+    "ruleSet": {
+      "$ref": "#/$defs/RuleSet"
+    },
+    "schemaTagsToAdd": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SchemaTags"
+      }
+    },
+    "schemaTagsToRemove": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SchemaTags"
+      }
+    },
+    "propagateSchemaTags": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "Metadata": {
+      "description": "User-defined metadata",
+      "properties": {
+        "tags": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "type": "object"
+        },
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "sensitive": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Rule": {
+      "description": "Rule",
+      "properties": {
+        "name": {
+          "description": "Rule name",
+          "type": "string"
+        },
+        "doc": {
+          "description": "Rule doc",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Rule kind",
+          "enum": [
+            "TRANSFORM",
+            "CONDITION"
+          ],
+          "type": "string"
+        },
+        "mode": {
+          "description": "Rule mode",
+          "enum": [
+            "UPGRADE",
+            "DOWNGRADE",
+            "UPDOWN",
+            "WRITE",
+            "READ",
+            "WRITEREAD"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "description": "Rule type",
+          "type": "string"
+        },
+        "tags": {
+          "description": "The tags to which this rule applies",
+          "items": {
+            "description": "The tags to which this rule applies",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "params": {
+          "additionalProperties": {
+            "description": "Optional params for the rule",
+            "type": "string"
+          },
+          "description": "Optional params for the rule",
+          "type": "object"
+        },
+        "expr": {
+          "description": "Rule expression",
+          "type": "string"
+        },
+        "onSuccess": {
+          "description": "Rule action on success",
+          "type": "string"
+        },
+        "onFailure": {
+          "description": "Rule action on failure",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Whether the rule is disabled",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "RuleSet": {
+      "description": "Schema rule set",
+      "properties": {
+        "migrationRules": {
+          "items": {
+            "$ref": "#/$defs/Rule"
+          },
+          "type": "array"
+        },
+        "domainRules": {
+          "items": {
+            "$ref": "#/$defs/Rule"
+          },
+          "type": "array"
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "SchemaEntity": {
+      "type": "object",
+      "properties": {
+        "entityPath": {
+          "type": "string"
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "sr_record",
+            "sr_field"
+          ]
+        }
+      }
+    },
+    "SchemaReference": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Reference name"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Name of the referenced subject"
+        },
+        "version": {
+          "type": "integer",
+          "description": "Version number of the referenced subject",
+          "format": "int32"
+        }
+      },
+      "description": "Schema reference"
+    },
+    "SchemaTags": {
+      "type": "object",
+      "properties": {
+        "schemaEntity": {
+          "$ref": "#/$defs/SchemaEntity"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

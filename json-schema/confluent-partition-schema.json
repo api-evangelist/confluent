@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-partition-schema.json",
+  "title": "Partition",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-partitions-api-openapi.yml#/components/schemas/Partition",
+  "type": "object",
+  "properties": {
+    "partition_id": {
+      "type": "integer"
+    },
+    "leader": {
+      "type": "integer"
+    },
+    "replicas": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  }
+}

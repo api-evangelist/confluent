@@ -78,18 +78,18 @@ components:
           items:
             $ref: '#/components/schemas/Partition'
   parameters:
-    ClusterId:
-      name: cluster_id
-      in: path
-      required: true
-      schema:
-        type: string
     PartitionId:
       name: partition_id
       in: path
       required: true
       schema:
         type: integer
+    ClusterId:
+      name: cluster_id
+      in: path
+      required: true
+      schema:
+        type: string
     TopicName:
       name: topic_name
       in: path

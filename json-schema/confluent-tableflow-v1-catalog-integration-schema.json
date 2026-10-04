@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-tableflow-v1-catalog-integration-schema.json",
+  "title": "tableflow.v1.CatalogIntegration",
+  "description": "A Catalog Integration represents configuration related to a catalog integration\n\n\n## The Catalog Integrations Model\n<SchemaDefinition schemaRef=\"#/components/schemas/tableflow.v1.CatalogIntegration\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-catalog-integrations-tableflow-v1-api-openapi.yml#/components/schemas/tableflow.v1.CatalogIntegration",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "tableflow/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "CatalogIntegration"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "spec": {
+      "$ref": "#/$defs/tableflow.v1.CatalogIntegrationSpec"
+    },
+    "status": {
+      "$ref": "#/$defs/tableflow.v1.CatalogIntegrationStatus"
+    }
+  },
+  "$defs": {
+    "EnvScopedObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "GlobalObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "tableflow.v1.CatalogIntegrationAwsGlueSpec": {
+      "type": "object",
+      "description": "The catalog integration Glue connection config.",
+      "required": [
+        "kind",
+        "provider_integration_id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "AwsGlue"
+          ],
+          "description": "The type of the catalog integration.",
+          "x-immutable": true
+        },
+        "provider_integration_id": {
+          "type": "string",
+          "description": "The provider integration id.",
+          "x-immutable": true
+        },
+        "custom_database": {
+          "type": "string",
+          "description": "The custom database name to use in AWS Glue."
+        }
+      }
+    },
+    "tableflow.v1.CatalogIntegrationSnowflakeSpec": {
+      "type": "object",
+      "description": "The catalog integration connection config for Snowflake Open Catalog.",
+      "required": [
+        "kind",
+        "endpoint",
+        "client_id",
+        "client_secret",
+        "warehouse",
+        "allowed_scope"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Snowflake"
+          ],
+          "description": "The type of the catalog integration."
+        },
+        "endpoint": {
+          "description": "The catalog integration connection endpoint for Snowflake Open Catalog.\n",
+          "type": "string"
+        },
+        "client_id": {
+          "description": "The client ID of the catalog integration.",
+          "type": "string"
+        },
+        "client_secret": {
+          "description": "The client secret of the catalog integration.",
+          "type": "string"
+        },
+        "warehouse": {
+          "description": "Warehouse name of the Snowflake Open Catalog.",
+          "type": "string"
+        },
+        "allowed_scope": {
+          "description": "Allowed scope of the Snowflake Open Catalog.",
+          "type": "string"
+        },
+        "custom_namespace": {
+          "type": "string",
+          "description": "The custom namespace to use in Snowflake Open Catalog."
+        }
+      }
+    },
+    "tableflow.v1.CatalogIntegrationSpec": {
+      "type": "object",
+      "description": "The desired state of the Catalog Integration",
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "description": "The name of the catalog integration"
+        },
+        "suspended": {
+          "type": "boolean",
+          "description": "Indicates whether the Catalog Integration should be suspended. The API allows setting it only to `false` i.e., to resume the Catalog Integration. Pausing the Catalog Integration on-demand is not currently supported."
+        },
+        "config": {
+          "type": "object",
+          "description": "The integration config",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/tableflow.v1.CatalogIntegrationAwsGlueSpec"
+            },
+            {
+              "$ref": "#/$defs/tableflow.v1.CatalogIntegrationSnowflakeSpec"
+            },
+            {
+              "$ref": "#/$defs/tableflow.v1.CatalogIntegrationUnitySpec"
+            }
+          ]
+        },
+        "environment": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlobalObjectReference"
+            }
+          ],
+          "description": "The environment to which the target Kafka cluster belongs."
+        },
+        "kafka_cluster": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EnvScopedObjectReference"
+            }
+          ],
+          "description": "The kafka cluster of the topic for which Tableflow is enabled"
+        }
+      },
+      "x-enable-id": true,
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    },
+    "tableflow.v1.CatalogIntegrationStatus": {
+      "description": "The status of the Catalog Integration",
+      "type": "object",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "PENDING",
+            "CONNECTED",
+            "FAILED"
+          ],
+          "description": "The lifecycle phase of the catalog integration:\n\n  PENDING: sync to catalog integration is pending;\n\n  CONNECTED: catalog integration is connected and syncing;\n\n  FAILED: catalog integration failed.\n",
+          "readOnly": true
+        },
+        "error_message": {
+          "type": "string",
+          "description": "Displayable error message if catalog integration is in a failed state.",
+          "readOnly": true
+        },
+        "last_sync_at": {
+          "type": "string",
+          "description": "The date and time at which the catalog was last synced. It is represented in RFC3339 format and is in UTC.\n",
+          "readOnly": true
+        }
+      },
+      "readOnly": true
+    },
+    "tableflow.v1.CatalogIntegrationUnitySpec": {
+      "type": "object",
+      "description": "The catalog integration connection config for Unity Catalog.",
+      "required": [
+        "kind",
+        "workspace_endpoint",
+        "catalog_name",
+        "client_id",
+        "client_secret"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Unity"
+          ],
+          "description": "The type of the catalog integration."
+        },
+        "workspace_endpoint": {
+          "type": "string",
+          "description": "The Databricks workspace URL associated with the Unity Catalog."
+        },
+        "catalog_name": {
+          "type": "string",
+          "description": "The name of the catalog within Unity Catalog."
+        },
+        "client_id": {
+          "type": "string",
+          "description": "The OAuth client ID used to authenticate with the Unity Catalog."
+        },
+        "client_secret": {
+          "type": "string",
+          "description": "The OAuth client secret used for authentication with the Unity Catalog."
+        },
+        "custom_schema": {
+          "type": "string",
+          "description": "The custom schema name to use in Unity Catalog."
+        }
+      }
+    }
+  }
+}

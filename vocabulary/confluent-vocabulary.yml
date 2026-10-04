@@ -1,0 +1,529 @@
+generated: '2026-10-04'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/confluent-access-points-networking-v1-api-openapi.yml
+- openapi/confluent-acl-v3-api-openapi.yml
+- openapi/confluent-acls-api-openapi.yml
+- openapi/confluent-agents-sql-v1-api-openapi.yml
+- openapi/confluent-api-keys-api-openapi.yml
+vocabulary:
+  name: Confluent Domain Vocabulary
+  description: 'Terms declared by Confluent''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-04'
+  terms:
+  - term: Access Points (networking/v1)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) AccessPoint objects represent network connections in and out
+      of Gateways. This API allows you to list, create, read, update, and delete your access points. ## The Access Points Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-access-points-networking-v1-api-openapi.yml
+  - term: ACL (v3)
+    definition: '![Generally Available](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-acl-v3-api-openapi.yml
+  - term: Agents (sql/v1)
+    definition: '![Preview](#section/Versioning/API-Lifecycle-Policy) `Agent` models an AI agent that uses a specified model, prompt, and set
+      of tools to autonomously perform tasks. The API allows you to create your agents. ## The Agents Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-agents-sql-v1-api-openapi.yml
+  - term: API Keys (iam/v2)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) `ApiKey` objects represent access to different parts of Confluent
+      Cloud.'
+    tags:
+    - Resource Group
+    source: openapi/confluent-api-keys-iam-v2-api-openapi.yml
+  - term: Applied Quotas (service-quota/v1)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) A `quota` object represents a quota configuration for a specific
+      Confluent Cloud resource. Use this API to retrieve an individual quota or list of quotas for a given scope. Related guide: Service Quotas
+      for Confluent Cloud. ## The Applied Quotas Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-applied-quotas-service-quota-v1-api-openapi.yml
+  - term: Catalog Integrations (tableflow/v1)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) A Catalog Integration represents configuration related to a
+      catalog integration ## The Catalog Integrations Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-catalog-integrations-tableflow-v1-api-openapi.yml
+  - term: Certificate Authorities (iam/v2)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) `CertificateAuthority` objects represent signing certificate
+      authorities in Confluent Cloud.'
+    tags:
+    - Resource Group
+    source: openapi/confluent-certificate-authorities-iam-v2-api-openapi.yml
+  - term: Certificate Identity Pools (iam/v2)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) `Identitypool` objects represent workload identities in Confluent
+      Cloud.'
+    tags:
+    - Resource Group
+    source: openapi/confluent-certificate-identity-pools-iam-v2-api-openapi.yml
+  - term: Client Quotas (kafka-quotas/v1)
+    definition: '![General Availability](#section/Versioning/API-Lifecycle-Policy) `ClientQuota` objects represent Client Quotas you can set at
+      the service account level. The API allows you to list, create, read, update, and delete your client quotas. Related guide: Client Quotas
+      in Confluent Cloud. ## The Client Quotas Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-client-quotas-kafka-quotas-v1-api-openapi.yml
+  - term: Environments (org/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Environment` objects represent an isolated namespace for your Confluent resources for organizational purposes. The API allows you to create,
+      delete, and update your environments. You can retrieve individual environments as well as a list of all your '
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Organizations (org/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Organization` objects represent a customer organization. An organization contains all customer resources (e.g., Environments, Kafka Clusters,
+      Service Accounts, API Keys) and is tied to a billing agreement (including any annual commitment or support p'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Scim Tokens (org/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ScimToken` objects represent bearer tokens used for SCIM 2.0 API authentication. The token value is only returned when the token is first
+      created and cannot be retrieved later. ## The Scim Tokens Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Users (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `User` objects represent individuals who may access your Confluent resources. The API allows you to retrieve, update, and delete individual
+      users, as well as list of all your users. This API cannot be used to create new user accounts. Related guide: ['
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Service Accounts (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ServiceAccount` objects are typically used to represent applications and other non-human principals that may access your Confluent resources.
+      The API allows you to create, retrieve, update, and delete individual service accounts, as well as list all '
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Invitations (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Invitation` objects represent invitations to invite users to join your organizations in Confluent Cloud. The API allows you to list all
+      your invitations, as well as create, read, and delete a specified invitation. Related guide: [User invitations in '
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: IP Groups (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Definitions of networks which can be named and referred by IP blocks, commonly used to attach to IP Filter rules. ## The IP Groups Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: IP Filters (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `IP Filter` objects are bindings between IP Groups and Confluent resource(s). For example, a binding between "CorpNet" and "Management APIs"
+      will enforce that access must come from one of the CIDR blocks associated with CorpNet. If there are multiple '
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: IP Filter Summaries (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The IP Filter Summary endpoint returns an aggregation of the IP Filters across the system. This API can be queried in the context of an
+      organization or an environment. It returns a summary of every operation group in the system grouped with a higher s'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Role Bindings (iam/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      A role binding grants a Principal a role on resources that match a pattern. The API allows you to perform create, delete, and list operations
+      on role bindings. Related guide: [Role-Based Access Control (RBAC)](https://docs.confluent.io/cloud/current/a'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Subscriptions (notifications/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Subscription` objects represent the intent of the customers to get notifications of particular types. A subscription is created for a particular
+      `NotificationType` and the user will get notifications on the `Integrations` that are provided while crea'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Integrations (notifications/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      You can create an `Integration` to specify how we can notify you when we receive an alert/notification for a subscription. Please note that
+      you can only perform create, update and delete operations for integrations of type `Webhook`, `Slack` and `MsTe'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Notification Types (notifications/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The type of notifications (and their corresponding metadata) supported by Confluent. Related guide: [Cloud Notifications](https://docs.confluent.io/cloud/current/monitoring/configure-notifications.html#notifications-for-ccloud).
+      ## The Notification Ty'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Resource Preferences (notifications/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ResourcePreference` objects represent the intent of the customers to enable or disable all notifications at the resource level. A ResourcePreference
+      is created for a specific Confluent Cloud Resource (e.g., a connector) and determines whether the use'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Resource Subscriptions (notifications/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ResourceSubscription` objects represent the intent of the customers to get notifications of particular types at the resource level. A ResourceSubscription
+      is created for a specific Confluent Cloud Resource (e.g., a connector) and determines whether t'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: User Notifications (notifications/v1)
+    definition: '[![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      [![Request Access To User Notifications API v1](https://img.shields.io/badge/-Request%20Access%20To%20User%20Notifications%20API%20v1-%23bc8540)](mailto:ccloud-api-access+notifications-v1-early-access@confluent.io?subject=Request%20to%20join%20notifications/v1%20API%'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Clusters (cmk/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Clusters` objects represent Apache Kafka Clusters on Confluent Cloud. The API allows you to list, create, read, update, and delete your
+      Kafka clusters. Related guide: [Confluent Cloud Cluster Management for Apache Kafka APIs](https://docs.confluent.i'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Clusters (ksqldbcm/v2)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Cluster` represents a ksqlDB runtime that you can issue queries to using its API endpoint. It executes SQL statements and queries which
+      under the hood get built into corresponding Kafka Streams topologies. The API allows you to list, create, read, an'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Connectors (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      API for Managed Connectors or Custom Connectors in Confluent Cloud. The API allows you to list, create, get, update and delete a Managed
+      Connector or Custom Connector in Confluent Cloud. Connect metrics are available through the [Metrics v2 API](https'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Lifecycle (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      API for managing the lifecycle for a Managed Connector or Custom Connector in Confluent Cloud. Operations currently supported are Pause
+      and Resume.'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Status (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      API for requesting the status or the tasks for a Managed Connector or Custom Connector in Confluent Cloud.'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Managed Connector Plugins (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      API for Managed connectors in Confluent Cloud.'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Offsets (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      API for managing the offsets for a Managed Connector. Related guide: [Manage Connector Offsets](https://docs.confluent.io/cloud/current/connectors/offsets.html#manage-offsets-for-fully-managed-connectors-in-ccloud)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Connect Artifacts (cam/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Connect Artifact` objects represent collection of Custom SMTs, user-defined message transformations that can be applied to Kafka connectors.
+      The API allows you to upload, retrieve, and delete Connect Artifact, as well as list all available Connect Ar'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Presigned Urls (cam/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Request a presigned upload URL for new Connect Artifact. Note that the URL policy expires in one hour. If the policy expires, you can request
+      a new presigned upload URL. ## The Presigned Urls Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Custom Connector Plugins (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      CustomConnectorPlugins objects represent Custom Connector Plugins on Confluent Cloud. The API allows you to list, create, read, update,
+      and delete your Custom Connector Plugins. Related guide: [Custom Connector Plugin API](https://docs.confluent.io/cl'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Presigned Urls (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Request a presigned upload URL for new Custom Connector Plugin. Note that the URL policy expires in one hour. If the policy expires, you
+      can request a new presigned upload URL. Related guide: [Custom Connector Plugin API](https://docs.confluent.io/clo'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Custom Connector Runtimes (connect/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      List of supported runtime languages for Custom Connector Plugin. The list defines the supported entries for confluent.custom.connect.plugin.runtime
+      attribute in CustomConnectorPlugin object. Each entry also defines the set of supported java versions f'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Cluster (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Configs (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Consumer Group (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Partition (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Topic (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Records (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Cluster Linking (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Share Group (v3)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Streams Group (v3)
+    definition: '[![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Scopes (service-quota/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Gets a list of all available scopes for applied quotas. Related guide: [Quota Scopes](https://docs.confluent.io/cloud/current/quotas/quotas.html#query-for-scopes).
+      ## The Scopes Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Entitlements (partner/v2)
+    definition: '[![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      [![Request Access To Partner v2](https://img.shields.io/badge/-Request%20Access%20To%20Partner%20v2-%23bc8540)](mailto:ccloud-api-access+partner-v2-early-access@confluent.io?subject=Request%20to%20join%20partner/v2%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Regions (srcm/v2)
+    definition: '[![Deprecated](https://img.shields.io/badge/Lifecycle%20Stage-Deprecated-%23ff005c)](#section/Versioning/API-Lifecycle-Policy)
+      `Region` objects represent cloud provider regions available when placing Schema Registry clusters. The API allows you to list Schema Registry
+      regions. Related guides: * [Confluent Cloud providers and region support](https://docs.confluent.io/cloud/current/stream-governance'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Clusters (srcm/v2)
+    definition: '[![Deprecated](https://img.shields.io/badge/Lifecycle%20Stage-Deprecated-%23ff005c)](#section/Versioning/API-Lifecycle-Policy)
+      `Clusters` objects represent Schema Registry Clusters on Confluent Cloud. The API allows you to list, create, read, and delete your Schema
+      Registry clusters. Related guides: * [Confluent Cloud Schema Registry Cluster APIs](https://docs.confluent.io/cloud/current/stream-gov'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Clusters (srcm/v3)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Clusters` objects represent Schema Registry Clusters on Confluent Cloud. The API allows you to list and read your Schema Registry clusters.
+      Related guide: [Confluent Cloud Schema Registry Cluster APIs](https://docs.confluent.io/cloud/current/stream-g'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Compatibility (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to test schema compatibility. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Config (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to manage and query schema compatibility settings and cluster configurations. Related guide: [Manage Schemas in Confluent
+      Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Contexts (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to retrieve information about schema contexts. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Exporters (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete exporters. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Modes (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete schema subjects modes of operation. Related guide: [Manage Schemas in Confluent
+      Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Schemas (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete schemas. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Subjects (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete schema subjects and versions. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Key Encryption Keys (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete key encryption keys. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Data Encryption Keys (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete data encryption keys. Related guide: [Manage Schemas in Confluent Cloud](https://docs.confluent.io/cloud/current/sr/schemas-manage.html#manage-schemas-in-ccloud).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Entity (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete catalog entities. Related guide: [Catalog API Documentation](https://docs.confluent.io/cloud/current/stream-governance/stream-catalog.html#catalog-api-documentation).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Search (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to search for entities. Related guide: [Catalog API Documentation](https://docs.confluent.io/cloud/current/stream-governance/stream-catalog.html#catalog-api-documentation).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Types (v1)
+    definition: '[![Generally Available](https://img.shields.io/badge/Lifecycle%20Stage-Generally%20Available-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      The API allows you to create, retrieve, update, and delete catalog types such as tag definitions. Related guide: [Catalog API Documentation](https://docs.confluent.io/cloud/current/stream-governance/stream-catalog.html#catalog-api-documentation).'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Provider Shared Resources (cdx/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ProviderSharedResource` object contains details of the data stream (topic, schema registry subjects, sharing metadata) that you have shared
+      through Stream Sharing. ## The Provider Shared Resources Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Provider Shares (cdx/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ProviderShare` object respresents the share that you have created through Stream Sharing. Related guide: [Provider Stream Shares in Confluent
+      Cloud](https://docs.confluent.io/cloud/current/stream-sharing/produce-shared-data.html#stream-shares). ## Th'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Consumer Shared Resources (cdx/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ConsumerSharedResource` object contains details of the data stream (topic, schema registry subjects, sharing metadata) that you received
+      through Stream Sharing. ## The Consumer Shared Resources Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Consumer Shares (cdx/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `ConsumerShare` object respresents the share that you received through Stream Sharing. Related guide: [Consumer Stream Shares in Confluent
+      Cloud](https://docs.confluent.io/cloud/current/stream-sharing/consume-shared-data.html). ## The Consumer Shares '
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Shared Tokens (cdx/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Encrypted Token shared with consumer ## The Shared Tokens Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Opt Ins (cdx/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Stream sharing opt in options ## The Opt Ins Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Organizations (partner/v2)
+    definition: '[![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      [![Request Access To Partner v2](https://img.shields.io/badge/-Request%20Access%20To%20Partner%20v2-%23bc8540)](mailto:ccloud-api-access+partner-v2-early-access@confluent.io?subject=Request%20to%20join%20partner/v2%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Signup (partner/v2)
+    definition: '[![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      [![Request Access To Partner v2](https://img.shields.io/badge/-Request%20Access%20To%20Partner%20v2-%23bc8540)](mailto:ccloud-api-access+partner-v2-early-access@confluent.io?subject=Request%20to%20join%20partner/v2%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Networks (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      `Network` represents a network (VPC) in Confluent Cloud. All Networks exist within Confluent-managed cloud provider accounts. Dedicated
+      networks support more networking options but can only contain Dedicated clusters. Shared networks can contain any c'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Peerings (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Add or remove VPC/VNet peering connections between your VPC/VNet and Confluent Cloud. Related guides: * [Use VPC peering connections with
+      Confluent Cloud on AWS](https://docs.confluent.io/cloud/current/networking/peering/aws-peering.html). * [Use VNet'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Transit Gateway Attachments (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      AWS Transit Gateway Attachments Related guide: [APIs to manage AWS Transit Gateway Attachments](https://docs.confluent.io/cloud/current/networking/aws-transit-gateway.html).
+      ## The Transit Gateway Attachments Model ## Quotas and Limits This resource i'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Private Link Accesses (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Add or remove access to PrivateLink endpoints by AWS account, Azure subscription and GCP project ID. Related guides: * [Use Google Cloud
+      Private Service Connect with Confluent Cloud](https://docs.confluent.io/cloud/current/networking/private-links/gcp'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Network Link Services (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      Network Link Service is associated with a Private Link Confluent Cloud Network. It enables connectivity from other Private Link Confluent
+      Cloud Networks based on the configured accept policies. Related guide: [Network Linking Overview](https://docs.co'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Network Link Endpoints (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      A Network Link Enpoint is associated with a Private Link Confluent Cloud Network at the origin and a Network Link Service (associated with
+      another Private Link Confluent Cloud Network) at the target. It enables connectivity between the origin network '
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Network Link Service Associations (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      List of incoming Network Link Enpoints associated with the Network Link Service. Related guide: [Network Linking Overview](https://docs.confluent.io/cloud/current/networking/network-linking.html).
+      ## The Network Link Service Associations Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: IP Addresses (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      IP Addresses Related guide: [Use Public Egress IP addresses on Confluent Cloud](https://docs.confluent.io/cloud/current/networking/static-egress-ip-addresses.html)
+      ## The IP Addresses Model'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml
+  - term: Private Link Attachments (networking/v1)
+    definition: '[![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+      PrivateLink attachment objects represent reservations to establish PrivateLink connections to a cloud region in order to access resources
+      that belong to a Confluent Cloud Environment. The API allows you to list, create, read update and delete your Pri'
+    tags:
+    - Resource Group
+    source: openapi/confluent-cloud-full.yaml

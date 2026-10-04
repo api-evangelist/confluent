@@ -1,11 +1,12 @@
 aid: confluent
+
 name: Confluent
-description: >-
-  Stream, connect, process, and govern your data with an all-in-one, real-time platform
-  from the pioneer in data streaming. Build faster, scale smarter, and turn data chaos
-  into instantly accessible and usable data products with the market leading Data
-  Streaming Platform.
+
+description: Stream, connect, process, and govern your data with an all-in-one, real-time platform from the pioneer in data streaming. Build faster,
+  scale smarter, and turn data chaos into instantly accessible and usable data products with the market leading Data Streaming Platform.
+
 type: Index
+
 deliveryModel:
   model: saas
   open_source: false
@@ -18,6 +19,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: freemium
   onboarding: self-serve
@@ -31,27 +33,149 @@ accessModel:
   - authentication
   generated: '2026-07-22'
   method: derived
+
 position: Consuming
+
 access: 3rd-Party
+
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/confluent.png
+
 tags:
-  - Data Streaming
-  - Apache Kafka
-  - Event Streaming
-  - Stream Processing
-  - Schema Registry
-  - Apache Flink
-  - Data Integration
-  - Connectors
-  - Data Governance
-  - Real-Time Data
-  - Messaging
-  - Cloud Infrastructure
+- Data Streaming
+- Apache Kafka
+- Event Streaming
+- Stream Processing
+- Schema Registry
+- Apache Flink
+- Data Integration
+- Connectors
+- Data Governance
+- Real-Time Data
+- Messaging
+- Cloud Infrastructure
+
 created: '2025-08-19'
+
 modified: '2026-08-27'
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/confluent/refs/heads/main/apis.yml
+
+url: https://raw.githubusercontent.com/api-evangelist/confluent/refs/heads/main/apis.yml
+
 specificationVersion: '0.23'
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+common:
+- type: Spectral
+  url: rules/confluent-rules.yml
+- type: JSONLD
+  url: json-ld/confluent-context.jsonld
+- type: Vocabulary
+  url: vocabulary/confluent-vocabulary.yml
+- type: Hosts
+  url: hosts/confluent-hosts.yml
+- type: Vendors
+  url: vendors/confluent-vendors.yml
+- type: Website
+  url: https://www.confluent.io/
+- type: CapabilityMap
+  url: capabilities/confluent-capability-edges.yml
+  name: Confluent Business Capability Map
+- type: Overlay
+  url: overlays/confluent-cloud-overlay.yaml
+- type: Overlay
+  url: overlays/confluent-metrics-overlay.yaml
+- type: DeveloperPortal
+  url: https://developer.confluent.io/
+- type: Documentation
+  url: https://docs.confluent.io/
+- type: APIReference
+  url: https://docs.confluent.io/cloud/current/api.html
+- type: GettingStarted
+  url: https://docs.confluent.io/cloud/current/get-started/index.html
+- type: Support
+  url: https://developer.confluent.io/community/
+- type: Blog
+  url: https://www.confluent.io/blog/
+- type: Pricing
+  url: https://www.confluent.io/pricing/
+- type: SignUp
+  url: https://www.confluent.io/confluent-cloud/tryfree/
+- type: TermsOfService
+  url: https://www.confluent.io/terms-of-use/
+- type: PrivacyPolicy
+  url: https://www.confluent.io/legal/confluent-privacy-notice/
+- type: StatusPage
+  url: https://status.confluent.cloud/
+- type: Deprecation
+  url: lifecycle/confluent-lifecycle.yml
+- type: Lifecycle
+  url: lifecycle/confluent-lifecycle.yml
+- type: ChangeLog
+  url: changelog/confluent-changelog.yml
+- type: Security
+  url: security/confluent-vulnerability-disclosure.yml
+- type: TrustCenter
+  url: security/confluent-trust-center.yml
+- type: Compliance
+  url: https://www.confluent.io/trust-and-security/
+- type: Conformance
+  url: conformance/confluent-conformance.yml
+- type: Packages
+  url: packages/confluent-packages.yml
+- type: SDKs
+  url: packages/confluent-packages.yml
+- type: CLI
+  url: cli/confluent-cli.yml
+- type: Sandbox
+  url: sandbox/confluent-sandbox.yml
+- type: Conventions
+  url: conventions/confluent-conventions.yml
+- type: ErrorCatalog
+  url: errors/confluent-problem-types.yml
+- type: DataModel
+  url: data-model/confluent-data-model.yml
+- type: Webhooks
+  url: asyncapi/confluent-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/confluent-well-known.yml
+- type: SecurityTxt
+  url: well-known/confluent-security.txt
+- type: LLMsTxt
+  url: llms/confluent-llms.txt
+- type: Plans
+  url: plans/confluent-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/confluent-rate-limits.yml
+- type: FinOps
+  url: finops/confluent-finops.yml
+- type: OAuthScopes
+  url: scopes/confluent-scopes.yml
+- type: AgenticAccess
+  url: agentic-access/confluent-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/confluent-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/confluent-domain-security.yml
+- type: Authentication
+  url: authentication/confluent-authentication.yml
+- name: Agent Skills
+  url: https://github.com/confluentinc/agent-skills
+  type: AgentSkills
+- type: GitHubOrganization
+  url: https://github.com/confluentinc
+- type: LinkedIn
+  url: https://www.linkedin.com/company/confluent
+- type: Integrations
+  url: https://www.confluent.io/partner/
+- type: LlmsText
+  url: https://docs.confluent.io/llms.txt
+- url: https://www.confluent.io/feed/
+  type: Blog
+
 apis:
 - aid: confluent:confluent
   name: Confluent
@@ -90,8 +214,6 @@ apis:
   properties:
   - type: MCPServer
     url: mcp/confluent-mcp.yml
-  - type: ToolCrosswalk
-    url: mcp/confluent-tool-crosswalk.yml
   - type: Documentation
     url: https://docs.confluent.io/cloud/current/ai/ai-tools/managed-mcp-server.html
 - aid: confluent:confluent-api-keys-api
@@ -105,6 +227,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-api-keys-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-api-key-list-schema.json
 - aid: confluent:confluent-clusters-api
   name: Confluent Clusters API
   description: The Clusters API from Confluent — 2 operation(s) for clusters.
@@ -116,6 +242,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-clusters-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-cluster-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-cluster-list-schema.json
 - aid: confluent:confluent-consumer-groups-api
   name: Confluent Consumer Groups API
   description: The Consumer Groups API from Confluent — 2 operation(s) for consumer groups.
@@ -125,6 +255,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-consumer-groups-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-consumer-group-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-consumer-group-list-schema.json
 - aid: confluent:confluent-environments-api
   name: Confluent Environments API
   description: The Environments API from Confluent — 1 operation(s) for environments.
@@ -136,6 +270,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-environments-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-environment-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-environment-schema.json
 - aid: confluent:confluent-partitions-api
   name: Confluent Partitions API
   description: The Partitions API from Confluent — 2 operation(s) for partitions.
@@ -145,6 +283,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-partitions-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-partition-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-partition-list-schema.json
 - aid: confluent:confluent-service-accounts-api
   name: Confluent Service Accounts API
   description: The Service Accounts API from Confluent — 1 operation(s) for service accounts.
@@ -154,6 +296,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-service-accounts-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-service-account-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-service-account-list-schema.json
 - aid: confluent:confluent-topics-api
   name: Confluent Topics API
   description: The Topics API from Confluent — 2 operation(s) for topics.
@@ -165,6 +311,12 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-topics-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/confluent-topic-create-request-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-topic-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-topic-list-schema.json
 - aid: confluent:confluent-access-points-networking-v1-api
   name: Confluent Access Points (networking/v1) API
   description: >-
@@ -191,6 +343,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-networking-v1-access-point-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-networking-v1-access-point-schema.json
 - aid: confluent:confluent-acl-v3-api
   name: Confluent ACL (v3) API
   description: >-
@@ -232,6 +388,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-sql-v1-agent-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-sql-v1-agent-list-schema.json
 - aid: confluent:confluent-api-keys-iam-v2-api
   name: Confluent API Keys (iam/v2) API
   description: >-
@@ -283,6 +443,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-api-key-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-api-key-schema.json
 - aid: confluent:confluent-applied-quotas-service-quota-v1-api
   name: Confluent Applied Quotas (service-quota/v1) API
   description: >-
@@ -312,6 +476,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-service-quota-v1-applied-quota-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-service-quota-v1-applied-quota-list-schema.json
 - aid: confluent:confluent-catalog-integrations-tableflow-v1-api
   name: Confluent Catalog Integrations (tableflow/v1) API
   description: >-
@@ -336,6 +504,12 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-tableflow-v1-catalog-integration-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-tableflow-v1-catalog-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-tableflow-v1-catalog-integration-update-request-schema.json
 - aid: confluent:confluent-certificate-authorities-iam-v2-api
   name: Confluent Certificate Authorities (iam/v2) API
   description: >-
@@ -378,6 +552,14 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-update-cert-request-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-create-cert-request-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-certificate-authority-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-certificate-authority-list-schema.json
 - aid: confluent:confluent-certificate-identity-pools-iam-v2-api
   name: Confluent Certificate Identity Pools (iam/v2) API
   description: >-
@@ -423,6 +605,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-certificate-identity-pool-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-iam-v2-certificate-identity-pool-list-schema.json
 - aid: confluent:confluent-client-quotas-kafka-quotas-v1-api
   name: Confluent Client Quotas (kafka-quotas/v1) API
   description: >-
@@ -453,6 +639,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-kafka-quotas-v1-client-quota-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-kafka-quotas-v1-client-quota-schema.json
 - aid: confluent:confluent-cluster-linking-v3-api
   name: Confluent Cluster Linking (v3) API
   description: >-
@@ -525,6 +715,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-cmk-v2-cluster-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-cmk-v2-cluster-schema.json
 - aid: confluent:confluent-clusters-ksqldbcm-v2-api
   name: Confluent Clusters (ksqldbcm/v2) API
   description: >-
@@ -568,6 +762,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-ksqldbcm-v2-cluster-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-ksqldbcm-v2-cluster-schema.json
 - aid: confluent:confluent-clusters-srcm-v2-api
   name: Confluent Clusters (srcm/v2) API
   description: >-
@@ -603,6 +801,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-srcm-v2-cluster-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-srcm-v2-cluster-schema.json
 - aid: confluent:confluent-clusters-srcm-v3-api
   name: Confluent Clusters (srcm/v3) API
   description: >-
@@ -633,6 +835,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-srcm-v3-cluster-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-srcm-v3-cluster-schema.json
 - aid: confluent:confluent-compatibility-v1-api
   name: Confluent Compatibility (v1) API
   description: >-
@@ -654,6 +860,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-register-schema-request-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-compatibility-check-response-schema.json
 - aid: confluent:confluent-compute-pools-fcpm-v2-api
   name: Confluent Compute Pools (fcpm/v2) API
   description: >-
@@ -683,6 +893,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-fcpm-v2-compute-pool-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-fcpm-v2-compute-pool-schema.json
 - aid: confluent:confluent-config-v1-api
   name: Confluent Config (v1) API
   description: >-
@@ -704,6 +918,12 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-config-update-request-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-config-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-cluster-config-schema.json
 - aid: confluent:confluent-configs-v3-api
   name: Confluent Configs (v3) API
   description: >-
@@ -756,6 +976,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-cam-v1-connect-artifact-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-cam-v1-connect-artifact-list-schema.json
 - aid: confluent:confluent-connect-clusters-usm-v1-api
   name: Confluent Connect Clusters (usm/v1) API
   description: >-
@@ -782,6 +1006,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-usm-v1-connect-cluster-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-usm-v1-connect-cluster-list-schema.json
 - aid: confluent:confluent-connections-sql-v1-api
   name: Confluent Connections (sql/v1) API
   description: >-
@@ -810,6 +1038,10 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-sql-v1-connection-list-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-sql-v1-connection-schema.json
 - aid: confluent:confluent-connectors-connect-v1-api
   name: Confluent Connectors (connect/v1) API
   description: >-
@@ -838,6 +1070,14 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-connect-v1-connector-with-offsets-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-connect-v1-connector-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-connect-v1-offsets-schema.json
+  - type: JSONSchema
+    url: json-schema/confluent-connect-v1-connector-expansion-map-schema.json
 - aid: confluent:confluent-consumer-group-v3-api
   name: Confluent Consumer Group (v3) API
   description: >-
@@ -879,6 +1119,8 @@ apis:
     url: https://docs.confluent.io/cloud/current/api.html
   - type: APIReference
     url: https://api.telemetry.confluent.cloud/docs
+  - type: JSONSchema
+    url: json-schema/confluent-cdx-v1-consumer-shared-resource-schema.json
 - aid: confluent:confluent-consumer-shares-cdx-v1-api
   name: Confluent Consumer Shares (cdx/v1) API
   description: >-
@@ -3723,108 +3965,369 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/confluent-acls-api-openapi.yml
-common:
-  - type: Website
-    url: https://www.confluent.io/
-  - type: CapabilityMap
-    url: capabilities/confluent-capability-edges.yml
-    name: Confluent Business Capability Map
-  - type: Overlay
-    url: overlays/confluent-cloud-overlay.yaml
-  - type: Overlay
-    url: overlays/confluent-metrics-overlay.yaml
-  - type: DeveloperPortal
-    url: https://developer.confluent.io/
-  - type: Documentation
-    url: https://docs.confluent.io/
-  - type: APIReference
-    url: https://docs.confluent.io/cloud/current/api.html
-  - type: GettingStarted
-    url: https://docs.confluent.io/cloud/current/get-started/index.html
-  - type: Support
-    url: https://developer.confluent.io/community/
-  - type: Pricing
-    url: https://www.confluent.io/pricing/
-  - type: SignUp
-    url: https://www.confluent.io/confluent-cloud/tryfree/
-  - type: TermsOfService
-    url: https://www.confluent.io/terms-of-use/
-  - type: PrivacyPolicy
-    url: https://www.confluent.io/legal/confluent-privacy-notice/
-  - type: StatusPage
-    url: https://status.confluent.cloud/
-  - type: Deprecation
-    url: lifecycle/confluent-lifecycle.yml
-  - type: Lifecycle
-    url: lifecycle/confluent-lifecycle.yml
-  - type: ChangeLog
-    url: changelog/confluent-changelog.yml
-  - type: Security
-    url: security/confluent-vulnerability-disclosure.yml
-  - type: TrustCenter
-    url: security/confluent-trust-center.yml
-  - type: Compliance
-    url: https://www.confluent.io/trust-and-security/
-  - type: Conformance
-    url: conformance/confluent-conformance.yml
-  - type: Packages
-    url: packages/confluent-packages.yml
-  - type: SDKs
-    url: packages/confluent-packages.yml
-  - type: CLI
-    url: cli/confluent-cli.yml
-  - type: Sandbox
-    url: sandbox/confluent-sandbox.yml
-  - type: Conventions
-    url: conventions/confluent-conventions.yml
-  - type: ErrorCatalog
-    url: errors/confluent-problem-types.yml
-  - type: DataModel
-    url: data-model/confluent-data-model.yml
-  - type: Webhooks
-    url: asyncapi/confluent-webhooks.yml
-  - type: AgentSkill
-    url: skills/_index.yml
-  - type: WellKnown
-    url: well-known/confluent-well-known.yml
-  - type: SecurityTxt
-    url: well-known/confluent-security.txt
-  - type: LLMsTxt
-    url: llms/confluent-llms.txt
-  - type: Plans
-    url: plans/confluent-plans-pricing.yml
-  - type: RateLimits
-    url: rate-limits/confluent-rate-limits.yml
-  - type: FinOps
-    url: finops/confluent-finops.yml
-  - type: OAuthScopes
-    url: scopes/confluent-scopes.yml
-  - type: AgenticAccess
-    url: agentic-access/confluent-agentic-access.yml
-  - type: VulnerabilityDisclosure
-    url: security/confluent-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/confluent-domain-security.yml
-  - type: Authentication
-    url: authentication/confluent-authentication.yml
-  - name: Agent Skills
-    url: https://github.com/confluentinc/agent-skills
-    type: AgentSkills
-  - type: GitHubOrganization
-    url: https://github.com/confluentinc
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/confluent
-  - type: Integrations
-    url: https://www.confluent.io/partner/
-  - type: LlmsText
-    url: https://docs.confluent.io/llms.txt
-  - url: https://www.confluent.io/feed/
-    type: Blog
+- aid: confluent:confluent-associations-api
+  name: Confluent Associations API
+  description: The Associations API from Confluent — 4 operation(s) for associations.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Associations
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-associations-api-openapi.yml
+- aid: confluent:confluent-associations-batch-api
+  name: Confluent Associations:batch API
+  description: The Associations:batch API from Confluent — 1 operation(s) for associations:batch.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Associations:batch
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-associations-batch-api-openapi.yml
+- aid: confluent:confluent-audit-log-configuration-api
+  name: Confluent Audit Log Configuration API
+  description: Configuration of what events get logged, and where those audit log events are sent.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Audit Log Configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-audit-log-configuration-api-openapi.yml
+- aid: confluent:confluent-authorization-api
+  name: Confluent Authorization API
+  description: >-
+    For components to find service nodes and call Authorize.
+
+    KSQL, Schema Registry, Connect would use these methods to enforce role permissions on their specfic
+    resources.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Authorization
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-authorization-api-openapi.yml
+- aid: confluent:confluent-cluster-registry-api
+  name: Confluent Cluster Registry API
+  description: Tracking and naming clusters.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Cluster Registry
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-cluster-registry-api-openapi.yml
+- aid: confluent:confluent-confluent-schema-registry-api
+  name: Confluent Confluent Schema Registry API
+  description: >-
+    The Confluent Schema Registry API from Confluent — 1 operation(s) for confluent schema registry.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Confluent Schema Registry
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-confluent-schema-registry-api-openapi.yml
+- aid: confluent:confluent-dek-registry-api
+  name: Confluent Dek Registry API
+  description: The Dek Registry API from Confluent — 10 operation(s) for dek registry.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Dek Registry
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-dek-registry-api-openapi.yml
+- aid: confluent:confluent-kafka-acl-management-api
+  name: Confluent Kafka ACL Management API
+  description: Endpoints to create, delete, and list Kafka ACLs.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Kafka ACL Management
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-kafka-acl-management-api-openapi.yml
+- aid: confluent:confluent-metadata-service-operations-api
+  name: Confluent Metadata Service Operations API
+  description: Metadata Service operational information.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Metadata Service Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-metadata-service-operations-api-openapi.yml
+- aid: confluent:confluent-private-rbac-ui-cached-user-store-information-api
+  name: Confluent Private RBAC UI - Cached User Store Information API
+  description: >-
+    The MDS system caches some information from LDAP; while incomplete,
+
+    it is suitable for autocomplete in the Confluent Control Center UI. Do not rely
+
+    on for any purpose other than autocomplete.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Private RBAC UI - Cached User Store Information
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-private-rbac-ui-cached-user-store-information-api-openapi.yml
+- aid: confluent:confluent-private-rbac-ui-cluster-visibility-api
+  name: Confluent Private RBAC UI - Cluster Visibility API
+  description: Identify which clusters a user has access to.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Private RBAC UI - Cluster Visibility
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-private-rbac-ui-cluster-visibility-api-openapi.yml
+- aid: confluent:confluent-private-rbac-ui-creation-guidelines-api
+  name: Confluent Private RBAC UI - Creation Guidelines API
+  description: >-
+    Provides guidelines for topic, connector, and rolebinding creation in Confluent Control Center.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Private RBAC UI - Creation Guidelines
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-private-rbac-ui-creation-guidelines-api-openapi.yml
+- aid: confluent:confluent-private-rbac-ui-manage-rolebindings-api
+  name: Confluent Private RBAC UI - Manage RoleBindings API
+  description: Endpoints that power the Manage RoleBindings UI in Confluent Control Center.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Private RBAC UI - Manage RoleBindings
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-private-rbac-ui-manage-rolebindings-api-openapi.yml
+- aid: confluent:confluent-private-rbac-ui-my-rolebindings-api
+  name: Confluent Private RBAC UI - My RoleBindings API
+  description: Endpoints that power the My Rolebindings UI in Confluent Control Center.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Private RBAC UI - My RoleBindings
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-private-rbac-ui-my-rolebindings-api-openapi.yml
+- aid: confluent:confluent-rbac-role-definitions-api
+  name: Confluent RBAC - Role Definitions API
+  description: Basic information about the roles that the system defines.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - RBAC - Role Definitions
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-rbac-role-definitions-api-openapi.yml
+- aid: confluent:confluent-rbac-rolebinding-crud-api
+  name: Confluent RBAC - RoleBinding CRUD API
+  description: CRUD rolebindings for users and groups.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - RBAC - RoleBinding CRUD
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-rbac-rolebinding-crud-api-openapi.yml
+- aid: confluent:confluent-rbac-rolebinding-summaries-api
+  name: Confluent RBAC - RoleBinding Summaries API
+  description: Endpoints that roll up rolebinding information in various ways.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - RBAC - RoleBinding Summaries
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-rbac-rolebinding-summaries-api-openapi.yml
+- aid: confluent:confluent-scim-tokens-org-v2-api
+  name: Confluent Scim Tokens (org/v2) API
+  description: >-
+    [![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+
+
+    `ScimToken` objects represent bearer tokens used for SCIM 2.0 API authentication.
+
+    The token value is only returned when the token is first created and cannot be retrieved later.
+
+
+
+    ## The Scim Tokens Model
+
+    <SchemaDefinition schemaRef="#/components/schemas/org.v2.ScimToken" />
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Scim Tokens (org/v2)
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-scim-tokens-org-v2-api-openapi.yml
+- aid: confluent:confluent-server-metadata-v1-api
+  name: Confluent Server Metadata (v1) API
+  description: The Server Metadata (v1) API from Confluent — 3 operation(s) for server metadata (v1).
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Server Metadata (v1)
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-server-metadata-v1-api-openapi.yml
+- aid: confluent:confluent-sso-device-authorization-api
+  name: Confluent SSO - Device Authorization API
+  description: >-
+    Endpoints for the OAuth 2.0 Device Authorization Grant flow. This flow is used by CLI
+
+    to enable SSO login.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - SSO - Device Authorization
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-sso-device-authorization-api-openapi.yml
+- aid: confluent:confluent-subjects-api
+  name: Confluent Subjects API
+  description: The Subjects API from Confluent — 1 operation(s) for subjects.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Subjects
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-subjects-api-openapi.yml
+- aid: confluent:confluent-switchover-endpoints-switchover-v1-api
+  name: Confluent Switchover Endpoints (switchover/v1) API
+  description: >-
+    [![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+    [![Request Access To Switchover API (Kafka Disaster Recovery)](https://img.shields.io/badge/-Request%20Access%20To%20Switchover%20API%20%28Kafka%20Disaster%20Recovery%29-%23bc8540)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+    `SwitchoverEndpoint` represents the endpoint-level Disaster Recovery configuration for a
+
+    `SwitchoverPair`. It exposes a sticky DR bootstrap endpoint that clients connect to so they
+
+    never need to update their bootstrap endpoint after a failover; that bootstrap endpoint is
+
+    not part of this resource's API representation (ORC-10133) and is obtained separately. For
+
+    stateful pairs, the active endpoint follows the pair's active member.
+
+
+    The API allows you to list, create, read, update, and delete switchover endpoints.
+
+
+
+    Related guide: [Disaster Recovery for Kafka in Confluent Cloud](https://docs.confluent.io/cloud/current/clusters/cluster-linking/index.html).
+
+
+    ## The Switchover Endpoints Model
+
+    <SchemaDefinition schemaRef="#/components/schemas/switchover.v1.SwitchoverEndpoint" />
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Switchover Endpoints (switchover/v1)
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-switchover-endpoints-switchover-v1-api-openapi.yml
+- aid: confluent:confluent-switchover-pairs-switchover-v1-api
+  name: Confluent Switchover Pairs (switchover/v1) API
+  description: >-
+    [![Early Access](https://img.shields.io/badge/Lifecycle%20Stage-Early%20Access-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+    [![Request Access To Switchover API (Kafka Disaster Recovery)](https://img.shields.io/badge/-Request%20Access%20To%20Switchover%20API%20%28Kafka%20Disaster%20Recovery%29-%23bc8540)](mailto:ccloud-api-access+switchover-v1-early-access@confluent.io?subject=Request%20to%20join%20switchover/v1%20API%20Early%20Access&body=I%E2%80%99d%20like%20to%20join%20the%20Confluent%20Cloud%20API%20Early%20Access%20for%20switchover/v1%20to%20provide%20early%20feedback%21%20My%20Cloud%20Organization%20ID%20is%20%3Cretrieve%20from%20https%3A//confluent.cloud/settings/billing/payment%3E.)
+
+
+    `SwitchoverPair` represents a cluster-level Disaster Recovery pairing between two Kafka
+
+    clusters in different regions of the same environment. Exactly one member is active at any
+
+    time; the other is passive and kept in sync via a bidirectional cluster link.
+
+
+    The API allows you to list, create, read, update, and delete switchover pairs, and to trigger
+
+    a failover (promotion of the passive member) via the `:failover` operation.
+
+
+
+    Related guide: [Disaster Recovery for Kafka in Confluent Cloud](https://docs.confluent.io/cloud/current/clusters/cluster-linking/index.html).
+
+
+    ## The Switchover Pairs Model
+
+    <SchemaDefinition schemaRef="#/components/schemas/switchover.v1.SwitchoverPair" />
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Switchover Pairs (switchover/v1)
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-switchover-pairs-switchover-v1-api-openapi.yml
+- aid: confluent:confluent-tokens-and-authentication-api
+  name: Confluent Tokens and Authentication API
+  description: >-
+    The Tokens and Authentication API from Confluent — 1 operation(s) for tokens and authentication.
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Tokens and Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-tokens-and-authentication-api-openapi.yml
+- aid: confluent:confluent-users-scim-v2-api
+  name: Confluent Users (scim/v2) API
+  description: >-
+    [![General Availability](https://img.shields.io/badge/Lifecycle%20Stage-General%20Availability-%2345c6e8)](#section/Versioning/API-Lifecycle-Policy)
+
+
+    `Users` objects represent user accounts in your Confluent Cloud organization that are
+
+    managed through your SSO identity provider integration.
+
+
+    This API enables identity providers to automatically provision, update, and deprovision
+
+    user accounts in Confluent Cloud, maintaining synchronization between your identity
+
+    provider and Confluent Cloud user directory. Users created through this API will have
+
+    access to Confluent Cloud resources based on the configured SSO mapping and organization
+
+    role assignments.
+
+
+
+    ## The Users Model
+
+    <SchemaDefinition schemaRef="#/components/schemas/scim.v2.Users" />
+
+
+    ## Quotas and Limits
+
+    This resource is subject to the [following quotas](https://docs.confluent.io/cloud/current/quotas/overview.html):
+
+
+    | Quota | Description |
+
+    | --- | --- |
+
+    | `users_per_org` | Users in one Confluent Cloud organization |
+  humanURL: https://www.confluent.io/
+  baseURL: https://api.confluent.cloud
+  tags:
+  - Users (scim/v2)
+  properties:
+  - type: OpenAPI
+    url: openapi/confluent-users-scim-v2-api-openapi.yml
 integrations:
-  - name: Become a Partner
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- name: Become a Partner
+
 x-enrichment:
   date: '2026-08-27'
   status: enriched

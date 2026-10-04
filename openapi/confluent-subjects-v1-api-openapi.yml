@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Subjects (v1) API
-  version: ''
-  x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
-  x-audience: external-public
-  x-logo:
-    url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  title: Confluent Subjects (v1) API
+  x-refined-note:
+  - x-api-id differs across the merged source definitions and was not carried
+  - x-audience differs across the merged source definitions and was not carried
+  - x-logo differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Subjects (v1) across 4 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml, schema-registry-api-spec.yaml, schema-registry-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -936,8 +930,103 @@ paths:
       security:
       - resource-api-key: []
       - external-access-token: []
+  /subjects/{subject}/versions/{version}/tags:
+    post:
+      tags:
+      - Subjects (v1)
+      summary: Create or remove schema embedded tags for a subject version
+      description: Create new schema subject version with the provided field or record level schema tags embedded (or remove) in the schema string, as well as the given metadata and ruleset.
+      operationId: modifyTags_1
+      parameters:
+      - name: subject
+        in: path
+        description: Name of the subject
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: Version of the schema to be returned. Valid values for versionId are between [1,2^31-1] or the string "latest". "latest" returns the last registered schema under the specified subject. Note that there may be a new latest schema that gets registered right after this request is served.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Tag schema request
+        content:
+          application/vnd.schemaregistry.v1+json:
+            schema:
+              $ref: '#/components/schemas/TagSchemaRequest'
+          application/vnd.schemaregistry+json:
+            schema:
+              $ref: '#/components/schemas/TagSchemaRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagSchemaRequest'
+          application/octet-stream:
+            schema:
+              $ref: '#/components/schemas/TagSchemaRequest'
+        required: true
+      responses:
+        '200':
+          description: Schema successfully registered.
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/RegisterSchemaResponse_2'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/RegisterSchemaResponse_2'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/RegisterSchemaResponse_2'
+        '409':
+          description: Conflict. Incompatible schema.
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+        '422':
+          description: 'Unprocessable entity. Error code 42201 indicates an invalid schema or schema type. '
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+        '500':
+          description: Internal Server Error. Error code 50001 indicates a failure in the backend data store.Error code 50002 indicates operation timed out. Error code 50003 indicates a failure forwarding the request to the primary.
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
 components:
   schemas:
+    SchemaEntity:
+      type: object
+      properties:
+        entityPath:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - sr_record
+          - sr_field
     Rule:
       description: Rule
       properties:
@@ -992,48 +1081,6 @@ components:
           description: Whether the rule is disabled
           type: boolean
       type: object
-    SchemaTags:
-      type: object
-      properties:
-        schemaEntity:
-          $ref: '#/components/schemas/SchemaEntity'
-        tags:
-          type: array
-          items:
-            type: string
-    SchemaEntity:
-      type: object
-      properties:
-        entityPath:
-          type: string
-        entityType:
-          type: string
-          enum:
-          - sr_record
-          - sr_field
-    RegisterSchemaResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Globally unique identifier of the schema
-          format: int32
-          example: 100001
-      description: Schema register response
-    RuleSet:
-      description: Schema rule set
-      properties:
-        migrationRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-        domainRules:
-          items:
-            $ref: '#/components/schemas/Rule'
-          type: array
-      type:
-      - object
-      - 'null'
     Metadata:
       description: User-defined metadata
       properties:
@@ -1056,17 +1103,6 @@ components:
       type:
       - object
       - 'null'
-    ErrorMessage:
-      type: object
-      properties:
-        error_code:
-          type: integer
-          description: The error code
-          format: int32
-        message:
-          type: string
-          description: The error message
-      description: Error message of this operation
     Schema:
       type: object
       properties:
@@ -1161,7 +1197,426 @@ components:
           format: int32
           example: 1
       description: Schema reference
+    ErrorMessage:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: The error code
+          format: int32
+        message:
+          type: string
+          description: The error message
+      description: Error message of this operation
+    RegisterSchemaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Globally unique identifier of the schema
+          format: int32
+          example: 100001
+      description: Schema register response
+    SchemaTags:
+      type: object
+      properties:
+        schemaEntity:
+          $ref: '#/components/schemas/SchemaEntity'
+        tags:
+          type: array
+          items:
+            type: string
+    RuleSet:
+      description: Schema rule set
+      properties:
+        migrationRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+        domainRules:
+          items:
+            $ref: '#/components/schemas/Rule'
+          type: array
+      type:
+      - object
+      - 'null'
+    TagSchemaRequest:
+      type: object
+      properties:
+        newVersion:
+          type: integer
+          description: The new version should be the latest version in the subject + 1. If set, the new version will be encoded to the schema metadata.
+          format: int32
+        tagsToAdd:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        tagsToRemove:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        metadata:
+          $ref: '#/components/schemas/Metadata_2'
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet_2'
+        rulesToMerge:
+          $ref: '#/components/schemas/RuleSet_2'
+        rulesToRemove:
+          type: array
+          items:
+            type: string
+      description: Schema tags register request
+    Metadata_2:
+      type: object
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        sensitive:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+      description: User-defined metadata
+    Schema_2:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Name of the subject
+          example: User
+        version:
+          type: integer
+          description: Version number
+          format: int32
+          example: 1
+        id:
+          type: integer
+          description: Globally unique identifier of the schema
+          format: int32
+          example: 100001
+        guid:
+          type: string
+          description: Globally unique identifier of the schema. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        schemaType:
+          type: string
+          description: Schema type. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          example: AVRO
+        references:
+          type: array
+          description: References to other schemas
+          items:
+            $ref: '#/components/schemas/SchemaReference'
+        metadata:
+          $ref: '#/components/schemas/Metadata_2'
+        ruleset:
+          $ref: '#/components/schemas/RuleSet_2'
+        schema:
+          type: string
+          description: Schema definition string
+          example: '{"schema": "{"type": "string"}"}'
+        schemaTags:
+          type: array
+          description: Schema tags
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        ts:
+          type: integer
+          description: Timestamp when the schema version's record was last written; the version was registered then unless createTs is present. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        createTs:
+          type: integer
+          description: Timestamp when the schema version was first registered. Present only when it differs from ts, i.e. the version's record was rewritten, as by a soft delete or an import; otherwise the version was registered at ts. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        deleted:
+          type: boolean
+          description: Whether the schema has been deleted. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet_2'
+      description: Schema
+    ErrorMessage_2:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: Error code
+          format: int32
+        message:
+          type: string
+          description: Detailed error message
+      description: Error message
+    RegisterSchemaResponse_2:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Globally unique identifier of the schema
+          format: int32
+          example: 100001
+        version:
+          type: integer
+          description: Version number. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int32
+        guid:
+          type: string
+          description: Globally unique identifier of the schema. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        schemaType:
+          type: string
+          description: Schema type. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        references:
+          type: array
+          description: References to other schemas. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          items:
+            $ref: '#/components/schemas/SchemaReference'
+        metadata:
+          $ref: '#/components/schemas/Metadata_2'
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet_2'
+        schema:
+          type: string
+          description: Schema definition string. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        ts:
+          type: integer
+          description: Timestamp when the schema version's record was last written; the version was registered then unless createTs is present. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        createTs:
+          type: integer
+          description: Timestamp when the schema version was first registered. Present only when it differs from ts, i.e. the version's record was rewritten, as by a soft delete or an import; otherwise the version was registered at ts. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        deleted:
+          type: boolean
+          description: Whether the schema has been deleted. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+      description: Schema register response
+    RuleSet_2:
+      type: object
+      properties:
+        migrationRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        domainRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        encodingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        enableAt:
+          type: string
+          enum:
+          - ALL
+          - CLIENT
+          - GATEWAY
+          - SERVER
+          - NONE
+      description: Schema rule set
+    TagSchemaRequest_2:
+      type: object
+      properties:
+        newVersion:
+          type: integer
+          description: The new version should be the latest version in the subject + 1. If set, the new version will be encoded to the schema metadata.
+          format: int32
+        tagsToAdd:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        tagsToRemove:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        metadata:
+          $ref: '#/components/schemas/Metadata_3'
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet_3'
+        rulesToMerge:
+          $ref: '#/components/schemas/RuleSet_3'
+        rulesToRemove:
+          type: array
+          items:
+            type: string
+      description: Schema tags register request
+    Metadata_3:
+      type: object
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        sensitive:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+      description: User-defined metadata
+    Schema_3:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Name of the subject
+          example: User
+        version:
+          type: integer
+          description: Version number
+          format: int32
+          example: 1
+        id:
+          type: integer
+          description: Globally unique identifier of the schema
+          format: int32
+          example: 100001
+        guid:
+          type: string
+          description: Globally unique identifier of the schema. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        schemaType:
+          type: string
+          description: Schema type. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          example: AVRO
+        references:
+          type: array
+          description: References to other schemas
+          items:
+            $ref: '#/components/schemas/SchemaReference'
+        metadata:
+          $ref: '#/components/schemas/Metadata_3'
+        ruleset:
+          $ref: '#/components/schemas/RuleSet_3'
+        schema:
+          type: string
+          description: Schema definition string
+          example: '{"schema": "{"type": "string"}"}'
+        schemaTags:
+          type: array
+          description: Schema tags
+          items:
+            $ref: '#/components/schemas/SchemaTags'
+        ts:
+          type: integer
+          description: Timestamp when the schema version's record was last written; the version was registered then unless createTs is present. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        createTs:
+          type: integer
+          description: Timestamp when the schema version was first registered. Present only when it differs from ts, i.e. the version's record was rewritten, as by a soft delete or an import; otherwise the version was registered at ts. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        deleted:
+          type: boolean
+          description: Whether the schema has been deleted. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet_3'
+      description: Schema
+    ErrorMessage_3:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: Error code
+          format: int32
+        message:
+          type: string
+          description: Detailed error message
+      description: Error message
+    RegisterSchemaResponse_3:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Globally unique identifier of the schema
+          format: int32
+          example: 100001
+        version:
+          type: integer
+          description: Version number. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int32
+        guid:
+          type: string
+          description: Globally unique identifier of the schema. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        schemaType:
+          type: string
+          description: Schema type. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        references:
+          type: array
+          description: References to other schemas. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          items:
+            $ref: '#/components/schemas/SchemaReference'
+        metadata:
+          $ref: '#/components/schemas/Metadata_3'
+        ruleSet:
+          $ref: '#/components/schemas/RuleSet_3'
+        schema:
+          type: string
+          description: Schema definition string. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+        ts:
+          type: integer
+          description: Timestamp when the schema version's record was last written; the version was registered then unless createTs is present. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        createTs:
+          type: integer
+          description: Timestamp when the schema version was first registered. Present only when it differs from ts, i.e. the version's record was rewritten, as by a soft delete or an import; otherwise the version was registered at ts. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+          format: int64
+        deleted:
+          type: boolean
+          description: Whether the schema has been deleted. In Confluent Cloud, this field is returned only if Confluent-Accept-Unknown-Properties header is passed in
+      description: Schema register response
+    RuleSet_3:
+      type: object
+      properties:
+        migrationRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        domainRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        encodingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        enableAt:
+          type: string
+          enum:
+          - ALL
+          - CLIENT
+          - GATEWAY
+          - SERVER
+          - NONE
+      description: Schema rule set
   responses:
+    schemaregistry.v1.ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 403
+            message: Forbidden
+    schemaregistry.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 400
+            message: Bad Request
     schemaregistry.v1.UnauthorizedError:
       description: Unauthorized
       content:
@@ -1194,24 +1649,6 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    schemaregistry.v1.ForbiddenError:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 403
-            message: Forbidden
-    schemaregistry.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 400
-            message: Bad Request
   securitySchemes:
     cloud-api-key:
       type: http
@@ -1250,6 +1687,11 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
+- schema-registry-api-spec.yaml
+- schema-registry-openapi.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

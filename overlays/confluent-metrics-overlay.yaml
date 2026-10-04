@@ -2,7 +2,7 @@ overlay: 1.0.0
 info:
   title: API Evangelist enhancements for the Confluent Cloud Metrics API
   version: 1.0.0
-extends: openapi/confluent-metrics-api-openapi.yaml
+extends: ../openapi/_original/confluent-metrics-api-openapi.yaml
 x-provenance:
   generated: '2026-08-27'
   method: generated

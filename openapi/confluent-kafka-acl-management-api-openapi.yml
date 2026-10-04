@@ -1,0 +1,383 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Kafka ACL Management API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Endpoints to create, delete, and list Kafka ACLs.
+  name: Kafka ACL Management
+paths:
+  /security/1.0/acls:
+    delete:
+      description: Callable by Admins+AclUsers.
+      operationId: removeAclBindings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AclFilterRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclBindings'
+          description: Deleted AclBindings.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Deletes Kafka ACLs according to the supplied filter
+      tags:
+      - Kafka ACL Management
+    post:
+      description: Callable by Admins+AclUsers.
+      operationId: addAclBinding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAclRequest'
+        required: true
+      responses:
+        '204':
+          description: Added AclBinding.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Creates Kafka ACLs for given AclBinding
+      tags:
+      - Kafka ACL Management
+  /security/1.0/acls:search:
+    post:
+      description: Callable by Admins+AclUsers.
+      operationId: searchAclBinding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AclFilterRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclBindings'
+          description: Returns all AclBindings that match the given AclBindingFilter.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Lists Kafka ACLs according to the supplied filter
+      tags:
+      - Kafka ACL Management
+components:
+  schemas:
+    KafkaResourcePatternFilter:
+      example:
+        name: clicksTopic1
+        patternType: LITERAL
+        resourceType: TOPIC
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/AclResourceType'
+        name:
+          example: clicksTopic1
+          type: string
+        patternType:
+          $ref: '#/components/schemas/PatternType'
+      required:
+      - patternType
+      - resourceType
+      type: object
+    AclBinding:
+      example:
+        entry:
+          principal: User:bob
+          permissionType: ALLOW
+          host: host
+          operation: ALL
+        pattern:
+          name: clicksTopic1
+          patternType: LITERAL
+          resourceType: TOPIC
+      properties:
+        pattern:
+          $ref: '#/components/schemas/KafkaResourcePattern'
+        entry:
+          $ref: '#/components/schemas/AccessControlEntry'
+      required:
+      - entry
+      - pattern
+      type: object
+    AccessControlEntryFilter:
+      example:
+        principal: principal
+        permissionType: ALLOW
+        host: host
+        operation: ALL
+      properties:
+        principal:
+          pattern: ^User:.+$
+          type: string
+        host:
+          type: string
+        operation:
+          $ref: '#/components/schemas/AclOperation'
+        permissionType:
+          $ref: '#/components/schemas/AclPermissionType'
+      required:
+      - operation
+      - permissionType
+      type: object
+    CreateAclRequest:
+      example:
+        aclBinding:
+          entry:
+            principal: User:bob
+            permissionType: ALLOW
+            host: host
+            operation: ALL
+          pattern:
+            name: clicksTopic1
+            patternType: LITERAL
+            resourceType: TOPIC
+        scope:
+          clusters:
+            kafka-cluster: kafka-cluster
+      properties:
+        scope:
+          $ref: '#/components/schemas/KafkaScope'
+        aclBinding:
+          $ref: '#/components/schemas/AclBinding'
+      required:
+      - aclBinding
+      - scope
+      type: object
+    KafkaScope_clusters:
+      example:
+        kafka-cluster: kafka-cluster
+      properties:
+        kafka-cluster:
+          type: string
+      required:
+      - kafka-cluster
+      type: object
+    KafkaResourcePattern:
+      example:
+        name: clicksTopic1
+        patternType: LITERAL
+        resourceType: TOPIC
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/AclResourceType'
+        name:
+          example: clicksTopic1
+          type: string
+        patternType:
+          $ref: '#/components/schemas/PatternType'
+      required:
+      - name
+      - patternType
+      - resourceType
+      type: object
+    AclResourceType:
+      enum:
+      - UNKNOWN
+      - ANY
+      - TOPIC
+      - GROUP
+      - CLUSTER
+      - TRANSACTIONAL_ID
+      example: TOPIC
+      type: string
+    AclPermissionType:
+      enum:
+      - UNKNOWN
+      - ANY
+      - DENY
+      - ALLOW
+      example: ALLOW
+      type: string
+    AclBindings:
+      items:
+        $ref: '#/components/schemas/AclBinding'
+      type: array
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    AccessControlEntry:
+      example:
+        principal: User:bob
+        permissionType: ALLOW
+        host: host
+        operation: ALL
+      properties:
+        principal:
+          example: User:bob
+          pattern: ^User:.+$
+          type: string
+        host:
+          type: string
+        operation:
+          $ref: '#/components/schemas/AclOperation'
+        permissionType:
+          $ref: '#/components/schemas/AclPermissionType'
+      required:
+      - host
+      - operation
+      - permissionType
+      - principal
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    PatternType:
+      enum:
+      - UNKNOWN
+      - ANY
+      - MATCH
+      - LITERAL
+      - PREFIXED
+      example: LITERAL
+      type: string
+    AclOperation:
+      enum:
+      - UNKNOWN
+      - ANY
+      - ALL
+      - READ
+      - WRITE
+      - CREATE
+      - DELETE
+      - ALTER
+      - DESCRIBE
+      - CLUSTER_ACTION
+      - DESCRIBE_CONFIGS
+      - ALTER_CONFIGS
+      - IDEMPOTENT_WRITE
+      example: ALL
+      type: string
+    AclFilterRequest:
+      example:
+        scope:
+          clusters:
+            kafka-cluster: kafka-cluster
+        aclBindingFilter:
+          patternFilter:
+            name: clicksTopic1
+            patternType: LITERAL
+            resourceType: TOPIC
+          entryFilter:
+            principal: principal
+            permissionType: ALLOW
+            host: host
+            operation: ALL
+      properties:
+        scope:
+          $ref: '#/components/schemas/KafkaScope'
+        aclBindingFilter:
+          $ref: '#/components/schemas/AclBindingFilter'
+      required:
+      - aclBindingFilter
+      - scope
+      type: object
+    KafkaScope:
+      example:
+        clusters:
+          kafka-cluster: kafka-cluster
+      properties:
+        clusters:
+          $ref: '#/components/schemas/KafkaScope_clusters'
+      required:
+      - clusters
+      type: object
+    AclBindingFilter:
+      example:
+        patternFilter:
+          name: clicksTopic1
+          patternType: LITERAL
+          resourceType: TOPIC
+        entryFilter:
+          principal: principal
+          permissionType: ALLOW
+          host: host
+          operation: ALL
+      properties:
+        patternFilter:
+          $ref: '#/components/schemas/KafkaResourcePatternFilter'
+        entryFilter:
+          $ref: '#/components/schemas/AccessControlEntryFilter'
+      required:
+      - entryFilter
+      - patternFilter
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

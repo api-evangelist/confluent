@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-sql-v1-connection-list-schema.json",
+  "title": "sql.v1.ConnectionList",
+  "description": "`Connection` models a reusable endpoint and auth token to authenticate the caller to\nuse that endpoint.\nOnly `OrgAdmins` and `EnvAdmins` will have the permissions to create, update and delete `Connections`.\n`FlinkDevelopers` and `ModelResourceOwners` can later reference a `Connection` resource within their Model\ncreation statements.\nThe API allows you to list, create, read, and delete your connections.\n## The Connection Model\n<SchemaDefinition schemaRef=\"#/components/schemas/sql.v1.Connection\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-connections-sql-v1-api-openapi.yml#/components/schemas/sql.v1.ConnectionList",
+  "type": "object",
+  "required": [
+    "api_version",
+    "kind",
+    "metadata",
+    "data"
+  ],
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "sql/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource."
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "enum": [
+        "ConnectionList"
+      ]
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ListMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "first": {},
+            "last": {},
+            "prev": {},
+            "next": {}
+          }
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "description": "A data property that contains an array of resource items. Each entry in the array is a separate resource.",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/sql.v1.Connection"
+          },
+          {
+            "type": "object",
+            "required": [
+              "api_version",
+              "kind",
+              "metadata",
+              "spec",
+              "status",
+              "name"
+            ],
+            "properties": {
+              "spec": {
+                "type": "object",
+                "required": [
+                  "connection_type",
+                  "endpoint"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "ListMeta": {
+      "type": "object",
+      "description": "ListMeta describes metadata that resource collections may have",
+      "properties": {
+        "first": {
+          "description": "A link to the first page of results. If a response does not contain a first link, then direct navigation to the first page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "last": {
+          "description": "A link to the last page of results. If a response does not contain a last link, then direct navigation to the last page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "prev": {
+          "description": "A link to the previous page of results. If a response does not contain a prev link, then either there is no previous data or backwards traversal through the result set is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "next": {
+          "description": "A link to the next page of results. If a response does not contain a next link, then there is no more data available.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "total_size": {
+          "description": "Number of records in the full result set. This response may be paginated and have a smaller number of records.",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "sql.v1.Connection": {
+      "type": "object",
+      "description": "`Connection` models a reusable endpoint and auth token to authenticate the caller to\nuse that endpoint.\nOnly `OrganizationAdmins` and `EnvironmentAdmins` will have the permissions to create, update and delete `Connections`.\n`FlinkDevelopers` and `ModelResourceOwners` can later reference a `Connection` resource within their Model\ncreation statements.\nThe API allows you to list, create, read, and delete your connections.\n## The Connections Model\n<SchemaDefinition schemaRef=\"#/components/schemas/sql.v1.Connection\" />",
+      "properties": {
+        "api_version": {
+          "type": "string",
+          "enum": [
+            "sql/v1"
+          ],
+          "description": "APIVersion defines the schema version of this representation of a resource.",
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind defines the object this REST resource represents.",
+          "enum": [
+            "Connection"
+          ],
+          "readOnly": true
+        },
+        "metadata": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectMeta"
+            },
+            {
+              "properties": {
+                "self": {},
+                "uid": {},
+                "resource_version": {},
+                "resource_name": {}
+              }
+            }
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "The user provided name of the resource, unique within this environment.",
+          "pattern": "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*",
+          "x-immutable": true,
+          "maxLength": 100
+        },
+        "spec": {
+          "$ref": "#/$defs/sql.v1.ConnectionSpec"
+        },
+        "status": {
+          "$ref": "#/$defs/sql.v1.ConnectionStatus"
+        }
+      }
+    },
+    "sql.v1.ConnectionSpec": {
+      "type": "object",
+      "description": "Encapsulates the model provider access details",
+      "properties": {
+        "connection_type": {
+          "type": "string",
+          "description": "The type of this connection.",
+          "x-immutable": true,
+          "x-extensible-enum": [
+            "AZUREML",
+            "AZUREOPENAI",
+            "A2A",
+            "ANTHROPIC",
+            "BEDROCK",
+            "CONFLUENT_JDBC",
+            "COSMOSDB",
+            "COUCHBASE",
+            "ELASTIC",
+            "FIREWORKSAI",
+            "GOOGLEAI",
+            "MCP_SERVER",
+            "MONGODB",
+            "OPENAI",
+            "PINECONE",
+            "REST",
+            "S3VECTORS",
+            "SAGEMAKER",
+            "VERTEXAI"
+          ]
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "The endpoint that is used to run model inferencing.",
+          "maxLength": 16384,
+          "x-immutable": true
+        },
+        "auth_data": {
+          "type": "object",
+          "description": "The vendor specific authentication token details\n\nThe contents are stored as opaque bytes given in plaintext by an EnvAdmin.\nIn future, we would support more secure methods for distributing authentication tokens.\n",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sql.v1.PlaintextProvider"
+            }
+          ],
+          "x-immutable": false
+        }
+      },
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    },
+    "sql.v1.ConnectionStatus": {
+      "type": "object",
+      "required": [
+        "phase"
+      ],
+      "description": "The status of the Connection",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-extensible-enum": [
+            "ACTIVE",
+            "UNREACHABLE",
+            "INVALID_AUTH"
+          ],
+          "description": "Describes the status of the connection:\n\nREADY: The Connection is usable;\n\nUNREACHABLE: The Connection endpoint is unreachable;\n\nINVALID_AUTH: The Connection auth token is invalid;\n",
+          "readOnly": true
+        },
+        "detail": {
+          "type": "string",
+          "description": "Details about why connection transitioned into a given status.",
+          "readOnly": true
+        }
+      },
+      "readOnly": true
+    },
+    "sql.v1.PlaintextProvider": {
+      "type": "object",
+      "description": "Describes a sensitive piece of information passed in plaintext.\n\nConfluent only accepts authentication tokens of supported model providers from OrgAdmins and EnvAdmins.\nFor now, only 'PlainText' provider is supported. It stores authentication token details as opaque bytes in an encrypted form.\nThis option offers limited security as it only provides a single level of encryption.\n",
+      "properties": {
+        "kind": {
+          "description": "Plaintext Provider Kind Type\n",
+          "type": "string",
+          "enum": [
+            "PlaintextProvider"
+          ],
+          "x-immutable": true
+        },
+        "data": {
+          "description": "Authentication token in plaintext JSON string.\nFor composite tokens, provide them as JSON.\nThis is sensitive piece of information stored as opaque bytes in an encrypted form with single level of encryption.\n\nScoped to an endpoint of a `Connection` resource.\n",
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    }
+  }
+}

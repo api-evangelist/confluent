@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Managed Connector Plugins (connect/v1) API
+  title: Confluent Managed Connector Plugins (connect/v1) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Managed Connector Plugins (connect/v1) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -99,6 +93,9 @@ paths:
         '500':
           $ref: '#/components/responses/connect.v1.DefaultSystemError'
       parameters: []
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connector-plugins/{plugin_name}/config/validate:
     x-lifecycle-stage: General Availability
     parameters:
@@ -523,6 +520,9 @@ paths:
               time.interval: DAILY
               topics: APILogsTopic
         description: Configuration parameters for the connector. All values should be strings.
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
   ? /connect/v1/environments/{environment_id}/clusters/{kafka_cluster_id}/connector-plugins/{plugin_name}/config/translate?mask_sensitive=true
   : x-lifecycle-stage: General Availability
     parameters:
@@ -679,21 +679,10 @@ paths:
           $ref: '#/components/responses/RateLimitError'
         '500':
           $ref: '#/components/responses/connect.v1.DefaultSystemError'
+    servers:
+    - url: https://api.confluent.cloud
+      description: Confluent Cloud API
 components:
-  schemas:
-    connect.v1.ConnectorError:
-      type: object
-      properties:
-        error:
-          type: object
-          description: Connector Error with error code and message.
-          properties:
-            code:
-              type: integer
-              description: Error code for the type of error
-            message:
-              type: string
-              description: Human readable error message
   responses:
     connect.v1.ResourceNotFoundError:
       description: Not Found
@@ -705,6 +694,46 @@ components:
             error:
               code: 404
               message: resource not found
+    connect.v1.DefaultSystemError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 500
+              message: Oops, something went wrong
+    connect.v1.ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 403
+              message: Forbidden
+    connect.v1.UnauthenticatedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 401
+              message: Unauthorized
+    connect.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/connect.v1.ConnectorError'
+          example:
+            error:
+              code: 400
+              message: Bad Request
     RateLimitError:
       description: Rate Limit Exceeded
       headers:
@@ -728,46 +757,20 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    connect.v1.DefaultSystemError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 500
-              message: Oops, something went wrong
-    connect.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 400
-              message: Bad Request
-    connect.v1.UnauthenticatedError:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 401
-              message: Unauthorized
-    connect.v1.ForbiddenError:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/connect.v1.ConnectorError'
-          example:
-            error:
-              code: 403
-              message: Forbidden
+  schemas:
+    connect.v1.ConnectorError:
+      type: object
+      properties:
+        error:
+          type: object
+          description: Connector Error with error code and message.
+          properties:
+            code:
+              type: integer
+              description: Error code for the type of error
+            message:
+              type: string
+              description: Human readable error message
   securitySchemes:
     cloud-api-key:
       type: http
@@ -806,6 +809,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

@@ -1,0 +1,234 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Authorization API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: 'For components to find service nodes and call Authorize.
+
+    KSQL, Schema Registry, Connect would use these methods to enforce role permissions on their specfic resources.'
+  name: Authorization
+paths:
+  /security/1.0/authorize:
+    put:
+      description: Callable by Admins+User.
+      operationId: authorize
+      requestBody:
+        content:
+          application/json:
+            example:
+              userPrincipal: User:bob
+              actions:
+              - scope:
+                  clusters:
+                    kafka-cluster: K_GUID
+                resourceName: clicksTopic1
+                resourceType: Topic
+                operation: Read
+            schema:
+              $ref: '#/components/schemas/AuthorizeRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - ALLOWED
+              - DENIED
+              schema:
+                items:
+                  type: string
+                type: array
+          description: Authorization proccessed
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Authorize operations against resourceType for a given user
+      tags:
+      - Authorization
+components:
+  schemas:
+    AuthorizeRequest:
+      example:
+        userPrincipal: User:bob
+        actions:
+        - scope:
+            clusters:
+              kafka-cluster: kafkaClusterId
+              schema-registry-cluster: schemaRegistryClusterId
+              flink-environment: flinkEnvironmentId
+              ksql-cluster: ksqlClusterId
+              cmf: cmfId
+              connect-cluster: connectClusterId
+          resourceName: clicksTopic1
+          operation: Read
+          resourceType: Topic
+        - scope:
+            clusters:
+              kafka-cluster: kafkaClusterId
+              schema-registry-cluster: schemaRegistryClusterId
+              flink-environment: flinkEnvironmentId
+              ksql-cluster: ksqlClusterId
+              cmf: cmfId
+              connect-cluster: connectClusterId
+          resourceName: clicksTopic1
+          operation: Read
+          resourceType: Topic
+      properties:
+        userPrincipal:
+          description: The 'target' user principal.
+          example: User:bob
+          pattern: ^User:.+$
+          type: string
+        actions:
+          description: Actions to authorize.
+          items:
+            $ref: '#/components/schemas/Action'
+          type: array
+      required:
+      - actions
+      - userPrincipal
+      type: object
+    Scope:
+      example:
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      required:
+      - clusters
+      type: object
+    Action:
+      example:
+        scope:
+          clusters:
+            kafka-cluster: kafkaClusterId
+            schema-registry-cluster: schemaRegistryClusterId
+            flink-environment: flinkEnvironmentId
+            ksql-cluster: ksqlClusterId
+            cmf: cmfId
+            connect-cluster: connectClusterId
+        resourceName: clicksTopic1
+        operation: Read
+        resourceType: Topic
+      properties:
+        scope:
+          $ref: '#/components/schemas/Scope'
+        operation:
+          example: Read
+          type: string
+        resourceType:
+          example: Topic
+          type: string
+        resourceName:
+          example: clicksTopic1
+          type: string
+      required:
+      - operation
+      - resourceName
+      - resourceType
+      - scope
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    Scope_clusters:
+      example:
+        kafka-cluster: kafkaClusterId
+        schema-registry-cluster: schemaRegistryClusterId
+        flink-environment: flinkEnvironmentId
+        ksql-cluster: ksqlClusterId
+        cmf: cmfId
+        connect-cluster: connectClusterId
+      properties:
+        kafka-cluster:
+          example: kafkaClusterId
+          type: string
+        connect-cluster:
+          example: connectClusterId
+          type: string
+        ksql-cluster:
+          example: ksqlClusterId
+          type: string
+        schema-registry-cluster:
+          example: schemaRegistryClusterId
+          type: string
+        cmf:
+          example: cmfId
+          type: string
+        flink-environment:
+          example: flinkEnvironmentId
+          type: string
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

@@ -1,0 +1,1221 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Audit Log Configuration API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Configuration of what events get logged, and where those audit log events are sent.
+  name: Audit Log Configuration
+paths:
+  /security/1.0/audit/config:
+    get:
+      description: 'Requires the "AuditAdmin" role on the metadata service (MDS) cluster
+
+        and every Kafka cluster in the cluster registry.
+
+
+        Callable by Admins.'
+      operationId: getConfig
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                destinations:
+                  topics:
+                    confluent-audit-log-events_general_allowed_events:
+                      retention_ms: 2592000000
+                    confluent-audit-log-events_general_denied_events:
+                      retention_ms: 7776000000
+                    confluent-audit-log-events_finance_reads:
+                      retention_ms: 157680000000
+                excluded_principals:
+                - User:Alice
+                - User:service_account_id
+                default_topics:
+                  allowed: confluent-audit-log-events_general_allowed_events
+                  denied: confluent-audit-log-events_general_denied_events
+                routes:
+                  crn://mds1.example.com/kafka=*/topic=*:
+                    management:
+                      allowed: ''
+                      denied: ''
+                    authorize:
+                      allowed: confluent-audit-log-events_general_allowed_events
+                      denied: confluent-audit-log-events_general_denied_events
+                  crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=finance-*:
+                    consume:
+                      allowed: confluent-audit-log-events_finance_reads
+                      denied: confluent-audit-log-events_general_denied_events
+                    interbroker:
+                      allowed: ''
+                      denied: ''
+                metadata:
+                  resource_version: ASNFZ4mrze8BI0VniavN7w
+                  updated_at: 2019-09-09 12:34:56+00:00
+              schema:
+                $ref: '#/components/schemas/AuditLogConfigSpec'
+          description: The entire audit log configuration.
+      summary: Get the entire audit log configuration, including the live retention time…
+      tags:
+      - Audit Log Configuration
+    put:
+      description: 'Also creates missing destination topics on the destination cluster and updates
+
+        the retention time policy of destination topics, if necessary.
+
+
+        Requires the "AuditAdmin" role on the MDS cluster and every Kafka
+
+        cluster in the cluster registry.
+
+
+        May result in a 409 conflict error status if the ``resource_version``
+
+        in the JSON body of the request does not match the current version.
+
+
+        Callable by Admins.'
+      operationId: putConfig
+      requestBody:
+        content:
+          application/json:
+            example:
+              destinations:
+                topics:
+                  confluent-audit-log-events_general_allowed_events:
+                    retention_ms: 2592000000
+                  confluent-audit-log-events_general_denied_events:
+                    retention_ms: 7776000000
+                  confluent-audit-log-events_finance_reads:
+                    retention_ms: 157680000000
+              excluded_principals:
+              - User:Alice
+              - User:service_account_id
+              default_topics:
+                allowed: confluent-audit-log-events_general_allowed_events
+                denied: confluent-audit-log-events_general_denied_events
+              routes:
+                crn://mds1.example.com/kafka=*/topic=*:
+                  management:
+                    allowed: ''
+                    denied: ''
+                  authorize:
+                    allowed: confluent-audit-log-events_general_allowed_events
+                    denied: confluent-audit-log-events_general_denied_events
+                crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=finance-*:
+                  consume:
+                    allowed: confluent-audit-log-events_finance_reads
+                    denied: confluent-audit-log-events_general_denied_events
+                  interbroker:
+                    allowed: ''
+                    denied: ''
+              metadata:
+                resource_version: ASNFZ4mrze8BI0VniavN7w
+                updated_at: 2019-09-09 12:34:56+00:00
+            schema:
+              $ref: '#/components/schemas/AuditLogConfigSpec'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogConfigSpec'
+          description: The current audit log configuration spec
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogConfigSpec'
+          description: 'Concurrent modification resulted in a conflict. Response
+
+            will be the current audit log configuration.
+
+            '
+      summary: Update the entire audit log configuration on the MDS cluster and all Kafka…
+      tags:
+      - Audit Log Configuration
+  /security/1.0/audit/routes:
+    get:
+      description: 'Multiple routes may match a resource,
+
+        but only the most specific route will be selected for events related
+
+        to the resource. This endpoint returns all matching routes regardless of
+
+        whether or not they would actually be selected, or ignored in favor of
+
+        a more specific route.
+
+
+        Requires the "AuditAdmin" role on the metadata service (MDS) cluster
+
+        and every Kafka cluster in the cluster registry.
+
+
+        Callable by Admins.
+
+
+        The CRN patterns in the audit log config routes can contain wildcards.
+
+        So a route with a CRN pattern like
+
+        ``crn://mds.example.com/kafka=*/topic=finance-*`` would match events
+
+        associated with the topic at address
+
+        ``crn://mds.example.com/kafka=abc123/topic=finance-deposits``, or
+
+        events associated with the topic at
+
+        ``crn://mds.example.com/kafka=xyz789/topic=finance-chargebacks``, but
+
+        would not match events associated with the topic
+
+        ``crn://mds.example.com/kafka=abc123/topic=server-deployments``. So a
+
+        route''s CRN pattern can match events from more than one resource,
+
+        based on where the pattern''s wildcards are.
+
+
+        It is possible to write multiple routes with different CRN patterns
+
+        that match a given resource''s CRN. For example: the resource at
+
+        ``crn://mds.example.com/kafka=abc123/topic=finance-chargebacks``
+
+        is matched by any of the following route CRN patterns:
+
+
+        * ``crn://mds.example.com/kafka=*/topic=*``
+
+        * ``crn://mds.example.com/kafka=abc123/topic=*``
+
+        * ``crn://mds.example.com/kafka=*/topic=finance-*``
+
+
+        When there are multiple matching routes for an event, we select the
+
+        matching route with the most specific CRN pattern. The most specific
+
+        CRN pattern is the one with the greatest length before its first
+
+        wildcard. So in the above example,
+
+        ``crn://mds.example.com/kafka=abc123/topic=*`` wins.
+
+
+        To break a tie, ignore the prefix that the patterns have in common.
+
+        So, for example ``crn://mds.example.com/kafka=*/topic=finance-*`` is
+
+        more specific than ``crn://mds.example.com/kafka=*/topic=*``.
+
+
+        This endpoint lists all currently defined routes that match the
+
+        queried resource or its sub-resources, regardless of whether or not
+
+        they would actually be selected, or ignored in favor of a more
+
+        specific route.
+
+
+        A query pattern like ...
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=qa-test``
+
+
+        ... would match all of the following routes ...
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=qa-test/connector=from-db4``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=qa-test/connector=*``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=*/connector=*``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=qa-*``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=*``
+
+
+        ``crn://mds1.example.com/kafka=*/connect=qa-*``
+
+
+        ``crn://mds1.example.com/kafka=*/connect=qa-*/connector=*``
+
+
+        ... but would not match any of these routes ...
+
+
+        ``crn://mds1.example.com/kafka=*/ksql=*``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=stg-*``
+
+
+        ``crn://mds1.example.com/kafka=zyxwv-UTSRQPO_98765432/connect=qa-*``
+
+
+        ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=qa-*``'
+      operationId: listRoutes
+      parameters:
+      - description: 'A Confluent resource name (CRN) .
+
+          '
+        example: crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=qa-test
+        explode: true
+        in: query
+        name: q
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                default_topics:
+                  allowed: confluent-audit-log-events_general_allowed_events
+                  denied: confluent-audit-log-events_general_denied_events
+                routes:
+                  crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=qa-test/connector=from-db4:
+                    management:
+                      allowed: ''
+                      denied: ''
+                  crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/connect=*:
+                    authorize:
+                      allowed: confluent-audit-log-events_abc-connector-allowed
+                      denied: confluent-audit-log-events_abc-connector-denied
+              schema:
+                $ref: '#/components/schemas/AuditLogConfigListRoutesResponse'
+          description: Matching routes and their rules
+      summary: Lists all currently defined routes that match the queried resource or its…
+      tags:
+      - Audit Log Configuration
+  /security/1.0/audit/lookup:
+    get:
+      description: 'Requires the "AuditAdmin" role on the metadata service (MDS) cluster
+
+        and every Kafka cluster in the cluster registry.
+
+
+        The CRN patterns in the audit log config routes can contain wildcards.
+
+        So a route with a CRN pattern like
+
+        ``crn://mds.example.com/kafka=*/topic=finance-*`` would match events
+
+        associated with the topic at address
+
+        ``crn://mds.example.com/kafka=abc123/topic=finance-deposits``, or
+
+        events associated with the topic at
+
+        ``crn://mds.example.com/kafka=xyz789/topic=finance-chargebacks``, but
+
+        would not match events associated with the topic
+
+        ``crn://mds.example.com/kafka=abc123/topic=server-deployments``. So a
+
+        route''s CRN pattern can match events from more than one resource,
+
+        based on where the pattern''s wildcards are.
+
+
+        It is possible to write multiple routes with different CRN patterns
+
+        that match a given resource''s CRN. For example: the resource at
+
+        ``crn://mds.example.com/kafka=abc123/topic=finance-chargebacks``
+
+        is matched by any of the following route CRN patterns:
+
+
+        * ``crn://mds.example.com/kafka=*/topic=*``
+
+        * ``crn://mds.example.com/kafka=abc123/topic=*``
+
+        * ``crn://mds.example.com/kafka=*/topic=finance-*``
+
+
+        When there are multiple matching routes for an event, we select the
+
+        matching route with the most specific CRN pattern. The most specific
+
+        CRN pattern is the one with the greatest length before its first
+
+        wildcard. So in the above example,
+
+        ``crn://mds.example.com/kafka=abc123/topic=*`` wins.
+
+
+        To break a tie, ignore the prefix that the patterns have in common.
+
+        So, for example ``crn://mds.example.com/kafka=*/topic=finance-*`` is
+
+        more specific than ``crn://mds.example.com/kafka=*/topic=*``.
+
+
+        This endpoint resolves the matching and precedence rules of all
+
+        configured audit log routes for you, and returns the one selected
+
+        (most specific) matching route describing how messages regarding the
+
+        given CRN would be routed.
+
+        Callable by Admins.'
+      operationId: resolveResourceRoute
+      parameters:
+      - description: A Confluent resource name (CRN).
+        example: crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=finance-payments
+        explode: true
+        in: query
+        name: crn
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                route: crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=finance-*
+                categories:
+                  authorize:
+                    allowed: confluent-audit-log-events_general_allowed_events
+                    denied: confluent-audit-log-events_general_denied_events
+                  consume:
+                    allowed: ''
+                    denied: confluent-audit-log-events_finance_denied
+                  describe:
+                    allowed: ''
+                    denied: ''
+                  heartbeat:
+                    allowed: ''
+                    denied: ''
+                  interbroker:
+                    allowed: ''
+                    denied: ''
+                  management:
+                    allowed: confluent-audit-log-events_general_allowed_events
+                    denied: confluent-audit-log-events_general_denied_events
+                  produce:
+                    allowed: confluent-audit-log-events_finance_produce_allowed
+                    denied: confluent-audit-log-events_finance_denied
+              schema:
+                $ref: '#/components/schemas/AuditLogConfigResolveResourceRouteResponse'
+          description: 'The CRN pattern of the route that will be selected and used by the
+
+            system (or else the string ``"default"``), and the route''s rules
+
+            for various audit log event categories. Categories include
+
+            ``produce``, ``consume``, ``interbroker``, ``authorize``,
+
+            ``authentication``, ``management``, `heartbeat``, and ``describe``.
+
+            If needed, the server fills in any missing or ``null`` values in
+
+            the rules by coalescing with defaults: ``authentication``,
+
+            ``authorize``, and ``management`` categories will default
+
+            to the destination topics specified in ``default_topics``. All
+
+            other categories default to an empty string. Rules that resolve to
+
+            an empty string indicate that events will be discarded.
+
+            '
+      summary: Returns the route describing how messages regarding this CRN would be routed
+      tags:
+      - Audit Log Configuration
+components:
+  schemas:
+    AuditLogConfigDestinationConfig:
+      properties:
+        retention_ms:
+          description: The number of milliseconds to keep events sent to this topic
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+      - retention_ms
+      type: object
+    AuditLogConfigMetadata:
+      example:
+        updated_at: 2000-01-23 04:56:07+00:00
+        modified_since: 2000-01-23 04:56:07+00:00
+        resource_version: resource_version
+      properties:
+        resource_version:
+          description: 'An opaque, server-generated marker, used to detect concurrent
+
+            modification collisions. When submitting an update, the
+
+            request will be rejected unless this value agrees with the
+
+            version expected by the server. GET the current configuration
+
+            first, to find out the expected ``resource_version``.
+
+            '
+          type: string
+        updated_at:
+          description: 'When the audit log configuration was last modified.
+
+            This value is set by the server, and ignored when submitted.
+
+            '
+          format: date-time
+          type:
+          - string
+          - 'null'
+        modified_since:
+          description: 'When the server detects that the audit log configuration has been
+
+            modified through another mechanism but is not sure when the
+
+            modification occurred, the ``updated_at`` property is renamed to
+
+            ``modified_since``. This value is set by the server, and ignored when
+
+            submitted.
+
+            '
+          format: date-time
+          type:
+          - string
+          - 'null'
+      required:
+      - resource_version
+      type:
+      - object
+      - 'null'
+    AuditLogConfigSpec:
+      example:
+        routes:
+          key:
+            other:
+              allowed: allowed
+              denied: denied
+            management:
+              allowed: allowed
+              denied: denied
+            interbroker:
+              allowed: allowed
+              denied: denied
+            heartbeat:
+              allowed: allowed
+              denied: denied
+            consume:
+              allowed: allowed
+              denied: denied
+            describe:
+              allowed: allowed
+              denied: denied
+            authorize:
+              allowed: allowed
+              denied: denied
+            produce:
+              allowed: allowed
+              denied: denied
+            authentication:
+              allowed: allowed
+              denied: denied
+        metadata:
+          updated_at: 2000-01-23 04:56:07+00:00
+          modified_since: 2000-01-23 04:56:07+00:00
+          resource_version: resource_version
+        destinations:
+          bootstrap_servers:
+          - localhost:8090
+          topics:
+            confluent-audit-log-events_general_allowed_events:
+              retention_ms: 2592000000
+            confluent-audit-log-events_general_denied_events:
+              retention_ms: 7776000000
+            confluent-audit-log-events_finance_topics:
+              retention_ms: 157680000000
+        excluded_principals:
+        - User:Alice
+        - User:service_account_id
+        default_topics:
+          allowed: allowed
+          denied: denied
+      properties:
+        destinations:
+          $ref: '#/components/schemas/AuditLogConfigDestinations'
+        excluded_principals:
+          default: []
+          description: 'A list of security principals to exclude from the audit log.
+
+            The list may be empty.
+
+            '
+          example:
+          - User:Alice
+          - User:service_account_id
+          items:
+            pattern: ^User:.+$
+            type: string
+          type:
+          - array
+          - 'null'
+        default_topics:
+          $ref: '#/components/schemas/AuditLogConfigDefaultTopics'
+        routes:
+          additionalProperties:
+            $ref: '#/components/schemas/AuditLogConfigRouteCategories'
+          description: 'Events are matched to exactly one of these route patterns (or
+
+            else to the ``default_topics``). The route patterns can be any valid
+
+            Confluent resource name (CRN), or even a CRN containing wildcards.
+
+            The most specific pattern that matches an event will be chosen.
+
+            Consider these example route patterns that match events on Kafka
+
+            topic resources. They are ordered here from most to least specific:
+
+
+            ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=clicks``
+
+
+            ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=*``
+
+
+            ``crn://mds1.example.com/kafka=*/topic=clicks``
+
+
+            ``crn://mds1.example.com/kafka=*/topic=*``
+
+
+            ``crn:///kafka=abcde_FGHIJKL-01234567/topic=clicks``
+
+
+            ``crn:///kafka=*/topic=*``
+
+
+            For a CRN pattern to match a CRN, the Authority sections must match
+
+            and the CRN pattern and the CRN must have all of the same path element
+
+            types in the same order. The Authority section of a CRN is between the
+
+            second and third slash ("mds1.example.com" in
+
+            ``crn://mds1.example.com/kafka=*/topic=*``). It may be left empty (as
+
+            in ``crn:///kafka=*/topic=*``). A CRN pattern with an empty Authority
+
+            section matches a CRN with ANY Authority. The converse is not true: A
+
+            CRN pattern with a non-empty Authority will not match a CRN with an
+
+            empty Authority. A resource with an empty Authority CRN can only be
+
+            matched by a CRN pattern with an empty Authority.
+
+
+            So an event on the resource with the CRN...
+
+
+            ``crn://confluent.cloud/kafka=abcde_FGHIJKL-01234567/topic=clicks``
+
+
+            ... would not match a route with pattern ...
+
+
+            ``crn://confluent.cloud/kafka=abcde_FGHIJKL-01234567``
+
+
+            ... because they do not have matching path element types.
+
+
+            Once the most specific matching route for an event is determined,
+
+            it is then matched within that route to exactly one event category,
+
+            and then based on whether it was "allowed" or "denied", matched to
+
+            exactly one destination topic (or discarded, if the rule''s destination
+
+            topic name is the empty string). If the category rule''s destination
+
+            topic is ``null`` then it either falls through to the
+
+            ``default_topics`` (for ``authentication``, ``authorize``, and
+
+            ``management`` categories), or is discarded (which is the default
+
+            for all other categories of events).
+
+            '
+          type:
+          - object
+          - 'null'
+        metadata:
+          $ref: '#/components/schemas/AuditLogConfigMetadata'
+      required:
+      - default_topics
+      - destinations
+      - metadata
+      type: object
+    AuditLogConfigListRoutesResponse:
+      example:
+        routes:
+          key:
+            other:
+              allowed: allowed
+              denied: denied
+            management:
+              allowed: allowed
+              denied: denied
+            interbroker:
+              allowed: allowed
+              denied: denied
+            heartbeat:
+              allowed: allowed
+              denied: denied
+            consume:
+              allowed: allowed
+              denied: denied
+            describe:
+              allowed: allowed
+              denied: denied
+            authorize:
+              allowed: allowed
+              denied: denied
+            produce:
+              allowed: allowed
+              denied: denied
+            authentication:
+              allowed: allowed
+              denied: denied
+        default_topics:
+          allowed: allowed
+          denied: denied
+      properties:
+        default_topics:
+          $ref: '#/components/schemas/AuditLogConfigDefaultTopics'
+        routes:
+          additionalProperties:
+            $ref: '#/components/schemas/AuditLogConfigRouteCategories'
+          description: 'Events are matched to exactly one of these route patterns (or
+
+            else to the ``default_topics``). The route patterns can be any valid
+
+            Confluent resource name (CRN), or even a CRN containing wildcards.
+
+            The most specific pattern that matches an event will be chosen.
+
+            Consider these example route patterns that match events on Kafka
+
+            topic resources. They are ordered here from most to least specific:
+
+
+            ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=clicks``
+
+
+            ``crn://mds1.example.com/kafka=abcde_FGHIJKL-01234567/topic=*``
+
+
+            ``crn://mds1.example.com/kafka=*/topic=clicks``
+
+
+            ``crn://mds1.example.com/kafka=*/topic=*``
+
+
+            ``crn:///kafka=abcde_FGHIJKL-01234567/topic=clicks``
+
+
+            ``crn:///kafka=*/topic=*``
+
+
+            For a CRN pattern to match a CRN, the Authority sections must match
+
+            and the CRN pattern and the CRN must have all of the same path element
+
+            types in the same order. The Authority section of a CRN is between the
+
+            second and third slash ("mds1.example.com" in
+
+            ``crn://mds1.example.com/kafka=*/topic=*``). It may be left empty (as
+
+            in ``crn:///kafka=*/topic=*``). A CRN pattern with an empty Authority
+
+            section matches a CRN with ANY Authority. The converse is not true: A
+
+            CRN pattern with a non-empty Authority will not match a CRN with an
+
+            empty Authority. A resource with an empty Authority CRN can only be
+
+            matched by a CRN pattern with an empty Authority.
+
+
+            So an event on the resource with the CRN...
+
+
+            ``crn://confluent.cloud/kafka=abcde_FGHIJKL-01234567/topic=clicks``
+
+
+            ... would not match a route with pattern ...
+
+
+            ``crn://confluent.cloud/kafka=abcde_FGHIJKL-01234567``
+
+
+            ... because they do not have matching path element types.
+
+
+            Once the most specific matching route for an event is determined,
+
+            it is then matched within that route to exactly one event category,
+
+            and then based on whether it was "allowed" or "denied", matched to
+
+            exactly one destination topic (or discarded, if the rule''s destination
+
+            topic name is the empty string). If the category rule''s destination
+
+            topic is ``null`` then it either falls through to the
+
+            ``default_topics`` (for ``authentication``, ``authorize``, and
+
+            ``management`` categories), or is discarded (which is the default
+
+            for all other categories of events).
+
+            '
+          type:
+          - object
+          - 'null'
+      type: object
+    AuditLogConfigRouteCategoryTopics:
+      example:
+        allowed: allowed
+        denied: denied
+      properties:
+        allowed:
+          description: 'The name of one of the destination Kafka topics, defined elsewhere
+
+            in the audit log configuration, that shall receive messages about
+
+            attempted actions when they are "allowed" by the system based on
+
+            security access policies.
+
+
+            You can set this value to an empty string, to discard the events
+
+            instead.
+
+
+            You can set this value to ``null`` (or omit this property) to use
+
+            the default behavior. By default the ``authentication``,
+
+            ``authorize``, and ``management`` categories of events are
+
+            routed according to the destination specified in
+
+            ``default_topics``. Events in all other categories are discarded by
+
+            default.
+
+
+            The empty string or a ``null`` value are the only valid values other
+
+            than one of the defined destination Kafka topic names.
+
+
+            This route will only be selected for an event if the routing rule''s
+
+            CRN pattern matches the event''s associated resource CRN, and its
+
+            CRN pattern is the most specific among those that match the event.
+
+            '
+          type:
+          - string
+          - 'null'
+        denied:
+          description: 'The name of one of the destination Kafka topics, defined elsewhere
+
+            in the audit log configuration, that shall receive messages about
+
+            attempted actions when they are "denied" by the system based on
+
+            security access policies.
+
+
+            You can set this value to an empty string, to discard the events
+
+            instead.
+
+
+            You can set this value to ``null`` (or omit this property) to use
+
+            the default behavior. By default the ``authentication``,
+
+            ``authorize``, and ``management`` categories of events are
+
+            routed according to the destination specified in
+
+            ``default_topics``. Events in all other categories are discarded by
+
+            default.
+
+
+            The empty string or a ``null`` value are the only valid values other
+
+            than one of the defined destination Kafka topic names.
+
+
+            This route will only be selected for an event if the routing rule''s
+
+            CRN pattern matches the event''s associated resource CRN, and its
+
+            CRN pattern is the most specific among those that match the event.
+
+            '
+          type:
+          - string
+          - 'null'
+      required:
+      - allowed
+      - denied
+      type:
+      - object
+      - 'null'
+    AuditLogConfigDestinations:
+      example:
+        bootstrap_servers:
+        - localhost:8090
+        topics:
+          confluent-audit-log-events_general_allowed_events:
+            retention_ms: 2592000000
+          confluent-audit-log-events_general_denied_events:
+            retention_ms: 7776000000
+          confluent-audit-log-events_finance_topics:
+            retention_ms: 157680000000
+      properties:
+        bootstrap_servers:
+          description: 'A list of Kafka broker endpoints, used when configuring the Kafka
+
+            producer(s) that will emit audit log events as they occur.
+
+
+            See Kafka Producer Configuration ``bootstrap.servers``:
+
+            https://kafka.apache.org/documentation/#producerconfigs
+
+            '
+          items:
+            pattern: ^[-.a-zA-Z0-9]{1,253}:[0-9]{1,5}$
+            type: string
+          type: array
+        topics:
+          additionalProperties:
+            $ref: '#/components/schemas/AuditLogConfigDestinationConfig'
+          description: 'The destination Kafka topics that can receive audit log events.
+
+            The keys are Kafka topic names used in routes within the audit log
+
+            configuration specification. The values are the configuration
+
+            details for each destination topic. Note that topic names must
+
+            match the pattern ``^confluent-audit-log-events[-_a-zA-Z0-9]*$`` and
+
+            be 249 characters or less.
+
+            '
+          type: object
+      required:
+      - topics
+      type: object
+    AuditLogConfigRouteCategories:
+      description: 'Once the most specific matching route for an event is selected based
+
+        on the event''s associated resource (CRN), it is then matched within
+
+        that route to exactly one event category rule, based on the category
+
+        of event, and finally matched within the category rule to a logging
+
+        destination based on whether the event was "allowed" or "denied".
+
+
+        Event categories include ``authorize``, ``management``, ``authentication``,
+
+        ``interbroker``, ``produce``, ``consume``, ``heartbeat``, and
+
+        ``describe``.
+
+
+        The ``authorize`` category of events are those where the metadata
+
+        service was asked to check whether the principal was authorized via
+
+        RBAC to perform an operation on a resource.
+
+
+        The ``management`` category of events are those involving Kafka APIs
+
+        that alter cluster or topic configuration settings, create, delete or
+
+        modify topics or delegation tokens, initiate shutdown, etc.
+
+
+        The ``produce``, ``consume``, ``interbroker``, ``heartbeat``, and
+
+        ``describe`` categories may include a potentially high volume of
+
+        events. For example, every "fetch" request received by a Kafka broker
+
+        from a Kafka consumer could result in one or more auditable events in
+
+        the ``consume`` category. Consider the possible write load on your
+
+        audit log destination cluster before enabling audit logging for these
+
+        categories.
+
+
+        If the matched rule''s logging destination is the empty string, the
+
+        event is discarded.
+
+
+        If the logging destination is ``null``, matched events in the
+
+        ``authentication``, ``authorize`` and ``management`` categories will be
+
+        routed to the corresponding entry in ``default_topics``; but matched
+
+        events in any other category will be discarded.
+
+
+        Note: the ``other`` category is deprecated and will be removed in a
+
+        future version.
+
+        '
+      example:
+        other:
+          allowed: allowed
+          denied: denied
+        management:
+          allowed: allowed
+          denied: denied
+        interbroker:
+          allowed: allowed
+          denied: denied
+        heartbeat:
+          allowed: allowed
+          denied: denied
+        consume:
+          allowed: allowed
+          denied: denied
+        describe:
+          allowed: allowed
+          denied: denied
+        authorize:
+          allowed: allowed
+          denied: denied
+        produce:
+          allowed: allowed
+          denied: denied
+        authentication:
+          allowed: allowed
+          denied: denied
+      properties:
+        other:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        authentication:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        authorize:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        management:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        produce:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        consume:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        interbroker:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        heartbeat:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+        describe:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategoryTopics'
+      type: object
+    AuditLogConfigResolveResourceRouteResponse:
+      example:
+        route: route
+        categories:
+          other:
+            allowed: allowed
+            denied: denied
+          management:
+            allowed: allowed
+            denied: denied
+          interbroker:
+            allowed: allowed
+            denied: denied
+          heartbeat:
+            allowed: allowed
+            denied: denied
+          consume:
+            allowed: allowed
+            denied: denied
+          describe:
+            allowed: allowed
+            denied: denied
+          authorize:
+            allowed: allowed
+            denied: denied
+          produce:
+            allowed: allowed
+            denied: denied
+          authentication:
+            allowed: allowed
+            denied: denied
+      properties:
+        route:
+          description: 'The Confluent resource name (CRN) pattern of the route, or else
+
+            the string ``"default"``.
+
+            '
+          type: string
+        categories:
+          $ref: '#/components/schemas/AuditLogConfigRouteCategories'
+      type: object
+    AuditLogConfigDefaultTopics:
+      example:
+        allowed: allowed
+        denied: denied
+      properties:
+        allowed:
+          description: 'The name of one of the destination Kafka topics, defined elsewhere
+
+            in the audit log configuration, that shall receive messages about
+
+            attempted actions when they are "allowed" by the system based on
+
+            security access policies.
+
+
+            You can set this value to an empty string instead, to discard the
+
+            "allowed" events routed here. The empty string is the only valid
+
+            value other than one of the Kafka topic names in the spec''s
+
+            ``destinations`` section.
+
+
+            This field specifies the default destination for events related to
+
+            "allowed" actions in the following categories: ``authentication``,
+
+            ``management``, and ``authorize``. All other event categories are
+
+            discarded by default. Events only follow the default behavior if
+
+            they do not match any of the audit log configuration ``routes``
+
+            CRN patterns, or if their selected route omits (or leaves
+
+            ``null``) the destination topic.
+
+            '
+          type: string
+        denied:
+          description: 'The name of one of the destination Kafka topics, defined elsewhere
+
+            in the audit log configuration, that shall receive messages about
+
+            attempted actions when they are "denied" by the system based on
+
+            security access policies.
+
+
+            You can set this value to an empty string instead, to discard the
+
+            "denied" events routed here.The empty string is the only valid
+
+            value other than one of the Kafka topic names in the spec''s
+
+            ``destinations`` section.
+
+
+            This field specifies the default destination for events related to
+
+            "denied" actions in the following categories: ``authentication``,
+
+            ``management``, and ``authorize``. All other event categories are
+
+            discarded by default. Events only follow the default behavior if
+
+            they do not match any of the audit log configuration ``routes``
+
+            CRN patterns, or if their selected route omits (or leaves
+
+            ``null``) the destination topic.
+
+            '
+          type: string
+      required:
+      - allowed
+      - denied
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

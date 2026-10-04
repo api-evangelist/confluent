@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-cluster-config-schema.json",
+  "title": "ClusterConfig",
+  "description": "Cluster Config",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-config-v1-api-openapi.yml#/components/schemas/ClusterConfig",
+  "type": "object",
+  "properties": {
+    "maxSchemas": {
+      "type": "integer",
+      "description": "Maximum number of registered schemas allowed",
+      "format": "int32"
+    },
+    "maxRequestsPerSec": {
+      "type": "integer",
+      "description": "Maximum number of allowed requests per second",
+      "format": "int32"
+    }
+  }
+}

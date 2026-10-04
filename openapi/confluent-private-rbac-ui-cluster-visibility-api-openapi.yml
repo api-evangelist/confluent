@@ -1,0 +1,306 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Private RBAC UI - Cluster Visibility API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Identify which clusters a user has access to.
+  name: Private RBAC UI - Cluster Visibility
+paths:
+  /security/1.0/lookup/principals/{principal}/visibility:
+    post:
+      description: 'The intent is that this endpoint is called with cluster IDs that
+
+        actually exist.
+
+
+        Callable by Admins+User.'
+      operationId: visibility
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:bob
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/VisibilityRequest'
+              type: array
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisibilityResponse'
+          description: Returns cluster IDs and true/false if the user has any role associated with it.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Endpoint for Confluent Control Center to determine visibilty of Kafka and its…
+      tags:
+      - Private RBAC UI - Cluster Visibility
+  /security/1.0/lookup/managed/clusters/principal/{principal}:
+    get:
+      description: 'May include rolebindings from scopes and clusters that never existed or previously existed
+
+        (in other words, rolebindings that have been decommissioned, but are still defined in the system).
+
+
+        Callable by Admins+User.'
+      operationId: listManagedClusters
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:bob
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      - description: Filter down by cluster type.
+        example: kafka-cluster
+        explode: true
+        in: query
+        name: clusterType
+        required: false
+        schema:
+          pattern: ^((kafka)|(ksql)|(connect)|(schema-registry))-cluster$
+          type: string
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Scope'
+                type: array
+          description: List of Scopes
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Identifies the scopes for the rolebindings that a user can see
+      tags:
+      - Private RBAC UI - Cluster Visibility
+components:
+  schemas:
+    Scope:
+      example:
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      required:
+      - clusters
+      type: object
+    ClusterVisibility:
+      example:
+        visible: true
+        clusterName: stagingKafkaCluster
+        id: clusterId
+      properties:
+        id:
+          example: clusterId
+          type: string
+        visible:
+          type: boolean
+        clusterName:
+          example: stagingKafkaCluster
+          type:
+          - string
+          - 'null'
+      type: object
+    VisibilityRequest:
+      example:
+        kafka-cluster: kafka-id
+        ksql-clusters:
+        - ksql-cluster-id
+        - ksql-cluster-id
+        connect-clusters:
+        - connect-cluster-id
+        - connect-cluster-id
+        schema-registry-clusters:
+        - schema-registry-id
+        - schema-registry-id
+      properties:
+        kafka-cluster:
+          example: kafka-id
+          type: string
+        connect-clusters:
+          items:
+            example: connect-cluster-id
+            type: string
+          type: array
+        schema-registry-clusters:
+          items:
+            example: schema-registry-id
+            type: string
+          type: array
+        ksql-clusters:
+          items:
+            example: ksql-cluster-id
+            type: string
+          type: array
+      required:
+      - kafka-cluster
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    VisibilityResponse:
+      example:
+        kafka-cluster:
+          visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+        ksql-clusters:
+        - visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+        - visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+        connect-clusters:
+        - visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+        - visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+        schema-registry-clusters:
+        - visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+        - visible: true
+          clusterName: stagingKafkaCluster
+          id: clusterId
+      properties:
+        kafka-cluster:
+          $ref: '#/components/schemas/ClusterVisibility'
+        connect-clusters:
+          items:
+            $ref: '#/components/schemas/ClusterVisibility'
+          type: array
+        schema-registry-clusters:
+          items:
+            $ref: '#/components/schemas/ClusterVisibility'
+          type: array
+        ksql-clusters:
+          items:
+            $ref: '#/components/schemas/ClusterVisibility'
+          type: array
+      type: object
+    Scope_clusters:
+      example:
+        kafka-cluster: kafkaClusterId
+        schema-registry-cluster: schemaRegistryClusterId
+        flink-environment: flinkEnvironmentId
+        ksql-cluster: ksqlClusterId
+        cmf: cmfId
+        connect-cluster: connectClusterId
+      properties:
+        kafka-cluster:
+          example: kafkaClusterId
+          type: string
+        connect-cluster:
+          example: connectClusterId
+          type: string
+        ksql-cluster:
+          example: ksqlClusterId
+          type: string
+        schema-registry-cluster:
+          example: schemaRegistryClusterId
+          type: string
+        cmf:
+          example: cmfId
+          type: string
+        flink-environment:
+          example: flinkEnvironmentId
+          type: string
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

@@ -1,0 +1,174 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Private RBAC UI - Cached User Store Information API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: 'The MDS system caches some information from LDAP; while incomplete,
+
+    it is suitable for autocomplete in the Confluent Control Center UI. Do not rely
+
+    on for any purpose other than autocomplete.'
+  name: Private RBAC UI - Cached User Store Information
+paths:
+  /security/1.0/rbac/principals:
+    post:
+      description: 'For use by a rolebinding admin on the provided scope.
+
+
+        Callable by Admins+ResourceOwners, but not broker super.users.'
+      operationId: usersGroupsList
+      parameters:
+      - description: The type of principals requested.
+        example: user
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          pattern: ^((user)|(group))$
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - Group:admin
+              - Group:developers
+              - Group:users
+              - User:alice
+              - User:bob
+              - User:charlie
+              - User:david
+              schema:
+                items:
+                  type: string
+                type: array
+          description: The list of principals for the requested type, or all principals.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: List of MDS cached users and groups
+      tags:
+      - Private RBAC UI - Cached User Store Information
+components:
+  schemas:
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    Scope_clusters:
+      example:
+        kafka-cluster: kafkaClusterId
+        schema-registry-cluster: schemaRegistryClusterId
+        flink-environment: flinkEnvironmentId
+        ksql-cluster: ksqlClusterId
+        cmf: cmfId
+        connect-cluster: connectClusterId
+      properties:
+        kafka-cluster:
+          example: kafkaClusterId
+          type: string
+        connect-cluster:
+          example: connectClusterId
+          type: string
+        ksql-cluster:
+          example: ksqlClusterId
+          type: string
+        schema-registry-cluster:
+          example: schemaRegistryClusterId
+          type: string
+        cmf:
+          example: cmfId
+          type: string
+        flink-environment:
+          example: flinkEnvironmentId
+          type: string
+      type: object
+    Scope:
+      example:
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      required:
+      - clusters
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

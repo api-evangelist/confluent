@@ -1,0 +1,219 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Private RBAC UI - Creation Guidelines API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Provides guidelines for topic, connector, and rolebinding creation in Confluent Control Center.
+  name: Private RBAC UI - Creation Guidelines
+paths:
+  /security/1.0/lookup/principal/{principal}/resource/{resourceType}/operation/{operation}:
+    post:
+      description: Callable by Admins+User.
+      operationId: lookupCreateGuidelines
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:alice
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      - description: The type of resource to create or the type of resource to specify when creating a new rolebinding.
+        explode: false
+        in: path
+        name: resourceType
+        required: true
+        schema:
+          example: Connector
+          type: string
+        style: simple
+      - description: '"Create" for creating an actual resource, "AlterAccess" for creating a rolebinding for a user.
+
+          '
+        explode: false
+        in: path
+        name: operation
+        required: true
+        schema:
+          example: Create
+          pattern: Create|AlterAccess
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                result: SOME
+                resourcePatterns:
+                - resourceType: Topic
+                  name: billing-invoices
+                  patternType: LITERAL
+                - resourceType: Topic
+                  name: investing-
+                  patternType: PREFIXED
+              schema:
+                properties:
+                  result:
+                    enum:
+                    - ANY
+                    - SOME
+                    - NONE
+                    example: SOME
+                    type: string
+                  resourcePatterns:
+                    items:
+                      $ref: '#/components/schemas/ResourcePattern'
+                    type: array
+          description: A deduped and squashed view of the user's rolebindings for creating resources or rolebindings.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Summarizes what resources and rolebindings this principal is allowed to create
+      tags:
+      - Private RBAC UI - Creation Guidelines
+components:
+  schemas:
+    ResourcePattern:
+      example:
+        name: clicksTopic1
+        patternType: LITERAL
+        resourceType: Topic
+      properties:
+        resourceType:
+          example: Topic
+          type: string
+        name:
+          example: clicksTopic1
+          type: string
+        patternType:
+          example: LITERAL
+          pattern: (^LITERAL$)|(^PREFIXED$)
+          type: string
+      required:
+      - name
+      - patternType
+      - resourceType
+      type: object
+    Scope:
+      example:
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      required:
+      - clusters
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    Scope_clusters:
+      example:
+        kafka-cluster: kafkaClusterId
+        schema-registry-cluster: schemaRegistryClusterId
+        flink-environment: flinkEnvironmentId
+        ksql-cluster: ksqlClusterId
+        cmf: cmfId
+        connect-cluster: connectClusterId
+      properties:
+        kafka-cluster:
+          example: kafkaClusterId
+          type: string
+        connect-cluster:
+          example: connectClusterId
+          type: string
+        ksql-cluster:
+          example: ksqlClusterId
+          type: string
+        schema-registry-cluster:
+          example: schemaRegistryClusterId
+          type: string
+        cmf:
+          example: cmfId
+          type: string
+        flink-environment:
+          example: flinkEnvironmentId
+          type: string
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

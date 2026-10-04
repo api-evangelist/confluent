@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-connect-v1-connector-expansion-map-schema.json",
+  "title": "connect.v1.ConnectorExpansionMap",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-connectors-connect-v1-api-openapi.yml#/components/schemas/connect.v1.ConnectorExpansionMap",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/$defs/connect.v1.ConnectorExpansion"
+  },
+  "$defs": {
+    "connect.v1.ConnectorExpansion": {
+      "type": "object",
+      "description": "Name of connector",
+      "properties": {
+        "id": {
+          "type": "object",
+          "description": "The ID of connector.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The ID of the connector."
+            },
+            "id_type": {
+              "type": "string",
+              "description": "Type of the value in the `id` property."
+            }
+          }
+        },
+        "info": {
+          "type": "object",
+          "description": "Metadata of the connector.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the connector."
+            },
+            "config": {
+              "type": "object",
+              "description": "Configuration parameters for the connector. These configurations\nare the minimum set of key-value pairs (KVP) which are used to\ndefine how the connector connects Kafka to the external system.\nSome of these KVPs are common to all the connectors, such as\nconnection parameters to Kafka, connector metadata, etc. The list\nof common connector configurations is as follows\n\n  - cloud.environment\n  - cloud.provider\n  - connector.class\n  - kafka.api.key\n  - kafka.api.secret\n  - kafka.endpoint\n  - kafka.region\n  - name\n\nFor example, a connector like `GcsSink` would have additional\nparameters such as `gcs.bucket.name`, `flush.size`, etc.",
+              "required": [
+                "cloud.environment",
+                "cloud.provider",
+                "connector.class",
+                "name",
+                "kafka.endpoint",
+                "kafka.region",
+                "kafka.api.key",
+                "kafka.api.secret"
+              ],
+              "properties": {
+                "cloud.environment": {
+                  "type": "string",
+                  "description": "The cloud environment type."
+                },
+                "cloud.provider": {
+                  "type": "string",
+                  "description": "The cloud service provider, e.g. aws, azure, etc.",
+                  "x-extensible-enum": [
+                    "aws",
+                    "azure",
+                    "gcp"
+                  ]
+                },
+                "connector.class": {
+                  "type": "string",
+                  "description": "The connector class name. E.g. BigQuerySink, GcsSink, etc."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name or alias of the class (plugin) for this connector."
+                },
+                "kafka.endpoint": {
+                  "type": "string",
+                  "description": "The kafka cluster endpoint."
+                },
+                "kafka.region": {
+                  "type": "string",
+                  "description": "The kafka cluster region."
+                },
+                "kafka.api.key": {
+                  "type": "string",
+                  "description": "The kafka cluster api key."
+                },
+                "kafka.api.secret": {
+                  "type": "string",
+                  "description": "The kafka cluster api secret key.",
+                  "x-redact": true
+                }
+              },
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "status": {
+          "type": "object",
+          "description": "Status of the connector and its tasks.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the connector."
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of connector, sink or source.",
+              "enum": [
+                "sink",
+                "source"
+              ]
+            },
+            "connector": {
+              "type": "object",
+              "description": "A map containing connector status.",
+              "required": [
+                "state",
+                "worker_id"
+              ],
+              "properties": {
+                "state": {
+                  "type": "string",
+                  "description": "The state of the connector.",
+                  "enum": [
+                    "NONE",
+                    "PROVISIONING",
+                    "RUNNING",
+                    "DEGRADED",
+                    "FAILED",
+                    "PAUSED",
+                    "DELETED"
+                  ]
+                },
+                "worker_id": {
+                  "type": "string",
+                  "description": "The worker ID of the connector."
+                },
+                "trace": {
+                  "type": "string",
+                  "description": "Exception message in case of an error."
+                }
+              }
+            },
+            "tasks": {
+              "type": "array",
+              "description": "A map containing the task status.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "The ID of task."
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "The state of the task."
+                  },
+                  "worker_id": {
+                    "type": "string",
+                    "description": "The worker ID of the task."
+                  },
+                  "msg": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "state",
+                  "worker_id"
+                ]
+              }
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "connector"
+          ]
+        }
+      }
+    }
+  }
+}

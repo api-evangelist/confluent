@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-iam-v2-certificate-authority-schema.json",
+  "title": "iam.v2.CertificateAuthority",
+  "description": "`CertificateAuthority` objects represent signing certificate authorities in Confluent Cloud.\n\nThe API allows you to list, create, read, update, and delete your Certificate Authority.\n",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-certificate-authorities-iam-v2-api-openapi.yml#/components/schemas/iam.v2.CertificateAuthority",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "iam/v2"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "CertificateAuthority"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "display_name": {
+      "type": "string",
+      "description": "The human-readable name of the certificate authority."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the certificate authority."
+    },
+    "fingerprints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The fingerprints for each certificate in the certificate chain. These are SHA-1 encoded\nstrings that act as unique identifiers for the certificates in the chain.",
+      "readOnly": true
+    },
+    "expiration_dates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "description": "The expiration dates of certificates in the chain.",
+      "readOnly": true
+    },
+    "serial_numbers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The serial numbers for each certificate in the certificate chain.",
+      "readOnly": true
+    },
+    "certificate_chain_filename": {
+      "type": "string",
+      "description": "The file name of the uploaded pem file for this certificate authority.",
+      "readOnly": true
+    },
+    "crl_source": {
+      "type": "string",
+      "description": "The source specifies whether the Certificate Revocation List (CRL) is updated from\neither local file uploaded (LOCAL) or from url of CRL (URL).",
+      "x-extensible-enum": [
+        "LOCAL",
+        "URL"
+      ],
+      "readOnly": true
+    },
+    "crl_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The url from which to fetch the CRL for the certificate authority if crl_source is URL.",
+      "readOnly": true
+    },
+    "crl_updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp for when CRL was last updated.",
+      "readOnly": true
+    },
+    "state": {
+      "type": "string",
+      "x-extensible-enum": [
+        "ENABLED"
+      ],
+      "description": "The current state of the certificate authority.",
+      "readOnly": true
+    },
+    "require_crl_on_client_certificate": {
+      "type": "boolean",
+      "description": "Whether to require CRL validation on client certificates.\nIf `require_crl_on_client_certificate` is true, then a CRL must be configured. At time of mTLS auth,\nif the client certificate is revoked in the CRL or the client issuer does not match the CRL issuer,\ncertificate verification will fail even if TLS handshake is successful (OpenSSL -crl_check default behavior).\nIf `require_crl_on_client_certificate` is false, this mTLS identity provider cannot configure a new CRL."
+    }
+  },
+  "$defs": {
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    }
+  }
+}

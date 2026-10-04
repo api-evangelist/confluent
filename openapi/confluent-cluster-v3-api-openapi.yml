@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Cluster (v3) API
+  title: Confluent Cluster (v3) API
   version: ''
   x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
   x-audience: external-public
   x-logo:
     url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  description: 'Operations tagged Cluster (v3) across 2 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -54,6 +48,45 @@ paths:
           $ref: '#/components/responses/ServerErrorResponse'
 components:
   schemas:
+    ClusterData:
+      allOf:
+      - $ref: '#/components/schemas/Resource'
+      - type: object
+        required:
+        - cluster_id
+        - acls
+        - brokers
+        - broker_configs
+        - consumer_groups
+        - topics
+        - partition_reassignments
+        properties:
+          cluster_id:
+            type: string
+          controller:
+            $ref: '#/components/schemas/Relationship'
+          acls:
+            $ref: '#/components/schemas/Relationship'
+          brokers:
+            $ref: '#/components/schemas/Relationship'
+          broker_configs:
+            $ref: '#/components/schemas/Relationship'
+          consumer_groups:
+            $ref: '#/components/schemas/Relationship'
+          topics:
+            $ref: '#/components/schemas/Relationship'
+          partition_reassignments:
+            $ref: '#/components/schemas/Relationship'
+    Resource:
+      type: object
+      required:
+      - kind
+      - metadata
+      properties:
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ResourceMetadata'
     Error:
       type: object
       description: Describes a particular error encountered while performing an operation.
@@ -92,6 +125,13 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    Relationship:
+      type: object
+      required:
+      - related
+      properties:
+        related:
+          type: string
     ResourceMetadata:
       type: object
       required:
@@ -103,65 +143,19 @@ components:
           type:
           - string
           - 'null'
-    Resource:
-      type: object
-      required:
-      - kind
-      - metadata
-      properties:
-        kind:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/ResourceMetadata'
-    Relationship:
-      type: object
-      required:
-      - related
-      properties:
-        related:
-          type: string
-    ClusterData:
-      allOf:
-      - $ref: '#/components/schemas/Resource'
-      - type: object
-        required:
-        - cluster_id
-        - acls
-        - brokers
-        - broker_configs
-        - consumer_groups
-        - topics
-        - partition_reassignments
-        properties:
-          cluster_id:
-            type: string
-          controller:
-            $ref: '#/components/schemas/Relationship'
-          acls:
-            $ref: '#/components/schemas/Relationship'
-          brokers:
-            $ref: '#/components/schemas/Relationship'
-          broker_configs:
-            $ref: '#/components/schemas/Relationship'
-          consumer_groups:
-            $ref: '#/components/schemas/Relationship'
-          topics:
-            $ref: '#/components/schemas/Relationship'
-          partition_reassignments:
-            $ref: '#/components/schemas/Relationship'
   responses:
-    UnauthorizedErrorResponse:
-      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
+    ServerErrorResponse:
+      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            kafka_authentication_failed:
-              description: Thrown when using Basic authentication with wrong Kafka credentials.
+            generic_internal_server_error:
+              description: Thrown for generic HTTP 500 errors.
               value:
-                error_code: 40101
-                message: Authentication failed
+                error_code: 500
+                message: Internal Server Error
     BadRequestErrorResponse:
       description: Indicates a bad request error. It could be caused by an unexpected request body format or other forms of request validation failure.
       content:
@@ -179,30 +173,18 @@ components:
               value:
                 error_code: 40035
                 message: The version of this API is not supported in the underlying Kafka cluster.
-    ServerErrorResponse:
-      description: A server-side problem that might not be addressable from the client side. Retriable Kafka errors will contain error code 50003 in the response body.
+    UnauthorizedErrorResponse:
+      description: Indicates a client authentication error. Kafka authentication failures will contain error code 40101 in the response body.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           examples:
-            generic_internal_server_error:
-              description: Thrown for generic HTTP 500 errors.
+            kafka_authentication_failed:
+              description: Thrown when using Basic authentication with wrong Kafka credentials.
               value:
-                error_code: 500
-                message: Internal Server Error
-    ForbiddenErrorResponse:
-      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            kafka_authorization_failed:
-              description: Thrown when the caller is not authorized to perform the underlying operation.
-              value:
-                error_code: 40301
-                message: Request is not authorized
+                error_code: 40101
+                message: Authentication failed
     TooManyRequestsErrorResponse:
       description: Indicates that a rate limit threshold has been reached, and the client should retry again later.
       content:
@@ -238,6 +220,18 @@ components:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics
             partition_reassignments:
               related: https://pkc-00000.region.provider.confluent.cloud/kafka/v3/clusters/cluster-1/topics/-/partitions/-/reassignment
+    ForbiddenErrorResponse:
+      description: Indicates a client authorization error. Kafka authorization failures will contain error code 40301 in the response body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            kafka_authorization_failed:
+              description: Thrown when the caller is not authorized to perform the underlying operation.
+              value:
+                error_code: 40301
+                message: Request is not authorized
   parameters:
     ClusterId:
       name: cluster_id
@@ -285,6 +279,9 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:

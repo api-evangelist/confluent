@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-iam-v2-api-key-list-schema.json",
+  "title": "iam.v2.ApiKeyList",
+  "description": "`ApiKey` objects represent access to different parts of Confluent Cloud. Some types\nof API keys represent access to a single cluster/resource such as a Kafka cluster,\nSchema Registry cluster or a ksqlDB cluster. Cloud API Keys represent access to resources within an organization\nthat are not tied to a specific cluster, such as the Org API, IAM API, Metrics API or Connect API.\nTableflow API keys and Global API keys are not tied to a specific cluster.\n\nThe API allows you to list, create, update and delete your API Keys.\n\n\nRelated guide: [API Keys in Confluent Cloud](https://docs.confluent.io/cloud/current/client-apps/api-keys.html).\n\n## The API Keys Model\n<SchemaDefinition schemaRef=\"#/components/schemas/iam.v2.ApiKey\" />\n\n## Quotas and Limits\nThis resource is subject to the [following quotas](https://docs.confluent.io/cloud/current/quotas/overview.html):\n\n| Quota | Description |\n| --- | --- |\n| `apikeys_per_org` | API Keys in one Confluent Cloud organization |",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-api-keys-iam-v2-api-openapi.yml#/components/schemas/iam.v2.ApiKeyList",
+  "type": "object",
+  "required": [
+    "api_version",
+    "kind",
+    "metadata",
+    "data"
+  ],
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "iam/v2"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "ApiKeyList"
+      ]
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ListMeta"
+        },
+        {
+          "properties": {
+            "first": {},
+            "last": {},
+            "prev": {},
+            "next": {}
+          }
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "description": "A data property that contains an array of resource items. Each entry in the array is a separate resource.",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/iam.v2.ApiKey"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "metadata",
+              "spec"
+            ],
+            "properties": {
+              "spec": {
+                "type": "object",
+                "required": [
+                  "owner"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "ListMeta": {
+      "type": "object",
+      "description": "ListMeta describes metadata that resource collections may have",
+      "properties": {
+        "first": {
+          "description": "A link to the first page of results. If a response does not contain a first link, then direct navigation to the first page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "last": {
+          "description": "A link to the last page of results. If a response does not contain a last link, then direct navigation to the last page is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "prev": {
+          "description": "A link to the previous page of results. If a response does not contain a prev link, then either there is no previous data or backwards traversal through the result set is not supported.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "next": {
+          "description": "A link to the next page of results. If a response does not contain a next link, then there is no more data available.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "total_size": {
+          "description": "Number of records in the full result set. This response may be paginated and have a smaller number of records.",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    },
+    "TypedEnvScopedObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "api_version": {
+          "type": "string",
+          "description": "API group and version of the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind of the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "TypedGlobalObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "api_version": {
+          "type": "string",
+          "description": "API group and version of the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind of the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "iam.v2.ApiKey": {
+      "type": "object",
+      "description": "`ApiKey` objects represent access to different parts of Confluent Cloud. Some types\nof API keys represent access to a single cluster/resource such as a Kafka cluster,\nSchema Registry cluster or a ksqlDB cluster. Cloud API Keys represent access to resources within an organization\nthat are not tied to a specific cluster, such as the Org API, IAM API, Metrics API or Connect API.\nTableflow API keys and Global API keys are not tied to a specific cluster.\n\nThe API allows you to list, create, update and delete your API Keys.\n\n\nRelated guide: [API Keys in Confluent Cloud](https://docs.confluent.io/cloud/current/client-apps/api-keys.html).\n\n## The API Keys Model\n<SchemaDefinition schemaRef=\"#/components/schemas/iam.v2.ApiKey\" />\n\n## Quotas and Limits\nThis resource is subject to the [following quotas](https://docs.confluent.io/cloud/current/quotas/overview.html):\n\n| Quota | Description |\n| --- | --- |\n| `apikeys_per_org` | API Keys in one Confluent Cloud organization |",
+      "properties": {
+        "api_version": {
+          "type": "string",
+          "enum": [
+            "iam/v2"
+          ],
+          "description": "APIVersion defines the schema version of this representation of a resource.",
+          "readOnly": true
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind defines the object this REST resource represents.",
+          "readOnly": true,
+          "enum": [
+            "ApiKey"
+          ]
+        },
+        "id": {
+          "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+          "type": "string",
+          "maxLength": 255,
+          "readOnly": true
+        },
+        "metadata": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectMeta"
+            },
+            {
+              "properties": {
+                "self": {},
+                "resource_name": {}
+              }
+            }
+          ]
+        },
+        "spec": {
+          "$ref": "#/$defs/iam.v2.ApiKeySpec"
+        }
+      }
+    },
+    "iam.v2.ApiKeySpec": {
+      "type": "object",
+      "description": "The desired state of the Api Key",
+      "properties": {
+        "secret": {
+          "type": "string",
+          "description": "The API key secret. Only provided in `create` responses, not in `get` or `list`.",
+          "x-redact": true,
+          "x-immutable": true,
+          "readOnly": true
+        },
+        "display_name": {
+          "type": "string",
+          "description": "A human readable name for the API key"
+        },
+        "description": {
+          "type": "string",
+          "description": "A human readable description for the API key"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time at which this API key will expire. It is represented in RFC3339 format and is in UTC.",
+          "readOnly": true,
+          "x-immutable": true
+        },
+        "owner": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/TypedGlobalObjectReference"
+            }
+          ],
+          "description": "The owner to which this belongs. The owner can be one of iam.v2.User, iam.v2.ServiceAccount.",
+          "x-immutable": true
+        },
+        "resource": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/TypedEnvScopedObjectReference"
+            }
+          ],
+          "description": "The resource associated with this object. The resource can be one of Kafka Cluster ID (example: lkc-12345),\nSchema Registry Cluster ID (example: lsrc-12345), ksqlDB Cluster ID (example: lksqlc-12345), or Flink\n(Environment + Region pair, example: env-abc123.aws.us-east-2).\nMay be null or omitted if not associated with a resource. For creating Cloud API key, resource id should be `CLOUD`,\nfor creating Tableflow API key, resource id should be `TABLEFLOW`, for creating Global API key, resource id should be `GLOBAL`.\nThe resource id is case-insensitive.\n[Learn more in Authentication](https://docs.confluent.io/cloud/current/api.html#section/Authentication).\n\nNote - Flink is in the [Preview lifecycle stage](https://docs.confluent.io/cloud/current/api.html#section/Versioning/API-Lifecycle-Policy)\n",
+          "x-immutable": true
+        }
+      },
+      "x-enable-id": true,
+      "x-enable-listmeta": true,
+      "x-enable-objectmeta": true
+    }
+  }
+}

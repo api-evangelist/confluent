@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/confluent/main/json-schema/confluent-service-quota-v1-applied-quota-schema.json",
+  "title": "service-quota.v1.AppliedQuota",
+  "description": "A `quota` object represents a quota configuration for a specific Confluent Cloud resource.\nUse this API to retrieve an individual quota or list of quotas for a given scope.\n\n\nRelated guide: [Service Quotas for Confluent Cloud](https://docs.confluent.io/cloud/current/quotas/index.html).\n\n## The Applied Quotas Model\n<SchemaDefinition schemaRef=\"#/components/schemas/service-quota.v1.AppliedQuota\" />",
+  "x-generated": "2026-10-04",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/confluent-applied-quotas-service-quota-v1-api-openapi.yml#/components/schemas/service-quota.v1.AppliedQuota",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "type": "string",
+      "enum": [
+        "service-quota/v1"
+      ],
+      "description": "APIVersion defines the schema version of this representation of a resource.",
+      "readOnly": true
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind defines the object this REST resource represents.",
+      "readOnly": true,
+      "enum": [
+        "AppliedQuota"
+      ]
+    },
+    "id": {
+      "description": "ID is the \"natural identifier\" for an object within its scope/namespace; it is normally unique across time but not space. That is, you can assume that the ID will not be reclaimed and reused after an object is deleted (\"time\"); however, it may collide with IDs for other object `kinds` or objects of the same `kind` within a different scope/namespace (\"space\").",
+      "type": "string",
+      "maxLength": 255,
+      "readOnly": true
+    },
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectMeta"
+        },
+        {
+          "properties": {
+            "self": {},
+            "resource_name": {}
+          }
+        }
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "description": "The applied scope that this quota belongs to.",
+      "x-extensible-enum": [
+        "ORGANIZATION",
+        "ENVIRONMENT",
+        "NETWORK",
+        "KAFKA_CLUSTER",
+        "SERVICE_ACCOUNT",
+        "USER_ACCOUNT"
+      ]
+    },
+    "display_name": {
+      "type": "string",
+      "description": "A human-readable name for the quota type name.",
+      "x-immutable": true
+    },
+    "default_limit": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The default service quota value.\n"
+    },
+    "applied_limit": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The latest applied service quota value, taking into account any limit adjustments.\n"
+    },
+    "usage": {
+      "type": "integer",
+      "description": "Show the quota usage value if the quota usage is available for this quota.\n",
+      "format": "int32"
+    },
+    "user": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalObjectReference"
+        }
+      ],
+      "description": "The user associated with this object.",
+      "x-immutable": true
+    },
+    "organization": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalObjectReference"
+        }
+      ],
+      "description": "A unique organization id to associate a specific organization to this quota."
+    },
+    "environment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalObjectReference"
+        }
+      ],
+      "description": "The environment ID the quota is associated with.\n",
+      "x-immutable": true
+    },
+    "network": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/EnvScopedObjectReference"
+        }
+      ],
+      "description": "The network ID the quota is associated with.\n",
+      "x-immutable": true
+    },
+    "kafka_cluster": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/EnvScopedObjectReference"
+        }
+      ],
+      "description": "The kafka cluster ID the quota is associated with.\n",
+      "x-immutable": true
+    }
+  },
+  "$defs": {
+    "EnvScopedObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment of the referred resource, if env-scoped",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "GlobalObjectReference": {
+      "type": "object",
+      "description": "ObjectReference provides information for you to locate the referred object",
+      "required": [
+        "id",
+        "related",
+        "resource_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the referred resource",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "related": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for accessing or modifying the referred object",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "resource_name": {
+          "type": "string",
+          "format": "uri",
+          "description": "CRN reference to the referred resource",
+          "minLength": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "ObjectMeta": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create.",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "description": "Self is a Uniform Resource Locator (URL) at which an object can be addressed. This URL encodes the service location, API version, and other particulars necessary to locate the resource at a point in time",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "resource_name": {
+          "description": "Resource Name is a Uniform Resource Identifier (URI) that is globally unique across space and time. It is represented as a Confluent Resource Name",
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was created. It is represented in RFC3339 format and is in UTC."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was last updated. It is represented in RFC3339 format and is in UTC."
+        },
+        "deleted_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "The date and time at which this object was (or will be) deleted. It is represented in RFC3339 format and is in UTC."
+        }
+      },
+      "readOnly": true
+    }
+  }
+}

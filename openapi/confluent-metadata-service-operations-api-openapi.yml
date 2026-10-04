@@ -1,0 +1,171 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Metadata Service Operations API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Metadata Service operational information.
+  name: Metadata Service Operations
+paths:
+  /security/1.0/activenodes/{protocol}:
+    get:
+      description: 'Clients are expected to round robin call to these endpoints if they don''t set up a
+
+        load balancer in front of the Metadata Service nodes.
+
+
+        Callable by LDAP users.'
+      operationId: activenodes
+      parameters:
+      - description: Should be "http" or "https".
+        example: http
+        explode: false
+        in: path
+        name: protocol
+        required: true
+        schema:
+          pattern: (^http$)|(^https$)
+          type: string
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - http://10.10.10.50:8090
+              - http://10.10.10.51:8090
+              schema:
+                items:
+                  type: string
+                type: array
+          description: List of other nodes running the Metadata Service.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Returns all the nodes running the Metadata Service REST API
+      tags:
+      - Metadata Service Operations
+  /security/1.0/metadataClusterId:
+    get:
+      description: Callable by LDAP users.
+      operationId: metadataClusterId
+      responses:
+        '200':
+          content:
+            application/json:
+              example: ENZ7FS8uTQOhXElRiE-L7g
+              schema:
+                type: string
+          description: Lists other nodes running the Metadata Service.
+      summary: Returns the ID of the Kafka cluster that MDS is running on
+      tags:
+      - Metadata Service Operations
+  /security/1.0/features:
+    get:
+      description: This endpoint does not require authentication.
+      operationId: features
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeaturesInfo'
+          description: What features MDS supports, and a human friendly description of them.
+      summary: What features the running version of MDS supports
+      tags:
+      - Metadata Service Operations
+components:
+  schemas:
+    FeaturesInfo:
+      example:
+        features:
+          FEATURE_A.1.enabled: true
+          FEATURE_B.1.enabled: true
+        legend:
+          FEATURE_A.1.enabled: Config controlled feature - Description of FEATURE_A, which is determined by the config of MDS.
+          FEATURE_B.1.enabled: 'Description of FEATURE_B, which is fixed functionality based on the version of the MDS running. '
+      properties:
+        features:
+          additionalProperties:
+            type: boolean
+          example:
+            FEATURE_A.1.enabled: true
+            FEATURE_B.1.enabled: true
+          type: object
+        legend:
+          additionalProperties:
+            type: string
+          example:
+            FEATURE_A.1.enabled: Config controlled feature - Description of FEATURE_A, which is determined by the config of MDS.
+            FEATURE_B.1.enabled: 'Description of FEATURE_B, which is fixed functionality based on the version of the MDS running. '
+          type: object
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

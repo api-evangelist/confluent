@@ -1,0 +1,307 @@
+openapi: 3.2.0
+info:
+  description: '## Confluent Metadata API - Swagger UI
+
+    ---
+
+    This tool (SwaggerUI) and the Open API spec file are provided _for development / test
+
+    purposes only_:
+
+
+    - **Do _not_ enable in Production.**
+
+    - **This tool only works with HTTP.**
+
+
+    ### Authenticating
+
+    Authentication is performed by HTTP Basic Auth or by presenting a bearer token.'
+  title: MDS Private RBAC UI - Manage RoleBindings API
+  version: '1.0'
+  x-api-id: 9a0c4222-9190-4816-b872-1a9cf002afab
+  x-audience: external-public
+servers:
+- url: /
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- description: Endpoints that power the Manage RoleBindings UI in Confluent Control Center.
+  name: Private RBAC UI - Manage RoleBindings
+paths:
+  /security/1.0/lookup/managed/clusters/principal/{principal}:
+    post:
+      description: 'Used by the Confluent Control Center UI to control access to rolebinding add/remove buttons.
+
+
+        Callable by Admins+ResourceOwners.'
+      operationId: clusterAccessInfo
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:bob
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterAccessInfo'
+          description: The rolebinding abilities the user has for a specified scope.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Identify the rolebinding abilities (view vs manage) the user has on the…
+      tags:
+      - Private RBAC UI - Manage RoleBindings
+  /security/1.0/lookup/managed/rolebindings/principal/{principal}:
+    post:
+      description: Callable by Admins+ResourceOwners.
+      operationId: managedRoleBindings
+      parameters:
+      - description: Fully-qualified KafkaPrincipal string for a user or group.
+        example: User:bob
+        explode: false
+        in: path
+        name: principal
+        required: true
+        schema:
+          pattern: (^User:.+$)|(^Group:.+$)
+          type: string
+        style: simple
+      - description: Filter down by resource type.
+        example: Topic
+        explode: true
+        in: query
+        name: resourceType
+        required: false
+        schema:
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManagedRoleBindings'
+          description: Rolebindings that the user can manage.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error Response
+      summary: Identify the rolebindings this user can see and manage
+      tags:
+      - Private RBAC UI - Manage RoleBindings
+components:
+  schemas:
+    Scope:
+      example:
+        clusters:
+          kafka-cluster: kafkaClusterId
+          schema-registry-cluster: schemaRegistryClusterId
+          flink-environment: flinkEnvironmentId
+          ksql-cluster: ksqlClusterId
+          cmf: cmfId
+          connect-cluster: connectClusterId
+      properties:
+        clusters:
+          $ref: '#/components/schemas/Scope_clusters'
+      required:
+      - clusters
+      type: object
+    ClusterAccessInfo:
+      example:
+        cluster:
+        - AlterAccess
+        - DescribeAccess
+        resources:
+          key:
+          - AlterAccess
+          - DescribeAccess
+      properties:
+        cluster:
+          example:
+          - AlterAccess
+          - DescribeAccess
+          items:
+            type: string
+          type: array
+        resources:
+          additionalProperties:
+            additionalProperties:
+              items:
+                type: string
+              type: array
+            example:
+            - AlterAccess
+            - DescribeAccess
+            type: object
+          type: object
+      type: object
+    ManagedRoleBindings:
+      example:
+        resource_role_bindings:
+          key:
+            key:
+            - role: DeveloperRead
+              resourcePattern: LITERAL
+              alterAccess: true
+              resourceName: clicksTopic1
+              resourceType: Topic
+            - role: DeveloperRead
+              resourcePattern: LITERAL
+              alterAccess: true
+              resourceName: clicksTopic1
+              resourceType: Topic
+        scope:
+          clusters:
+            kafka-cluster: kafkaClusterId
+            schema-registry-cluster: schemaRegistryClusterId
+            flink-environment: flinkEnvironmentId
+            ksql-cluster: ksqlClusterId
+            cmf: cmfId
+            connect-cluster: connectClusterId
+        cluster_role_bindings:
+          key:
+            key:
+            - cluster_role_bindings
+            - cluster_role_bindings
+      properties:
+        scope:
+          $ref: '#/components/schemas/Scope'
+        cluster_role_bindings:
+          additionalProperties:
+            additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          type: object
+        resource_role_bindings:
+          additionalProperties:
+            additionalProperties:
+              items:
+                $ref: '#/components/schemas/ManagedResourceBinding'
+              type: array
+            type: object
+          type: object
+      type: object
+    ErrorResponse:
+      properties:
+        status_code:
+          description: Optional - http status code
+          example: 400
+          type: integer
+        error_code:
+          description: Optional - Kafka error code (typically 5 digits)
+          type: integer
+        type:
+          description: Optional - Type of error
+          example: INVALID REQUEST DATA
+          type: string
+        message:
+          description: Required - Top level error message
+          example: Bad request
+          type: string
+        errors:
+          description: Optional - List of errors
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type: array
+      required:
+      - message
+      type: object
+    ErrorDetail:
+      properties:
+        error_type:
+          type: string
+        message:
+          type: string
+      required:
+      - error_type
+      - type
+      type: object
+    Scope_clusters:
+      example:
+        kafka-cluster: kafkaClusterId
+        schema-registry-cluster: schemaRegistryClusterId
+        flink-environment: flinkEnvironmentId
+        ksql-cluster: ksqlClusterId
+        cmf: cmfId
+        connect-cluster: connectClusterId
+      properties:
+        kafka-cluster:
+          example: kafkaClusterId
+          type: string
+        connect-cluster:
+          example: connectClusterId
+          type: string
+        ksql-cluster:
+          example: ksqlClusterId
+          type: string
+        schema-registry-cluster:
+          example: schemaRegistryClusterId
+          type: string
+        cmf:
+          example: cmfId
+          type: string
+        flink-environment:
+          example: flinkEnvironmentId
+          type: string
+      type: object
+    ManagedResourceBinding:
+      example:
+        role: DeveloperRead
+        resourcePattern: LITERAL
+        alterAccess: true
+        resourceName: clicksTopic1
+        resourceType: Topic
+      properties:
+        role:
+          example: DeveloperRead
+          type: string
+        resourceType:
+          example: Topic
+          type: string
+        resourceName:
+          example: clicksTopic1
+          type: string
+        resourcePattern:
+          example: LITERAL
+          type: string
+        alterAccess:
+          example: true
+          type: boolean
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

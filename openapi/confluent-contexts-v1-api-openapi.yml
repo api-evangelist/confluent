@@ -1,18 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Confluent Cloud Contexts (v1) API
-  version: ''
-  x-api-id: 46234552-5833-42eb-ba0f-883ad3f70d2b
-  x-audience: external-public
-  x-logo:
-    url: https://assets.confluent.io/m/1661ef5e4ff82d3d/
-  description: '# Introduction
-
-
-    Note
-
-
-    This documents the collection of Confluent Cloud APIs.'
+  title: Confluent Contexts (v1) API
+  x-refined-note:
+  - x-api-id differs across the merged source definitions and was not carried
+  - x-audience differs across the merged source definitions and was not carried
+  - x-logo differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Contexts (v1) across 4 of this provider''s published API definitions: confluent-cloud-openapi.yaml, confluent-cloud-full.yaml, schema-registry-api-spec.yaml, schema-registry-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.confluent.cloud
   description: Confluent Cloud API
@@ -96,8 +90,67 @@ paths:
       security:
       - resource-api-key: []
       - external-access-token: []
+  /contexts/{context}:
+    delete:
+      tags:
+      - Contexts (v1)
+      summary: Delete a context
+      description: Deletes the specified context if it is empty.
+      operationId: deleteContext
+      parameters:
+      - name: context
+        in: path
+        description: Name of the context
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found. Error code 40401 indicates context not found.
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+        '500':
+          description: Internal Server Error. Error code 50001 indicates a failure in the backend data store.
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage_2'
 components:
   responses:
+    schemaregistry.v1.ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 403
+            message: Forbidden
+    schemaregistry.v1.BadRequestError:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+          example:
+            error_code: 400
+            message: Bad Request
     schemaregistry.v1.UnauthorizedError:
       description: Unauthorized
       content:
@@ -130,24 +183,6 @@ components:
           schema:
             type: integer
           description: The number of seconds to wait until the rate limit window resets. Only sent when the rate limit is reached.
-    schemaregistry.v1.ForbiddenError:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 403
-            message: Forbidden
-    schemaregistry.v1.BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-          example:
-            error_code: 400
-            message: Bad Request
   schemas:
     ErrorMessage:
       type: object
@@ -160,6 +195,28 @@ components:
           type: string
           description: The error message
       description: Error message of this operation
+    ErrorMessage_2:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: Error code
+          format: int32
+        message:
+          type: string
+          description: Detailed error message
+      description: Error message
+    ErrorMessage_3:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: Error code
+          format: int32
+        message:
+          type: string
+          description: Detailed error message
+      description: Error message
   securitySchemes:
     cloud-api-key:
       type: http
@@ -198,6 +255,11 @@ components:
             partner:create: enables partners to create entitlements and signup on behalf of customers
             partner:delete: enables partners to delete entitlements and organizations
             partner:describe: enables partners to read and list entitlements and organizations
+x-refined-from:
+- confluent-cloud-openapi.yaml
+- confluent-cloud-full.yaml
+- schema-registry-api-spec.yaml
+- schema-registry-openapi.yaml
 x-tagGroups:
 - name: Identity Access Management (v2)
   tags:
