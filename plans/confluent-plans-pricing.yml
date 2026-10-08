@@ -145,3 +145,50 @@ free_tier:
   description: First eCKU free on Basic clusters, plus a signup trial credit.
 pricing_url: https://www.confluent.io/pricing/
 cost_estimator: https://www.confluent.io/pricing/
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  units:
+  - compute
+  - data
+  plans:
+  - name: Basic
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - compute
+    - data
+    periods: []
+  - name: Standard
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - compute
+    - data
+    periods: []
+  - name: Enterprise
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - compute
+    - data
+    periods: []
+  - name: Freight
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - compute
+    - data
+    periods: []
+  - name: Dedicated
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
