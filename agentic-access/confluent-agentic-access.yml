@@ -1,4 +1,4 @@
-generated: '2026-09-16'
+generated: '2026-09-23'
 method: generated
 source: openapi/confluent-access-points-networking-v1-api-openapi.yml, openapi/confluent-acl-v3-api-openapi.yml,
   openapi/confluent-acls-api-openapi.yml, openapi/confluent-agents-sql-v1-api-openapi.yml, openapi/confluent-api-keys-api-openapi.yml,
@@ -68,11 +68,11 @@ description: Recommended x-agentic-access execution contracts, classified heuris
 summary:
   operations: 528
   by_action_class:
-    connected: 260
-    acting: 268
+    connected: 263
+    acting: 265
   by_consequence:
-    read: 260
-    write: 262
+    read: 263
+    write: 259
     safety-critical: 5
     physical: 1
   human_in_the_loop_required: 5
@@ -6221,18 +6221,12 @@ operations:
   method: post
   operationId: lookUpSchemaUnderSubject
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /subjects/{subject}
   method: delete
   operationId: deleteSubject
@@ -6935,18 +6929,12 @@ operations:
   method: post
   operationId: postV2MetricsByDatasetQuery
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /v2/metrics/{dataset}/export
   method: get
   operationId: getV2MetricsByDatasetExport
@@ -6961,18 +6949,12 @@ operations:
   method: post
   operationId: postV2MetricsByDatasetAttributes
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /v2/metrics/{dataset}/discovery
   method: get
   operationId: getV2MetricsByDatasetDiscovery
