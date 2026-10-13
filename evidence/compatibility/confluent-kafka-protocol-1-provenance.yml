@@ -1,0 +1,13 @@
+fetched: '2026-10-13'
+method: fetched
+source: https://www.confluent.io/confluent-cloud/
+page: https://www.confluent.io/confluent-cloud/
+file: confluent-kafka-protocol-1.md
+bytes: 36494
+sha256: b02bf1a2beb68133db08d983c0da35b7f7944295c181c4838b83cc50a5307f00
+anchor: apache-kafka
+shape: kafka-protocol
+classification: declares-compatibility
+quote: 'Confluent Cloud, a Fully Managed Apache Kafka® Service Introducing Streamhouse: the open data architecture
+  for AI | Learn More'
+note: text extracted from the provider's own page (tags stripped), saved for evidence
