@@ -15,5 +15,47 @@ edges:
     for AI | Learn More'
   detected_by: sweep-shape-compat.py
   first_seen: '2026-10-13'
+- partner_name: JetBrains Marketplace
+  partner: jetbrains
+  partner_match: aggregator
+  type: marketplace
+  marketplace: jetbrains
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://plugins.jetbrains.com/vendor/confluentinc
+  listing_count: 1
+  apps:
+  - Confluent
+  publisher_name: Confluent
+  badges:
+  - Verified vendor
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+- partner_name: Visual Studio Code Marketplace
+  partner: vs-code-marketplace
+  partner_match: aggregator
+  type: marketplace
+  marketplace: vscode
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://marketplace.visualstudio.com/publishers/confluentinc
+  listing_count: 1
+  apps:
+  - Confluent
+  publisher_name: Confluent
+  badges:
+  - Verified publisher
+  - Verified domain
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
 generated: '2026-10-13'
 method: searched
+checked:
+- https://marketplace.visualstudio.com/vscode
+- https://plugins.jetbrains.com/
+marketplace_apps: []
+source:
+- https://marketplace.visualstudio.com/vscode
+- https://plugins.jetbrains.com/
