@@ -1,20 +1,4 @@
 edges:
-- partner_name: Apache Kafka
-  partner: apache-kafka
-  partner_match: shape-anchor
-  channel: provider-built
-  relationship: compatible
-  direction: provider-built
-  shape: kafka-protocol
-  type: docs
-  degree: full
-  evidence: https://www.confluent.io/confluent-cloud/
-  evidence_kind: own-docs
-  evidence_file: https://github.com/api-evangelist/confluent/blob/main/evidence/compatibility/confluent-kafka-protocol-1.md
-  quote: 'Confluent Cloud, a Fully Managed Apache Kafka® Service Introducing Streamhouse: the open data architecture
-    for AI | Learn More'
-  detected_by: sweep-shape-compat.py
-  first_seen: '2026-10-13'
 - partner_name: JetBrains Marketplace
   partner: jetbrains
   partner_match: aggregator
@@ -50,6 +34,22 @@ edges:
   - Verified domain
   detected_by: sweep-devtools.py
   detected: '2026-10-14'
+- partner_name: Apache Kafka
+  partner: apache-kafka
+  partner_match: shape-anchor
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  shape: kafka-protocol
+  type: docs
+  degree: full
+  evidence: https://www.confluent.io/confluent-cloud/
+  evidence_kind: own-docs
+  evidence_file: https://github.com/api-evangelist/confluent/blob/main/evidence/compatibility/confluent-kafka-protocol-1.md
+  quote: 'Confluent Cloud, a Fully Managed Apache Kafka® Service Introducing Streamhouse: the open data architecture
+    for AI | Learn More'
+  detected_by: sweep-shape-compat.py
+  first_seen: '2026-10-13'
 generated: '2026-10-13'
 method: searched
 checked:
