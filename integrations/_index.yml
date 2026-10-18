@@ -62,5 +62,5 @@
     - connectors/events/confluent-cloud
     vendor_link: https://www.confluent.io/confluent-cloud/
     builder: Fivetran
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
