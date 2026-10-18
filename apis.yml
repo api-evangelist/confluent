@@ -4070,7 +4070,8 @@ apis:
     on for any purpose other than autocomplete.
   humanURL: https://www.confluent.io/
   baseURL: https://api.confluent.cloud
-  tags:
+  tags: []
+  tags_raw:
   - Private RBAC UI - Cached User Store Information
   properties:
   - type: OpenAPI
