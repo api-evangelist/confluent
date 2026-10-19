@@ -76,13 +76,89 @@ edges:
     builder: Fivetran
   detected_by: sweep-data-integration.py
   first_seen: '2026-10-18'
+- partner_name: Maven Central
+  partner: maven-central
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (Java/JVM)
+  evidence: https://central.sonatype.com/artifact/io.confluent/confluent-log4j
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Maven Central (public registry JSON)
+    spec_file: null
+    language: Java/JVM
+    packages:
+    - name: io.confluent:confluent-log4j
+      version: 1.2.17-cp12
+      released: '2023-05-17'
+      released_field: lastUpdated
+      lapsed: true
+      page: https://central.sonatype.com/artifact/io.confluent/confluent-log4j
+      repo_leg: domain:confluent.io
+      publisher_leg: groupId:confluent.io
+      matched_by: domain+name-among-holders
+    - name: io.confluent:logredactor
+      version: 1.0.23
+      released: '2026-09-28'
+      released_field: lastUpdated
+      lapsed: false
+      page: https://central.sonatype.com/artifact/io.confluent/logredactor
+      repo_leg: shared-github-org:confluentinc
+      publisher_leg: groupId:confluent.io
+      matched_by: domain+name-among-holders
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/@confluentinc/schemaregistry
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@confluentinc/schemaregistry'
+      version: 1.11.0
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@confluentinc/schemaregistry
+      repo_leg: shared-github-org:confluentinc
+      publisher_leg: email:confluent.io
+      matched_by: domain+name-among-holders
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
 generated: '2026-10-13'
 method: searched
 checked:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
 - https://fivetran.com/docs-sitemap.xml
 - https://fivetran.com/docs/connectors/partner-built-program
 - https://marketplace.visualstudio.com/vscode
 - https://plugins.jetbrains.com/
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
 marketplace_apps: []
 source:
 - https://marketplace.visualstudio.com/vscode
