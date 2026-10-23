@@ -1143,3 +1143,9 @@ x-tagGroups:
   tags:
   - Switchover Pairs (switchover/v1)
   - Switchover Endpoints (switchover/v1)
+x-provenance:
+  method: harvested
+  publisher: Confluent
+  source: https://docs.confluent.io/cloud/current/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

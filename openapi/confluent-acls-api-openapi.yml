@@ -96,3 +96,9 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: OAuth 2.0 bearer token (Confluent STS, external OAuth, or partner token)
+x-provenance:
+  method: harvested
+  publisher: Confluent
+  source: https://docs.confluent.io/cloud/current/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

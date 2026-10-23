@@ -93,127 +93,199 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  hosts/confluent-hosts.yml:
+    method: derived
+    evidence: declared in the artifact
+  integrations/_index.yml:
     method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T125852.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T133943.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T143147.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T154045.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-26T215308.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T094438.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T103455.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T123021.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T132314.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T140727.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T213958.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T230545.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T203505.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T220315.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-31T223420.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T063623.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T210448.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T222808.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+    evidence: carries an API Evangelist house phrase
+  integrations/confluent-integration-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
+  json-ld/confluent-context.jsonld:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-api-key-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-api-key-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cam-v1-connect-artifact-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cam-v1-connect-artifact-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cdx-v1-consumer-shared-resource-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cluster-config-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cluster-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cluster-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cmk-v2-cluster-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-cmk-v2-cluster-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-compatibility-check-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-config-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-config-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-connect-v1-connector-expansion-map-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-connect-v1-connector-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-connect-v1-connector-with-offsets-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-connect-v1-offsets-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-consumer-group-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-consumer-group-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-environment-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-environment-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-fcpm-v2-compute-pool-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-fcpm-v2-compute-pool-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-api-key-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-api-key-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-certificate-authority-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-certificate-authority-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-certificate-identity-pool-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-certificate-identity-pool-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-create-cert-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-iam-v2-update-cert-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-kafka-quotas-v1-client-quota-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-kafka-quotas-v1-client-quota-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-ksqldbcm-v2-cluster-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-ksqldbcm-v2-cluster-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-networking-v1-access-point-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-networking-v1-access-point-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-partition-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-partition-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-register-schema-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-service-account-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-service-account-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-service-quota-v1-applied-quota-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-service-quota-v1-applied-quota-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-sql-v1-agent-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-sql-v1-agent-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-sql-v1-connection-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-sql-v1-connection-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-srcm-v2-cluster-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-srcm-v2-cluster-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-srcm-v3-cluster-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-srcm-v3-cluster-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-tableflow-v1-catalog-integration-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-tableflow-v1-catalog-integration-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-tableflow-v1-catalog-integration-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-topic-create-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-topic-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-topic-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-usm-v1-connect-cluster-list-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/confluent-usm-v1-connect-cluster-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -297,9 +369,27 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/confluent-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
+  llms/confluent-llms-provenance.yml:
+    method: searched
+    evidence: 'derive-llms-provenance.py: harvested'
   llms/confluent-llms.txt:
     method: searched
     evidence: 'derive-llms-provenance.py: harvested'
@@ -309,15 +399,35 @@ artifacts:
   mcp/confluent-tool-crosswalk.yml:
     method: derived
     evidence: declared in the artifact
+  openapi/_original/confluent-cloud-full.yaml:
+    method: harvested
+    evidence: the same operations as https://docs.confluent.io/cloud/current/openapi.yaml (sha256 4bbccb7fdb6d,
+      fetched 2026-10-04)
   openapi/_original/confluent-cloud-openapi.yaml:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://docs.confluent.io/cloud/current/openapi.yaml (sha256 4bbccb7fdb6d,
+      fetched 2026-10-04)
   openapi/_original/confluent-metrics-api-openapi.yaml:
     method: harvested
     evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
       to the provider's source is unverified
   openapi/_original/confluent-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/dek-registry-api-spec.yaml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/openapi.yaml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/schema-registry-api-spec.yaml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/schema-registry-openapi.yaml:
     method: harvested
     evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
       to the provider's source is unverified
@@ -342,6 +452,18 @@ artifacts:
   openapi/confluent-applied-quotas-service-quota-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-associations-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-associations-batch-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-audit-log-configuration-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-authorization-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-catalog-integrations-tableflow-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -354,7 +476,13 @@ artifacts:
   openapi/confluent-client-quotas-kafka-quotas-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-cloud.yaml:
+    method: unknown
+    evidence: no authorship recorded
   openapi/confluent-cluster-linking-v3-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-cluster-registry-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-cluster-v3-api-openapi.yml:
@@ -385,6 +513,9 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-configs-v3-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-confluent-schema-registry-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-connect-artifacts-cam-v1-api-openapi.yml:
@@ -433,6 +564,9 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-data-encryption-keys-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-dek-registry-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-dns-forwarders-networking-v1-api-openapi.yml:
@@ -501,6 +635,9 @@ artifacts:
   openapi/confluent-jwks-iam-v2-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-kafka-acl-management-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-kafka-clusters-usm-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -520,6 +657,9 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-materialized-tables-sql-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-metadata-service-operations-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-modes-v1-api-openapi.yml:
@@ -588,10 +728,34 @@ artifacts:
   openapi/confluent-private-link-attachments-networking-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-private-rbac-ui-cached-user-store-information-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-private-rbac-ui-cluster-visibility-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-private-rbac-ui-creation-guidelines-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-private-rbac-ui-manage-rolebindings-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-private-rbac-ui-my-rolebindings-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-provider-shared-resources-cdx-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-provider-shares-cdx-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-rbac-role-definitions-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-rbac-rolebinding-crud-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-rbac-rolebinding-summaries-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-records-v3-api-openapi.yml:
@@ -624,10 +788,16 @@ artifacts:
   openapi/confluent-schemas-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-scim-tokens-org-v2-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-scopes-service-quota-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-search-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-server-metadata-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-service-accounts-api-openapi.yml:
@@ -643,6 +813,9 @@ artifacts:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-signup-partner-v2-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-sso-device-authorization-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-statement-exceptions-sql-v1-api-openapi.yml:
@@ -663,13 +836,25 @@ artifacts:
   openapi/confluent-streams-group-v3-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-subjects-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-subjects-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-subscriptions-notifications-v1-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-switchover-endpoints-switchover-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-switchover-pairs-switchover-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-tableflow-topics-tableflow-v1-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-tokens-and-authentication-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-tools-sql-v1-api-openapi.yml:
@@ -693,13 +878,391 @@ artifacts:
   openapi/confluent-users-iam-v2-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/confluent-users-scim-v2-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/confluent-version-2-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  overlays/confluent-access-points-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-acl-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-acls-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-agents-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-api-keys-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-api-keys-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-applied-quotas-service-quota-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-catalog-integrations-tableflow-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-certificate-authorities-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-certificate-identity-pools-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-client-quotas-kafka-quotas-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
   overlays/confluent-cloud-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/confluent-cluster-linking-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-cluster-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-clusters-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-clusters-cmk-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-clusters-ksqldbcm-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-clusters-srcm-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-clusters-srcm-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-compatibility-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-compute-pools-fcpm-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-config-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-configs-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-connect-artifacts-cam-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-connect-clusters-usm-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-connections-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-connectors-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-consumer-group-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-consumer-groups-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-consumer-shared-resources-cdx-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-consumer-shares-cdx-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-contexts-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-costs-billing-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-custom-code-loggings-ccl-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-custom-connect-plugin-versions-ccpm-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-custom-connect-plugins-ccpm-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-custom-connector-plugins-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-custom-connector-runtimes-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-data-encryption-keys-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-dns-forwarders-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-dns-records-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-endpoints-endpoint-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-entitlements-partner-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-entity-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-environments-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-environments-org-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-exporters-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-flink-artifacts-artifact-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-gateways-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-group-mappings-iam-v2-sso-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-identity-pools-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-identity-providers-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-integrations-notifications-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-integrations-pim-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-integrations-pim-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-invitations-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-ip-addresses-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-ip-filter-summaries-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-ip-filters-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-ip-groups-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-jwks-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-kafka-clusters-usm-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-key-encryption-keys-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-keys-byok-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-lifecycle-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-managed-connector-plugins-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-materialized-table-versions-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-materialized-tables-sql-v1-api-phrasing-overlay.yaml:
     method: generated
     evidence: declared in the artifact
   overlays/confluent-metrics-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/confluent-modes-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-network-link-endpoints-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-network-link-service-associations-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-network-link-services-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-networks-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-notification-types-notifications-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-oauth-tokens-sts-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-offsets-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-opt-ins-cdx-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-org-compute-pool-configs-fcpm-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-organizations-org-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-organizations-partner-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-partition-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-partitions-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-peerings-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-presigned-urls-artifact-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-presigned-urls-cam-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-presigned-urls-ccpm-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-presigned-urls-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-private-link-accesses-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-private-link-attachment-connections-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-private-link-attachments-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-provider-shared-resources-cdx-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-provider-shares-cdx-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-records-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-regions-fcpm-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-regions-rtce-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-regions-srcm-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-regions-tableflow-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-resource-preferences-notifications-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-resource-subscriptions-notifications-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-role-bindings-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-rtce-topics-rtce-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-schemas-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-scopes-service-quota-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-search-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-service-accounts-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-service-accounts-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-share-group-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-shared-tokens-cdx-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-signup-partner-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-statement-exceptions-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-statement-results-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-statements-query-v1alpha1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-statements-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-status-connect-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-streams-group-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-subjects-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-subscriptions-notifications-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-tableflow-topics-tableflow-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-tools-sql-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-topic-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-topics-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-transit-gateway-attachments-networking-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-types-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-user-notifications-notifications-v1-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-users-iam-v2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/confluent-version-2-api-phrasing-overlay.yaml:
     method: generated
     evidence: declared in the artifact
   packages/confluent-packages.yml:
@@ -710,6 +1273,9 @@ artifacts:
     evidence: declared in the artifact
   rate-limits/confluent-rate-limits.yml:
     method: searched
+    evidence: declared in the artifact
+  rules/confluent-rules.yml:
+    method: generated
     evidence: declared in the artifact
   sandbox/confluent-sandbox.yml:
     method: searched
@@ -727,7 +1293,28 @@ artifacts:
     method: searched
     evidence: declared in the artifact
   skills/_index.yml:
-    method: searched
+    method: generated
+    evidence: declared in the artifact
+  skills/confluent-connectors-create-and-manage.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/confluent-create-and-manage-topic.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/confluent-create-and-test-integration.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/confluent-create-and-validate-integration.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/confluent-create-subscription.md:
+    method: generated
+    evidence: declared in the artifact
+  vendors/confluent-vendors.yml:
+    method: unknown
+    evidence: no authorship recorded
+  vocabulary/confluent-vocabulary.yml:
+    method: derived
     evidence: declared in the artifact
   well-known/confluent-security.txt:
     method: unknown
